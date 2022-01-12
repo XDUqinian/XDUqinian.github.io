@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ff9a11;
+  background: #446bff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2390,6 +2390,7 @@ hr {
   display: inline-block;
 }
 body {
+/*  背景图的位置*/
   background: url("/images/back.jpg") no-repeat;
 /* 背景图垂直、水平均居中 */
   background-position: center center;
@@ -2399,6 +2400,11 @@ body {
   background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
   background-color: #1b1b1b;
+/* 设置主体字体颜色*/
+  color: #000;
+}
+.posts-expand .post-title-link {
+  color: #000;
 }
 .sidebar {
   background: url("/images/sidebar.jpg");
@@ -2429,7 +2435,19 @@ body {
   margin-top: 60px;
   margin-bottom: 60px;
   padding: 25px;
-  background: rgba(255,255,255,0.9) none repeat scroll !important;
-  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
-  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+  background: #fff none repeat scroll !important;
+}
+.out-img-topic {
+  display: block;
+  max-height: 500px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+img.img-topic {
+  display: block;
+  margin-left: 0.7em;
+  margin-right: 0.7em;
+  padding: 0;
+  float: right;
+  clear: right;
 }
