@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #b500fc;
+  background: #6a54c2;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1547,8 +1547,8 @@ pre .javascript .function {
   opacity: 0;
   padding: 25px;
   background: rgba(255,255,255,0.9) none repeat scroll !important;
-  -webkit-box-shadow: 0 0 5px rgba(255,255,255,0.5);
-  -moz-box-shadow: 0 0 5px rgba(255,255,255,0.5);
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
 }
 .use-motion .pagination,
 .use-motion .comments {
@@ -2311,7 +2311,7 @@ hr {
   display: none;
 }
 .posts-expand .post-block:not(:first-child) {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .posts-expand .post-title,
 .posts-expand .post-meta {
@@ -2417,7 +2417,7 @@ body {
   background-size: cover;
   -o-background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-color: #c8c8c8;
+  background-color: #f5f5f5;
 /* 设置主体字体颜色*/
   color: #000;
   position: relative;
@@ -2457,7 +2457,9 @@ body {
   color: #fff;
 }
 .footer {
+  background: url("/images/back.jpg") no-repeat;
   background-position: center 100%;
+  background-attachment: absolute;
   background-color: #fff;
 }
 .post {
@@ -2465,6 +2467,33 @@ body {
   margin-bottom: 60px;
   padding: 25px;
   background: #fff none repeat scroll !important;
+}
+.post-body p a {
+  color: #0593d3;
+  border-bottom: none;
+  border-bottom: 1px solid #0593d3;
+}
+.post-body p a:hover {
+  color: #fc6423;
+  border-bottom: none;
+  border-bottom: 1px solid #fc6423;
+}
+.post-button .btn {
+  color: #555 !important;
+  background-color: #fff;
+  border-radius: 3px;
+  font-size: 15px;
+  box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.35);
+  border: none !important;
+  transition-property: unset;
+  padding: 0px 15px;
+}
+.post-button .btn:hover {
+  color: #fff !important;
+  border-radius: 3px;
+  font-size: 15px;
+  box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.35);
+  background-image: linear-gradient(90deg, #a166ab 0%, #ef4e7b 25%, #f37055 50%, #ef4e7b 75%, #a166ab 100%);
 }
 .out-img-topic {
   display: block;
