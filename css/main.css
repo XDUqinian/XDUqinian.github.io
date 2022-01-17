@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #46fff6;
+  background: #ccff12;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2395,11 +2395,11 @@ body {
 /* 背景图垂直、水平均居中 */
   background-position: center center;
 /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-  background-attachment: fixed;
+  background-attachment: absolute;
 /* 让背景图基于容器大小伸缩 */
   background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-color: #1b1b1b;
+  background-color: #000;
 /* 设置主体字体颜色*/
   color: #000;
 }
