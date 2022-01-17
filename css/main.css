@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #378f8a;
+  background: #b500fc;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -2389,29 +2389,50 @@ hr {
 .sub-menu .menu-item {
   display: inline-block;
 }
+/*
+#header {height: 70vh;}
+  @media (max-width:768px) {
+    #header {
+      height: 40vh;
+    }      
+  }
+#site-meta {
+  display: none;
+  }
+#background {
+  width: 100%;
+  height: 100%;
+  background: url(/images/back.jpg) center center no-repeat;
+  background-size: cover;
+  z-index: -1;
+  position: relative;
+}
+*/
 body {
 /*  背景图的位置*/
-  background: url("/images/back.jpg") no-repeat;
 /* 背景图垂直、水平均居中 */
   background-position: center center;
 /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-  background-attachment: fixed;
 /* 让背景图基于容器大小伸缩 */
   background-size: cover;
+  -o-background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-color: rgba(0,0,0,0);
+  background-color: #c8c8c8;
 /* 设置主体字体颜色*/
   color: #000;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 .posts-expand .post-title-link {
   color: #000;
 }
 .sidebar {
-  background: url("/images/sidebar.jpg");
+  background: url("/images/back.jpg");
   background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: absolute;
 }
 .sidebar p,
 .sidebar span,
@@ -2419,11 +2440,15 @@ body {
   color: #fff;
 }
 .header {
-  background-attachment: fixed;
+  height: 740px;
+  width: 100%;
+  background-attachment: absolute;
 /* 让背景图基于容器大小伸缩 */
   background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
 }
 .header p,
@@ -2432,8 +2457,8 @@ body {
   color: #fff;
 }
 .footer {
-  background: url("/images/back.jpg") no-repeat;
   background-position: center 100%;
+  background-color: #fff;
 }
 .post {
   margin-top: 60px;
