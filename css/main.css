@@ -925,7 +925,7 @@ pre .javascript .function {
 }
 @media (min-width: 1200px) {
   .main-inner {
-    width: 800px;
+    width: 745px;
   }
 }
 @media (min-width: 1600px) {
@@ -947,7 +947,7 @@ pre .javascript .function {
 }
 @media (min-width: 1200px) {
   .header-inner {
-    width: 800px;
+    width: 745px;
   }
 }
 @media (min-width: 1600px) {
@@ -1169,7 +1169,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ccff12;
+  background: #378f8a;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1387,7 +1387,7 @@ pre .javascript .function {
 }
 @media (min-width: 1200px) {
   .footer-inner {
-    width: 800px;
+    width: 745px;
   }
 }
 @media (min-width: 1600px) {
@@ -2395,11 +2395,11 @@ body {
 /* 背景图垂直、水平均居中 */
   background-position: center center;
 /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-  background-attachment: absolute;
+  background-attachment: fixed;
 /* 让背景图基于容器大小伸缩 */
   background-size: cover;
 /* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-color: #000;
+  background-color: rgba(0,0,0,0);
 /* 设置主体字体颜色*/
   color: #000;
 }
@@ -2454,4 +2454,7 @@ img.img-topic {
   padding: 0;
   float: right;
   clear: right;
+}
+.pagination {
+  border: none;
 }
