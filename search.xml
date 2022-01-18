@@ -1,367 +1,244 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/snow2.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/snow1.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"xduqinian.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="应用密码学与网络安全的传统加密技术。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="应用密码学与网络安全（二）">
-<meta property="og:url" content="https://xduqinian.github.io/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/index.html">
-<meta property="og:site_name" content="年雨冰季的博客">
-<meta property="og:description" content="应用密码学与网络安全的传统加密技术。">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-01-16T14:11:29.000Z">
-<meta property="article:modified_time" content="2022-01-18T03:45:59.158Z">
-<meta property="article:author" content="七年">
-<meta property="article:tag" content="密码">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://xduqinian.github.io/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>应用密码学与网络安全（二） | 年雨冰季的博客</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-<style>mjx-container[jax="SVG"] {
-  direction: ltr;
-}
-
-mjx-container[jax="SVG"] > svg {
-  overflow: visible;
-}
-
-mjx-container[jax="SVG"][display="true"] {
-  display: block;
-  text-align: center;
-  margin: 1em 0;
-}
-
-mjx-container[jax="SVG"][justify="left"] {
-  text-align: left;
-}
-
-mjx-container[jax="SVG"][justify="right"] {
-  text-align: right;
-}
-
-g[data-mml-node="merror"] > g {
-  fill: red;
-  stroke: red;
-}
-
-g[data-mml-node="merror"] > rect[data-background] {
-  fill: yellow;
-  stroke: none;
-}
-
-g[data-mml-node="mtable"] > line[data-line] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > rect[data-frame] {
-  stroke-width: 70px;
-  fill: none;
-}
-
-g[data-mml-node="mtable"] > .mjx-dashed {
-  stroke-dasharray: 140;
-}
-
-g[data-mml-node="mtable"] > .mjx-dotted {
-  stroke-linecap: round;
-  stroke-dasharray: 0,140;
-}
-
-g[data-mml-node="mtable"] > svg {
-  overflow: visible;
-}
-
-[jax="SVG"] mjx-tool {
-  display: inline-block;
-  position: relative;
-  width: 0;
-  height: 0;
-}
-
-[jax="SVG"] mjx-tool > mjx-tip {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-mjx-tool > mjx-tip {
-  display: inline-block;
-  padding: .2em;
-  border: 1px solid #888;
-  font-size: 70%;
-  background-color: #F8F8F8;
-  color: black;
-  box-shadow: 2px 2px 5px #AAAAAA;
-}
-
-g[data-mml-node="maction"][data-toggle] {
-  cursor: pointer;
-}
-
-mjx-status {
-  display: block;
-  position: fixed;
-  left: 1em;
-  bottom: 1em;
-  min-width: 25%;
-  padding: .2em .4em;
-  border: 1px solid #888;
-  font-size: 90%;
-  background-color: #F8F8F8;
-  color: black;
-}
-
-foreignObject[data-mjx-xml] {
-  font-family: initial;
-  line-height: normal;
-  overflow: visible;
-}
-
-.MathJax path {
-  stroke-width: 3;
-}
-
-mjx-container[display="true"] {
-  overflow: auto hidden;
-}
-
-mjx-container[display="true"] + br {
-  display: none;
-}
-</style></head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">年雨冰季的博客</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container">
-    <input autocomplete="off" autocapitalize="off"
-           placeholder="搜索..." spellcheck="false"
-           type="search" class="search-input">
-  </div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div id="search-result">
-  <div id="no-result">
-    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
-  </div>
-</div>
-
-    </div>
-  </div>
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
-            
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xduqinian.github.io/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="七年">
-      <meta itemprop="description" content="<front color="FFFFFF">自由之思想，独立之精神。</front>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="年雨冰季的博客">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          应用密码学与网络安全（二）
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-01-16 22:11:29" itemprop="dateCreated datePublished" datetime="2022-01-16T22:11:29+08:00">2022-01-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-18 11:45:59" itemprop="dateModified" datetime="2022-01-18T11:45:59+08:00">2022-01-18</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" class="post-meta-item leancloud_visitors" data-flag-title="应用密码学与网络安全（二）" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>应用密码学与网络安全的传统加密技术。</p>
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>hexo博客搭建</title>
+    <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
+<span id="more"></span>
+<p><img src="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
+<h2 id="问题及解决方式"><a href="#问题及解决方式" class="headerlink" title="问题及解决方式"></a>问题及解决方式</h2><ol>
+<li><p>md 加不上图片。 <strong>解决方式</strong>：<a href="https://www.jianshu.com/p/f72aaad7b852">hexo插入图片</a>。</p>
+</li>
+<li><p>手机端的背景会被拉伸。<strong>解决方式</strong>：把背景放到header里，然后拉长head高度，设为absolute。</p>
+</li>
+<li><p>首页的文章显示全文而不是摘要。</p>
+<p> <strong>解决方法：</strong>在文章中加上&lt; !—more— &gt;标记 ，该标记以后部分就不在显示了，只有展开全部才显示，这是hexo定义的。</p>
+</li>
+<li><p>无法显示 markdown 的数学公式。</p>
+<p><strong>解决方法</strong>：几个博客的方法都试了一遍，莫名其妙就好了。</p>
+<p><a href="https://blog.csdn.net/yexiaohhjk/article/details/82526604">hexo next主题解决无法显示数学公式</a></p>
+<p><a href="https://blog.csdn.net/weixin_43014927/article/details/99619627?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">在HEXO主题中添加数学公式支持</a></p>
+<p><a href="https://blog.csdn.net/weixin_45511189/article/details/115798563?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-115798563.pc_agg_new_rank&amp;utm_term=hexo+next+%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F&amp;spm=1000.2123.3001.4430">hexo博客next主题添加对数学公式的支持</a></p>
+</li>
+<li><p>分页不显示封图。</p>
+<p><strong>解决方法</strong>：在 images 的路径前加个/。</p>
+</li>
+<li><p><a href="https://blog.csdn.net/w573719227/article/details/100704952">HEXO博客使用LeanCloud报错</a>。</p>
+</li>
+</ol>
+<h2 id="实现的功能"><a href="#实现的功能" class="headerlink" title="实现的功能"></a>实现的功能</h2><h3 id="一些小修改"><a href="#一些小修改" class="headerlink" title="一些小修改"></a>一些小修改</h3><ul>
+<li><p>将14号字体改为了16号。<a href="https://blog.csdn.net/dpdpdppp/article/details/102387532">hexo修改字体大小</a></p>
+</li>
+<li><p>将灰色字体改成了纯黑色。</p>
+</li>
+</ul>
+<ul>
+<li><p>文本框由灰色透明改为了纯白。</p>
+</li>
+<li><p>实现 markdown 行内数学公式的渲染。</p>
+</li>
+<li><p>文章页宽修改为745px。这篇教程往后拉：<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改文章页宽</a></p>
+</li>
+<li><p>修改文章底部#号标签为图标。</p>
+<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;</code>，将后面的内容换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code>。</p>
+</li>
+<li><p>将侧边栏弹出改为 always。改了半天才想起来，不成功是因为之前又设置了一个 nest.yml……捏马……</p>
+</li>
+<li><p>把背景图放在了header里，body 背景改为白灰色。</p>
+</li>
+<li><p><a href="https://blog.csdn.net/gfl1427097103/article/details/104814979">修改首页文章间距并添加边框阴影</a>。</p>
+</li>
+<li><p><a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改了链接文字样式与 Read More样式</a>。</p>
+</li>
+<li><p>修改了<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">标签云颜色</a>。</p>
+</li>
+<li><p>将 github 的源改为中科大的源，网页加载优化，性能提升。</p>
+</li>
+<li><p>实现文章图片懒加载。</p>
+</li>
+<li><p>文章背景与首页文章卡片设置圆角。</p>
+</li>
+<li><p>搜索结果框内部字体颜色改动。</p>
+</li>
+</ul>
+<h3 id="一些功能"><a href="#一些功能" class="headerlink" title="一些功能"></a>一些功能</h3><ul>
+<li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
+<li>实现首页文章简介与封图设置，使首页更加简洁美观。</li>
+<li>实现了文章分类和标签功能，便于根据需求找到想要的内容。</li>
+<li>实现博客首页分页。<a href="https://blog.csdn.net/qq_43773164/article/details/106389652">hexo博客主页分页</a></li>
+<li>页面点击小红心！csdn上说的都实现不了，最后从lq神的博客里扒到了github上的js。<a href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js">click-heart!</a></li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
+<li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
+</ul>
+<h3 id="待实现的功能与小任务"><a href="#待实现的功能与小任务" class="headerlink" title="待实现的功能与小任务"></a>待实现的功能与小任务</h3><ul>
+<li>[ ] 裁剪 loading.png 为正常矩形大小。</li>
+<li>[ ] 点击头像回首页。</li>
+<li>[ ] 站点信息显示：已运行时间等。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>博客开发测试</category>
+      </categories>
+      <tags>
+        <tag>problem</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/01/10/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<span id="more"></span>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+      <categories>
+        <category>博客开发测试</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>picture</title>
+    <url>/2022/01/11/picture/</url>
+    <content><![CDATA[<p><img src="/2022/01/11/picture/1.jpg" alt="应该行了吧"></p>
+]]></content>
+      <categories>
+        <category>博客开发测试</category>
+      </categories>
+      <tags>
+        <tag>图片</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2022/01/10/test/</url>
+    <content><![CDATA[<p>一个小测试，我现在会markdown了。</p>
+<span id="more"></span>
+<p>hhhhhh</p>
+]]></content>
+      <categories>
+        <category>博客开发测试</category>
+      </categories>
+      <tags>
+        <tag>message</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>应用密码学与网络安全（一）</title>
+    <url>/2022/01/12/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>应用密码学与网络安全的引言与概述。</p>
+<span id="more"></span>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>如何保证 Web 服务器和 Web 服务器之间的安全”交流“？</p>
+<p>Ans： 使用 HTTPS 协议。</p>
+<h3 id="SSL-协议"><a href="#SSL-协议" class="headerlink" title="SSL 协议"></a>SSL 协议</h3><p>SSL 安全套接层协议，专门用于保护 web 通信。</p>
+<p>SSL 协议通过<strong>加密传输</strong>来确保数据的机密性，通过<strong>消息验证码</strong>机制来保护信息的完整性，通过<strong>数字证书</strong>来对发送方和接收方的身份进行认证。</p>
+<h3 id="三个关键概念"><a href="#三个关键概念" class="headerlink" title="三个关键概念"></a>三个关键概念</h3><ul>
+<li>计算机安全（Computer Security）</li>
+</ul>
+<p>​    对于一个自动化的信息系统，采取保护措施确保信息系统（包括硬件、软件、固件、信息/数据和通信）的保密性、完整性、可用性。</p>
+<p>​    是针对一个计算机自身的安全。</p>
+<ul>
+<li>网络安全</li>
+</ul>
+<p>​    保护数据在网络传输中安全的方法。</p>
+<ul>
+<li>互联网安全</li>
+</ul>
+<p>​    保护数据安全通过互联网络的方法。</p>
+<h3 id="网络安全核心需求"><a href="#网络安全核心需求" class="headerlink" title="网络安全核心需求"></a>网络安全核心需求</h3><ul>
+<li>保密性：数据保密性、隐私性。</li>
+<li>完整性：数据完整性、系统完整性。</li>
+<li>可用性</li>
+<li>真实性</li>
+<li>可追溯性</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="网络安全现状"><a href="#网络安全现状" class="headerlink" title="网络安全现状"></a>网络安全现状</h3><p>Internet 一方面成为人们离不开的信息工具，同时也成为公开的攻击对象目标。网络的全球性、开放性、无缝连通性、共享性、动态性，使任何人都可以自由地接入 Internet，其中有善者也有恶者。恶意者时刻在试图穿透别人的系统，捣毁别人的信箱、散步破坏性信息、倾泻信息垃圾。</p>
+<h3 id="OSI-安全框架"><a href="#OSI-安全框架" class="headerlink" title="OSI 安全框架"></a>OSI 安全框架</h3><ul>
+<li>安全攻击 security attack <strong>问题</strong></li>
+</ul>
+<p>任何危及信息安全的活动。分为主动攻击和被动攻击。</p>
+<p>被动攻击是在未经用户同意和认可的情况下将信息或数据文件泄露给系统攻击者，但不对数据信息做任何修改。常见手段有搭线监听、无线截获、其他截获等，不易被发现。防范被动攻击的重点在于预防，如使用虚拟专用网（VPN）、采用加密技术保护网络以及使用加保护的分布式网络等。</p>
+<p>主动攻击时，攻击者会对消息做处理后再传给接收者，涉及某些数据流的篡改或虚假流的产生。通常分为假冒、重放、篡改消息、拒绝服务等。主动攻击能够检测出来，但不易有效防止，具体措施包括自动审计、入侵检测和完整性恢复等。</p>
+<p><strong>拒绝服务攻击（DoS）</strong>，是通过大量虚假访问耗尽被攻击对象的资源，让目标计算机或网络无法提供正常的服务或资源访问，使目标系统<strong>服务停止响应甚至崩溃</strong>。</p>
+<p><strong>分布式拒绝服务攻击（DDoS）</strong>，是指黑客利用并控制已经侵入的主机进行协同 DoS 攻击，比一般 DoS 攻击<strong>更自动化、更隐蔽且更难防范</strong>。</p>
+<ul>
+<li>安全服务 security service <strong>效果</strong></li>
+</ul>
+<p>加强数据处理系统和信息传输的安全性的一种服务。目的在于利用一种或多种安全机制阻止安全攻击，对文档进行安全地分发，是对安全攻击的反击。</p>
+<p>设计安全服务应包含四个方面内容：</p>
+<ol>
+<li>设计执行安全相关传输的算法，</li>
+<li>产生算法所使用的秘密信息，</li>
+<li>设计分配和共享秘密信息的方法，</li>
+<li>指明通信双方使用的协议，该协议利用安全算法和秘密信息实现安全服务。</li>
+</ol>
+<ul>
+<li>安全机制 security mechanism <strong>方法</strong></li>
+</ul>
+<p>用来保护系统免受侦听、阻止安全攻击及恢复系统的机制。</p>
+<p>安全机制要具备检测、防御或从安全攻击中恢复的能力，没有单一的机制能够提供所有的安全服务，一个机制往往构成其他安全机制的基础，比如加密技术。</p>
+<p>特定的安全机制有加密、数字签名、访问控制、数据完整性、认证交换、流量填充、路由控制、公证等。</p>
+<p>普遍的安全机制有可信功能、安全标签、事件检测、安全审计跟踪、安全恢复等。</p>
+<p>信息加密分为<strong>对称密钥体制</strong>和<strong>非对称密钥体制</strong>（采用公钥）。</p>
+<p>对称密钥体制的加密和解密采用同一个秘密密钥，通信双方在安全的秘密信道协商好密钥后，发送方将信息明文通过加密算法和密钥加密成密文，密文沿公开信道传输给接收方，接收方收到密文后使用解密算法和密钥解密信息明文。</p>
+<p>非对称密钥体制，发送方用接收方的公钥加密信息明文，接收方用自己的私钥对密文解密。公钥和加解密算法是公开的，只有用于解密的私钥是保密的。非对称密码体制利用了计算复杂性原理。</p>
+<p><strong>消息摘要</strong>保护信息的完整性，发送方将信息明文通过 MAC 算法进行摘要，然后用自己的私钥对摘要进行加密（<strong>数字签名</strong>），将加密后的摘要附加到信息明文尾部，然后将信息发生给接收方。接收方收到信息后，将信息内容通过 MAC 算法进行摘要，将发送方传来的摘要密文用发送方的公钥解密，将解密后的摘要与 MAC 算法得到的摘要进行比对，就能知道信息的完整性是否被破坏。</p>
+<p><strong>数字签名</strong>是传统签名的数字化，能与所签文件”绑定“，签名者不能否认自己的签名，签名不能被伪造，且容易被自动验证。数字签名机制基于签名过程和验证过程，签名过程是利用签名者的私有信息作为私钥，对数据单元进行加密或产生该数据单元的密码校验值，验证过程是利用公开的规程和信息来确定签名是否是利用该签名者的私有信息产生的。</p>
+<ul>
+<li>安全协议</li>
+</ul>
+<p>安全协议是建立在密码体制基础上的一种高互通协议，它运行在计算机通信网或分布式系统中，为安全需求的各方提供一系列保障。借助密码算法来达到密码分配、身份认证、信息保密等目的。</p>
+<p>密钥交换协议：完成会话密钥的建立与认证协议结合使用。</p>
+<p>认证协议：实体认证、消息认证、数据源认证等，用于防止假冒、篡改、否认等攻击。</p>
+<p>认证密钥交换协议：对通信实体的身份认证，成功认证后，为下一步的安全通信分配密钥。</p>
+<p>电子商务协议：保证交易双方都不能通过损害对方利益而得到它不应得到的利益。</p>
+<h3 id="网络安全访问模型"><a href="#网络安全访问模型" class="headerlink" title="网络安全访问模型"></a>网络安全访问模型</h3><p>需要做到选择合适的门卫功能以识别用户，实现安全控制以确保只有授权用户才可以访问被指定的信息或资源。</p>
+<h3 id="计算机安全"><a href="#计算机安全" class="headerlink" title="计算机安全"></a>计算机安全</h3><h4 id="病毒"><a href="#病毒" class="headerlink" title="病毒"></a>病毒</h4><p>病毒是一种特殊的计算机程序，基于硬件和操作系统，会进行一些恶意活动破坏用户的网络或信息系统。任何一种病毒都是针对某种处理器和操作系统编写的。</p>
+<p>计算机病毒的特点：破坏性、传染性、隐藏性、可激活性、针对性。</p>
+<p>病毒传播的主要途径：网络、U盘、硬盘和光盘。</p>
+<p><strong>计算机病毒的类型：</strong></p>
+<p>系统引导型病毒：寄生在磁盘引导区或主引导区。</p>
+<p>文件型病毒：寄生在可执行程序。</p>
+<p>宏病毒：Word 宏病毒是利用 Word 提供的功能，将病毒程序插入到带有宏的 .doc 文件或.dot 文件中。</p>
+<p>混合型病毒：同时具有多种病毒的特征，破坏性大，传染机会多，灭杀困难。</p>
+<p>网络蠕虫病毒：通过网络传播的恶性病毒，具有自己的一些特征，如不利用文件寄生（如只存在于内存），使服务器拒绝服务或和其他黑客技术相结合使用等。</p>
+<p>木马病毒：伪装潜伏，常通过一段特定的程序（木马程序）来控制远程计算机。</p>
+<p><strong>计算机病毒防护：</strong></p>
+<p>查毒引擎：无界面和包装的核心程序，在杀毒软件所安装的目录下。</p>
+<p>杀毒软件：病毒特征码、查毒引擎、精美的操作画面。</p>
+<p>病毒扫描技术：已知病毒扫描（特征码扫描技术、广谱特征扫描技术）、未知病毒扫描（虚拟机技术）。</p>
+<h4 id="访问控制机制"><a href="#访问控制机制" class="headerlink" title="访问控制机制"></a>访问控制机制</h4><p>访问控制的目的是防止对信息资源的非授权访问和使用。用来实施对资源访问或操作加以限制的策略。保证网络资源不被非法使用和访问。在身份认证后实施。</p>
+<h4 id="防火墙"><a href="#防火墙" class="headerlink" title="防火墙"></a>防火墙</h4><p>传统防火墙被设计用来防止火从大厦的一部分传播到另一部分。</p>
+<p>外部网络被认为是不安全和不可信赖的，内部网络被认为是安全和可信赖的，防火墙一般安放在被保护网络的边界。</p>
+<p>防火墙是位于两个或多个网络之间，执行访问控制策略的一个或一组系统，是一类防范措施的总称。它是不同网络安全域间通信流的唯一通道，能根据企业有关的安全政策控制（允许、拒绝、监视、记录）进出网络的访问行为。</p>
+<h4 id="入侵检测系统"><a href="#入侵检测系统" class="headerlink" title="入侵检测系统"></a>入侵检测系统</h4><p>入侵检测系统是为保证计算机系统的安全而设计与配置的一种能够及时发现并报告系统中未经授权的访问和其他异常现象的技术，是一种用于检测计算机网络中违反安全策略行为的技术。</p>
+<p>入侵检测被认为是防火墙之后的第二道安全闸门，在不影响网络性能的情况下能对网络进行监测，从而提供对内部攻击、外部攻击和误操作的实时保护。</p>
+<p>入侵检测系统的功能是发现可能存在的安全攻击。</p>
+<p>入侵检测系统的工作流程：信息收集、数据分析、响应。</p>
+<p>检测方法：</p>
+<ol>
+<li>基于攻击特征行为：根据入侵行为的特征建立入侵行为模型，若当前行为过程与某个入侵行为特征一致，判定入侵发生。适合检测已知攻击。</li>
+<li>误用检测：建立正常网络活动的特征模型，若当前行为过程与正常模型不符，判定入侵发生。适合检测未知攻击。</li>
+</ol>
+<p>入侵检测方法的评估：检测率、误报率。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>病毒</tag>
+        <tag>密码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>应用密码学与网络安全（二）</title>
+    <url>/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
+    <content><![CDATA[<p>应用密码学与网络安全的传统加密技术。</p>
 <span id="more"></span>
 <h2 id="传统加密技术"><a href="#传统加密技术" class="headerlink" title="传统加密技术"></a>传统加密技术</h2><h3 id="密码学"><a href="#密码学" class="headerlink" title="密码学"></a>密码学</h3><p><strong>密码学</strong>是研究编制密码和破译密码的学科，分为密码编码学和密码分析学。</p>
 <p>密码编码学主要研究对信息进行编码，实现对信息的<strong>隐蔽</strong>。密码编码学常用运算有<strong>代替</strong>和<strong>置换</strong>，所用的密钥数分为单钥和双钥，处理明文的方法有和分组密码与流密码。</p>
@@ -586,321 +463,15 @@ mjx-container[display="true"] + br {
 <p>实现了复杂多变的多表代换密码，多层加密。</p>
 <p>采用一系列转轮，每一个都是一个代替表，转轮可以依次旋转加密每个字母。</p>
 <p>用3个转轮就有 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.186ex" xmlns="http://www.w3.org/2000/svg" width="11.923ex" height="2.139ex" role="img" focusable="false" viewbox="0 -863.3 5270.1 945.3"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/><path data-c="36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z" transform="translate(500,0)"/></g><g data-mml-node="mn" transform="translate(1033,393.1) scale(0.707)"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"/></g></g><g data-mml-node="mo" transform="translate(1714.3,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"/></g><g data-mml-node="mn" transform="translate(2770.1,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="37" d="M55 458Q56 460 72 567L88 674Q88 676 108 676H128V672Q128 662 143 655T195 646T364 644H485V605L417 512Q408 500 387 472T360 435T339 403T319 367T305 330T292 284T284 230T278 162T275 80Q275 66 275 52T274 28V19Q270 2 255 -10T221 -22Q210 -22 200 -19T179 0T168 40Q168 198 265 368Q285 400 349 489L395 552H302Q128 552 119 546Q113 543 108 522T98 479L95 458V455H55V458Z" transform="translate(500,0)"/><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(1000,0)"/><path data-c="37" d="M55 458Q56 460 72 567L88 674Q88 676 108 676H128V672Q128 662 143 655T195 646T364 644H485V605L417 512Q408 500 387 472T360 435T339 403T319 367T305 330T292 284T284 230T278 162T275 80Q275 66 275 52T274 28V19Q270 2 255 -10T221 -22Q210 -22 200 -19T179 0T168 40Q168 198 265 368Q285 400 349 489L395 552H302Q128 552 119 546Q113 543 108 522T98 479L95 458V455H55V458Z" transform="translate(1500,0)"/><path data-c="36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z" transform="translate(2000,0)"/></g></g></g></svg></mjx-container> 个代替表。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zdh89786/article/details/84497357">转轮密码机原理</a>。轮子从上往下转，密码对应过程在输入处和轮子间，轮子转速不同。</p>
+<p><a href="https://blog.csdn.net/zdh89786/article/details/84497357">转轮密码机原理</a>。轮子从上往下转，密码对应过程在输入处和轮子间，轮子转速不同。</p>
 <h3 id="隐写术"><a href="#隐写术" class="headerlink" title="隐写术"></a>隐写术</h3><p>隐藏信息的存在：字符标记、用不可见的墨水、隐藏在图形图像或声音文件的 LSB 上。</p>
 <p>缺点：需要额外的付出来隐藏相对较少的信息。</p>
-
-    </div>
-
-    
-    
-    
-        
-
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>七年
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://xduqinian.github.io/2022/01/16/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%BA%8C%EF%BC%89/" title="应用密码学与网络安全（二）">https://xduqinian.github.io/2022/01/16/应用密码学与网络安全（二）/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
-</div>
-
-
-      <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/%E5%AF%86%E7%A0%81/" rel="tag"><i class="fa fa-tag"></i> 密码</a>
-          </div>
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2022/01/12/%E5%BA%94%E7%94%A8%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%EF%BC%88%E4%B8%80%EF%BC%89/" rel="prev" title="应用密码学与网络安全（一）">
-      <i class="fa fa-chevron-left"></i> 应用密码学与网络安全（一）
-    </a></div>
-      <div class="post-nav-item"></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%8A%A0%E5%AF%86%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text">传统加密技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6"><span class="nav-number">1.1.</span> <span class="nav-text">密码学</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E7%A0%81%E5%88%86%E6%9E%90%E7%9A%84%E6%94%BB%E5%87%BB"><span class="nav-number">1.1.1.</span> <span class="nav-text">基于密码分析的攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E5%AF%86%E7%A0%81%E5%AD%A6"><span class="nav-number">1.2.</span> <span class="nav-text">开放密码学</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0"><span class="nav-number">1.2.1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">1.2.2.</span> <span class="nav-text">优势</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">两个概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%9D%E5%AF%B9%E5%AE%89%E5%85%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">绝对安全</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%AE%89%E5%85%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">计算安全</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E7%9A%84%E5%87%A0%E4%B8%AA%E9%98%B6%E6%AE%B5"><span class="nav-number">1.4.</span> <span class="nav-text">密码学的几个阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%A4%E5%85%B8%E5%AF%86%E7%A0%81"><span class="nav-number">1.4.1.</span> <span class="nav-text">古典密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1949-1975"><span class="nav-number">1.4.2.</span> <span class="nav-text">1949-1975</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1976"><span class="nav-number">1.4.3.</span> <span class="nav-text">1976-</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E9%98%B6%E6%AE%B5%E4%B8%8E%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6"><span class="nav-number">1.4.4.</span> <span class="nav-text">新阶段与现代密码学</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E7%AE%97%E6%B3%95%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.</span> <span class="nav-text">密码算法分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E8%A6%81%E6%B1%82"><span class="nav-number">1.6.</span> <span class="nav-text">安全要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81"><span class="nav-number">1.7.</span> <span class="nav-text">对称密码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81%E5%AE%89%E5%85%A8%E7%9A%84%E4%B8%A4%E4%B8%AA%E5%BF%85%E5%A4%87%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.7.1.</span> <span class="nav-text">对称密码安全的两个必备条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.7.2.</span> <span class="nav-text">加密对称密码模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81"><span class="nav-number">1.8.</span> <span class="nav-text">凯撒密码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%A7%A3%E5%AF%86"><span class="nav-number">1.8.1.</span> <span class="nav-text">加解密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%86%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.8.2.</span> <span class="nav-text">密码分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E8%A1%A8%E4%BB%A3%E6%9B%BF%E5%AF%86%E7%A0%81"><span class="nav-number">1.8.3.</span> <span class="nav-text">单表代替密码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Playfair-%E5%AF%86%E7%A0%81"><span class="nav-number">1.9.</span> <span class="nav-text">Playfair 密码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%A7%A3%E5%AF%86-1"><span class="nav-number">1.9.1.</span> <span class="nav-text">加解密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Playfair-%E5%AF%86%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">1.9.2.</span> <span class="nav-text">Playfair 密码分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hill-%E5%AF%86%E7%A0%81"><span class="nav-number">1.10.</span> <span class="nav-text">Hill 密码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E8%A7%A3%E5%AF%86-2"><span class="nav-number">1.10.1.</span> <span class="nav-text">加解密</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%A1%A8%E4%BB%A3%E6%9B%BF%E5%AF%86%E7%A0%81"><span class="nav-number">1.11.</span> <span class="nav-text">多表代替密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81"><span class="nav-number">1.12.</span> <span class="nav-text">维吉尼亚密码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E8%BF%87%E7%A8%8B"><span class="nav-number">1.12.1.</span> <span class="nav-text">加密过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%AF%86%E7%A0%81%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">1.12.2.</span> <span class="nav-text">维吉尼亚密码的安全性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E6%AC%A1%E4%B8%80%E5%AF%86"><span class="nav-number">1.13.</span> <span class="nav-text">一次一密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%AE%E6%8D%A2%E5%AF%86%E7%A0%81"><span class="nav-number">1.14.</span> <span class="nav-text">置换密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E7%A7%BB%E4%BD%8D%E5%AF%86%E7%A0%81"><span class="nav-number">1.15.</span> <span class="nav-text">行移位密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E8%BD%AE%E5%AF%86%E7%A0%81"><span class="nav-number">1.16.</span> <span class="nav-text">转轮密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E5%86%99%E6%9C%AF"><span class="nav-number">1.17.</span> <span class="nav-text">隐写术</span></a></li></ol></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="七年"
-      src="/images/avatar.png">
-  <p class="site-author-name" itemprop="name">七年</p>
-  <div class="site-description" itemprop="description"><front color="FFFFFF">自由之思想，独立之精神。</front></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">6</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">七年</span>
-</div>
-
-        
-
-
-
-
-
-
-<script>
-  (function() {
-    function leancloudSelector(url) {
-      url = encodeURI(url);
-      return document.getElementById(url).querySelector('.leancloud-visitors-count');
-    }
-
-    function addCount(Counter) {
-      var visitors = document.querySelector('.leancloud_visitors');
-      var url = decodeURI(visitors.id);
-      var title = visitors.dataset.flagTitle;
-
-      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
-        .then(response => response.json())
-        .then(({ results }) => {
-          if (results.length > 0) {
-            var counter = results[0];
-            leancloudSelector(url).innerText = counter.time + 1;
-            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
-              .catch(error => {
-                console.error('Failed to save visitor count', error);
-              });
-          } else {
-              Counter('post', '/classes/Counter', { title, url, time: 1 })
-                .then(response => response.json())
-                .then(() => {
-                  leancloudSelector(url).innerText = 1;
-                })
-                .catch(error => {
-                  console.error('Failed to create', error);
-                });
-          }
-        })
-        .catch(error => {
-          console.error('LeanCloud Counter Error', error);
-        });
-    }
-
-    function showTime(Counter) {
-      var visitors = document.querySelectorAll('.leancloud_visitors');
-      var entries = [...visitors].map(element => {
-        return decodeURI(element.id);
-      });
-
-      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
-        .then(response => response.json())
-        .then(({ results }) => {
-          for (let url of entries) {
-            let target = results.find(item => item.url === url);
-            leancloudSelector(url).innerText = target ? target.time : 0;
-          }
-        })
-        .catch(error => {
-          console.error('LeanCloud Counter Error', error);
-        });
-    }
-
-    let { app_id, app_key, server_url } = {"enable":true,"app_id":"SDOdmTg1DNWPtubU8vHwAgvc-gzGzoHsz","app_key":"W8Ua1Axo0hdnNKFUjqETYeBB","server_url":null,"security":false};
-    function fetchData(api_server) {
-      var Counter = (method, url, data) => {
-        return fetch(`${api_server}/1.1${url}`, {
-          method,
-          headers: {
-            'X-LC-Id'     : app_id,
-            'X-LC-Key'    : app_key,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data)
-        });
-      };
-      if (CONFIG.page.isPost) {
-        if (CONFIG.hostname !== location.hostname) return;
-        addCount(Counter);
-      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
-        showTime(Counter);
-      }
-    }
-
-    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
-
-    if (api_server) {
-      fetchData(api_server);
-    } else {
-      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
-        .then(response => response.json())
-        .then(({ api_server }) => {
-          fetchData('https://' + api_server);
-        });
-    }
-  })();
-</script>
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-<script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script>
-<script>
-            window.imageLazyLoadSetting = {
-                isSPA: false,
-                preloadRatio: 1,
-                processImages: null,
-            };
-        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body>
-</html>
-
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>密码</tag>
+      </tags>
+  </entry>
+</search>
