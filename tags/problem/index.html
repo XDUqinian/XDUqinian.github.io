@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"xduqinian.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"xduqinian.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="自由之思想，独立之精神。">
@@ -80,7 +80,8 @@
   <div class="container use-motion">
     <div class="headband"></div>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="id-header-inner" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <!-- 添加了id，后面改变css样式用 -->
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏">
@@ -171,6 +172,60 @@
 
 </div>
     </header>
+   <!-- 改变css样式 -->
+    <script type="text/javascript">
+      var url = document.location.pathname;
+      var folderName = url.substr(1, url.length - 2)
+      console.log(folderName);
+
+      var listPostUrl = [
+        "/" + folderName + "/" + "post-banner.png",
+        "/" + folderName + "/" + "post-banner.jpg",
+      ];
+
+      var nSuccessCount = 0;
+      var nResponceCount = 0;
+      function OnHttpResponse(bSuccess, strUrl) {
+        console.log("OnHttpResponse: " + bSuccess + ", " + strUrl);
+        nResponceCount++;
+        if(nSuccessCount > 0){
+          return;
+        }
+        if(bSuccess) {
+          nSuccessCount++;
+          document.getElementById("id-header-inner").style.backgroundImage = "url(" + strUrl + ")";
+        }
+        if(nResponceCount >= listPostUrl.length && nSuccessCount <= 0){
+        // 使用默认图
+          document.getElementById("id-header-inner").style.backgroundImage = "url(/images/back.jpg)";
+        }
+      }
+
+      function changeBanner(strPostUrl, nIndex){
+        console.log("try to load" + strPostUrl);
+        var xmlhttp;
+        if (window.XMLHttpRequest){
+        //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+        xmlhttp=new XMLHttpRequest();
+        }
+        else{
+        // IE6, IE5 浏览器执行代码
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function(){
+          if (xmlhttp.readyState==4 && xmlhttp.status==200){
+            OnHttpResponse(true, strPostUrl);
+          } 
+          else {
+            OnHttpResponse(false, strPostUrl);
+          }
+        }
+        xmlhttp.open("HEAD",strPostUrl,true);
+        xmlhttp.send();
+      }
+
+      listPostUrl.forEach(changeBanner);
+    </script>
 
     
   <div class="back-to-top">
@@ -267,7 +322,7 @@
     <span class="toggle-line toggle-line-last"></span>
   </div>
 
-  <aside class="sidebar">
+  <aside id="id-sidebar" class="sidebar">
     <div class="sidebar-inner">
 
       <ul class="sidebar-nav motion-element">
@@ -320,6 +375,59 @@
       </div>
 
     </div>
+    <script type="text/javascript">
+          var url = document.location.pathname;
+          var folderName = url.substr(1, url.length - 2)
+          console.log(folderName);
+
+          var listPostUrl = [
+            "/" + folderName + "/" + "post-banner.png",
+            "/" + folderName + "/" + "post-banner.jpg",
+          ];
+
+          var nSuccessCount = 0;
+          var nResponceCount = 0;
+          function OnHttpResponse(bSuccess, strUrl) {
+            console.log("OnHttpResponse: " + bSuccess + ", " + strUrl);
+            nResponceCount++;
+            if(nSuccessCount > 0){
+              return;
+            }
+            if(bSuccess) {
+              nSuccessCount++;
+              document.getElementById("id-sidebar").style.backgroundImage = "url(" + strUrl + ")";
+            }
+            if(nResponceCount >= listPostUrl.length && nSuccessCount <= 0){
+            // 使用默认图
+              document.getElementById("id-sidebar").style.backgroundImage = "url(/images/back.jpg)";
+            }
+          }
+
+          function changeBanner(strPostUrl, nIndex){
+            console.log("try to load" + strPostUrl);
+            var xmlhttp;
+            if (window.XMLHttpRequest){
+            //  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp=new XMLHttpRequest();
+            }
+            else{
+            // IE6, IE5 浏览器执行代码
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange=function(){
+              if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                OnHttpResponse(true, strPostUrl);
+              } 
+              else {
+                OnHttpResponse(false, strPostUrl);
+              }
+            }
+            xmlhttp.open("HEAD",strPostUrl,true);
+            xmlhttp.send();
+          }
+
+          listPostUrl.forEach(changeBanner);
+        </script>
   </aside>
   <div id="sidebar-dimmer"></div>
 
@@ -488,6 +596,35 @@
   
 
   
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'SDOdmTg1DNWPtubU8vHwAgvc-gzGzoHsz',
+      appKey     : 'W8Ua1Axo0hdnNKFUjqETYeBB',
+      placeholder: "Just go go",
+      avatar     : 'identicon',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
 <script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script>
 <script>
             window.imageLazyLoadSetting = {

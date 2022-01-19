@@ -82,6 +82,14 @@
 </li>
 <li><p><a href="https://blog.csdn.net/qq_38747027/article/details/107967518">修改创建文章时的固定模板</a>。</p>
 </li>
+<li><p>修改菜单标签。<a href="https://blog.csdn.net/lijing742180/article/details/85622524#_39">配置主题菜单</a></p>
+</li>
+<li><p>可参考的一些修改。<a href="https://www.cnblogs.com/antmoe/p/12846393.html#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E">优雅魔改</a></p>
+</li>
+<li><p>修改评论样式。<a href="https://blog.csdn.net/qq_42889280/article/details/103087637">评论框美化</a></p>
+</li>
+<li><p>Ctrl+Shift+c 可以看到网页某部分的源码位置。<a href="https://blog.csdn.net/wugenqiang/article/details/105744843">Hexo NexT 评论系统 Valine 的使用，详细版</a></p>
+</li>
 </ul>
 <h3 id="一些功能"><a href="#一些功能" class="headerlink" title="一些功能"></a>一些功能</h3><ul>
 <li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
@@ -92,6 +100,10 @@
 <li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
 <li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
 <li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
+<li>友情链接实现。<a href="https://zhuanlan.zhihu.com/p/384472746">友链</a></li>
+<li>显示当前浏览进度。主题配置文件 b2t 和 scrollpercnet 修改为 true。</li>
+<li>设置about的时候应该会用上。<a href="https://blog.csdn.net/hhh132/article/details/97029059">post-banner</a></li>
+<li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
 </ul>
 <h3 id="待实现的功能与小任务"><a href="#待实现的功能与小任务" class="headerlink" title="待实现的功能与小任务"></a>待实现的功能与小任务</h3><ul>
 <li><p>点击头像回首页。</p>
