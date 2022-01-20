@@ -106,11 +106,11 @@
 <li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
 </ul>
 <h3 id="待实现的功能与小任务"><a href="#待实现的功能与小任务" class="headerlink" title="待实现的功能与小任务"></a>待实现的功能与小任务</h3><ul>
-<li><p>点击头像回首页。</p>
-</li>
-<li><p>站点信息显示：已运行时间等。</p>
-</li>
-<li>评论回复功能。</li>
+<li>站点信息显示：已运行时间等。</li>
+<li>评论回复邮箱审核。</li>
+<li>首页封图LazyLoading。</li>
+<li>滚动条优化。</li>
+<li>首页背景 scroll-down。</li>
 </ul>
 ]]></content>
       <categories>
