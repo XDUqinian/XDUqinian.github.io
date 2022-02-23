@@ -1073,7 +1073,7 @@
       </tags>
   </entry>
   <entry>
-    <title>基于go-cqhttp与python的qq机器人配置教程</title>
+    <title>基于go-cqhttp与python的qq机器人开发</title>
     <url>/2022/01/27/mybot/</url>
     <content><![CDATA[<p>大一的时候看到果果自己写了一个qq机器人，就想着什么时候自己也实现一个，刚好因为疫情的原因在宿舍封了两周，就动手实现一下自己久远的小愿望。</p>
 <span id="more"></span>
@@ -1131,7 +1131,8 @@
         <category>教程</category>
       </categories>
       <tags>
-        <tag>qq机器人，python</tag>
+        <tag>qq机器人</tag>
+        <tag>python</tag>
       </tags>
   </entry>
 </search>
