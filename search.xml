@@ -246,7 +246,7 @@
 <p>入侵检测方法的评估：检测率、误报率。</p>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>应用密码学与网络安全</category>
       </categories>
       <tags>
         <tag>病毒</tag>
@@ -486,7 +486,7 @@
 <p>缺点：需要额外的付出来隐藏相对较少的信息。</p>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>应用密码学与网络安全</category>
       </categories>
       <tags>
         <tag>密码</tag>
@@ -1066,7 +1066,7 @@
 <p>这些攻击方法虽然可以部分减少搜索空间，但对 DES 的实际攻击都不可行。</p>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>应用密码学与网络安全</category>
       </categories>
       <tags>
         <tag>密码</tag>
@@ -1277,11 +1277,11 @@
 <ul>
 <li><strong>整数表示</strong></li>
 <li><strong>向量表示</strong></li>
-<li><strong>多项式表示</strong></li>
+<li><strong>多项式表示</strong>0</li>
 </ul>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>应用密码学与网络安全</category>
       </categories>
       <tags>
         <tag>密码</tag>
@@ -1608,7 +1608,7 @@
 </ul>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>软件工程概论</category>
       </categories>
       <tags>
         <tag>软件工程</tag>
@@ -1720,6 +1720,221 @@
       </categories>
       <tags>
         <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2021期末数据库复习总结</title>
+    <url>/2022/03/14/DataBase/</url>
+    <content><![CDATA[<p><img src="/DataBase/cover.png" alt="cover"></p>
+<p>因为疫情导致的第四轮复习的产物，数据库真让人麻木 qaq 。</p>
+<p>主要是一些概念。和代码相关的还有关系代数关系演算部分就不搞了，看看书就会。</p>
+<span id="more"></span>
+<h1 id="一、绪论"><a href="#一、绪论" class="headerlink" title="一、绪论"></a>一、绪论</h1><h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p><strong>描述事物的符号记录</strong>。</p>
+<p>数据的含义称为数据的语义，数据与其语义是不可分的。</p>
+<h2 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h2><p><strong>长期存储</strong>在计算机内，<strong>有组织</strong>，<strong>可共享</strong>的大量数据的集合。</p>
+<p><strong>特点</strong>：较小的冗余度、较高的数据独立性和易扩展性。</p>
+<h2 id="数据库管理系统"><a href="#数据库管理系统" class="headerlink" title="数据库管理系统"></a>数据库管理系统</h2><p>位于用户应用与操作系统间的一层<strong>数据管理软件</strong>。</p>
+<h2 id="数据库系统"><a href="#数据库系统" class="headerlink" title="数据库系统"></a>数据库系统</h2><p>由<strong>数据库</strong>、<strong>数据库管理系统</strong>（及其应用开发工具）、<strong>应用程序</strong>和<strong>数据库管理员</strong>组成的<strong>存储</strong>、<strong>管理</strong>、<strong>处理</strong>和<strong>维护</strong>数据的系统。</p>
+<h3 id="数据库系统特点"><a href="#数据库系统特点" class="headerlink" title="数据库系统特点"></a>数据库系统特点</h3><ul>
+<li>数据结构化。</li>
+<li>数据共享性高、冗余度低且易扩充。</li>
+<li>数据独立性高。</li>
+<li>数据由数据库管理系统统一管理和控制。</li>
+</ul>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p><strong>概念模型</strong>（信息模型）</p>
+<p><strong>逻辑模型</strong>：按计算机系统的观点对数据建模，用于 DBMS 实现。</p>
+<p><strong>物理模型</strong>：描述数据在系统内（磁盘上）的表示形式和存取方式。</p>
+<h2 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h2><ul>
+<li>实体：人、书、物。</li>
+<li>属性：特性。</li>
+<li>码（key）：属性集。</li>
+<li>实体型：用实体名及其属性名集抽象和刻画同类实体。</li>
+<li>实体集：同类型实体集合。</li>
+<li>联系：1对1、1对n、m对n （E-R图）。</li>
+</ul>
+<h2 id="数据模型的组成要素"><a href="#数据模型的组成要素" class="headerlink" title="数据模型的组成要素"></a>数据模型的组成要素</h2><ul>
+<li>数据结构：描述数据库的组成对象以及对象之间的联系。</li>
+<li>数据操作：查询和更新（包括插入、删除、修改）。</li>
+<li>数据完整性的约束条件：一组完整性规则。</li>
+</ul>
+<h2 id="数据独立性"><a href="#数据独立性" class="headerlink" title="数据独立性"></a>数据独立性</h2><ul>
+<li>物理独立性：用户的应用程序与数据库中的数据的物理存储相互独立。</li>
+<li>逻辑独立性：用户的应用程序与数据库的逻辑结构相互独立。</li>
+</ul>
+<h2 id="两代数据模型"><a href="#两代数据模型" class="headerlink" title="两代数据模型"></a>两代数据模型</h2><h3 id="第一代数据模型"><a href="#第一代数据模型" class="headerlink" title="第一代数据模型"></a>第一代数据模型</h3><p>层次模型，<strong>树形</strong>结构。</p>
+<p>网状模型，<strong>网状</strong>结构。</p>
+<h3 id="第二代数据模型"><a href="#第二代数据模型" class="headerlink" title="第二代数据模型"></a>第二代数据模型</h3><p>关系模型。</p>
+<h2 id="关系模型"><a href="#关系模型" class="headerlink" title="关系模型"></a>关系模型</h2><ul>
+<li>关系名：表名。</li>
+<li>关系模式：表头。</li>
+<li>关系：二维表。</li>
+<li>元组：记录或行。</li>
+<li>属性：列。</li>
+<li>属性名：列名。</li>
+<li>属性值：列值。</li>
+<li>分值：一条记录中的一个列值。</li>
+<li>非规范关系：表中有表。</li>
+</ul>
+<h2 id="关系的完整性约束条件"><a href="#关系的完整性约束条件" class="headerlink" title="关系的完整性约束条件"></a>关系的完整性约束条件</h2><p>实体完整性、参照完整性、用户定义完整性。</p>
+<p>实体完整性和参照完整性是关系的两个不变性。</p>
+<h2 id="三级模式结构"><a href="#三级模式结构" class="headerlink" title="三级模式结构"></a>三级模式结构</h2><p><strong>外模式</strong>：数据的逻辑独立性。用户能见的局部数据的逻辑结构和特征描述。</p>
+<p><strong>模式</strong>：数据库中全体数据的逻辑结构和特征描述。</p>
+<p><strong>内模式</strong>：数据的物理独立性</p>
+<p>外模式可以有多个，模式和内模式只有一个。</p>
+<h1 id="二、关系数据库"><a href="#二、关系数据库" class="headerlink" title="二、关系数据库"></a>二、关系数据库</h1><p><strong>关系模型</strong>建立在<strong>集合代数</strong>基础上。</p>
+<p><strong>候选码</strong>是某一属性组的值能<strong>唯一标识一个元组</strong>，而其子集不能。</p>
+<p><strong>主码</strong>：若一个关系有<strong>多个候选码</strong>，则<strong>选其中一个</strong>为主码。</p>
+<p><strong>外码</strong>：一个表中一个（多个）属性，<strong>非自身的码</strong>，且该属性和另一个表的<strong>主码属性</strong>是同一属性，则这个（组）属性称为外码。</p>
+<p><strong>实体完整性</strong>：主码不能重复，不能为空。</p>
+<p><strong>参照完整性</strong>：外码不能为空（或均为空值），外码等于被参照表的主码值。</p>
+<p><strong>用户定义完整性</strong>：用户自定义的完整性约束条件。</p>
+<h1 id="三、SQL"><a href="#三、SQL" class="headerlink" title="三、SQL"></a>三、SQL</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">SQL 功能</th>
+<th style="text-align:center">动词</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数据查询</td>
+<td style="text-align:center">SELECT</td>
+</tr>
+<tr>
+<td style="text-align:center">数据定义</td>
+<td style="text-align:center">CREATE、DROP、ALTER</td>
+</tr>
+<tr>
+<td style="text-align:center">数据操纵</td>
+<td style="text-align:center">INSERT、UPDATE、DELETE</td>
+</tr>
+<tr>
+<td style="text-align:center">数据控制</td>
+<td style="text-align:center">GRANT、REVOKE</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作对象</th>
+<th style="text-align:center"></th>
+<th style="text-align:center">操作方式</th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">创建</td>
+<td style="text-align:center">删除</td>
+<td style="text-align:center">修改</td>
+</tr>
+<tr>
+<td style="text-align:center">模式</td>
+<td style="text-align:center">CREATE SCHEMA</td>
+<td style="text-align:center">DROP SCHEMA</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">表</td>
+<td style="text-align:center">CREATE TABLE</td>
+<td style="text-align:center">DROP TABLE</td>
+<td style="text-align:center">ALTER TABLE</td>
+</tr>
+<tr>
+<td style="text-align:center">视图</td>
+<td style="text-align:center">CREATE VIEW</td>
+<td style="text-align:center">DROP VIEW</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">索引</td>
+<td style="text-align:center">CREATE INDEX</td>
+<td style="text-align:center">DROP INDEX</td>
+<td style="text-align:center">ALTER INDEX</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="定义表格"><a href="#定义表格" class="headerlink" title="定义表格"></a>定义表格</h2><p>PRIMARY KEY( xxx，xxx )：<strong>主码由两个或以上属性构成，必须作为表级完整性进行定义</strong>。</p>
+<p>FOREIGN KEY( xxx，xxx ) REFERENCES TableName( xxx )</p>
+<h2 id="数据查询"><a href="#数据查询" class="headerlink" title="数据查询"></a>数据查询</h2><p>DISTINCT：消除重复的行。</p>
+<p>GROUP BY：对属性列值相等的值进行分组。</p>
+<p>HAVING：对 GROUP BY 得到的值进行筛选。</p>
+<p>ORDER BY 列名 DESC / ASC：查询结果降序或升序排列。</p>
+<h2 id="常用条件"><a href="#常用条件" class="headerlink" title="常用条件"></a>常用条件</h2><p><strong>比较符号</strong>：大于、小于等。</p>
+<p><strong>范围</strong>： BETWEEN AND、NOT BETWEEN AND。</p>
+<p><strong>确定集合</strong>： IN、NOT IN。</p>
+<p><strong>字符匹配</strong>： LIKE、NOT LIKE。</p>
+<ul>
+<li>% 任意长度</li>
+<li>_ 任意单字符</li>
+<li>加 \ 转义可以查上述字符。</li>
+</ul>
+<p><strong>多重条件</strong>：AND、OR、NOT。</p>
+<h2 id="聚集函数"><a href="#聚集函数" class="headerlink" title="聚集函数"></a>聚集函数</h2><p>COUNT(*)：统计元组个数。</p>
+<p>SUM：列值和。</p>
+<p>AVG：列值平均。</p>
+<p>MAX：最大值。</p>
+<p>MIN：最小值。</p>
+<h2 id="连接查询"><a href="#连接查询" class="headerlink" title="连接查询"></a>连接查询</h2><p>等值连接和非等值连接。</p>
+<p>自然连接：2张表公共属性等值连接，并将结果去掉重复列。</p>
+<p>自身连接：自身笛卡尔积，再根据条件选择。</p>
+<p>外连接：</p>
+<ul>
+<li>左外连接：保留左边，不匹配补空格。</li>
+<li>右外连接：保留右边，不匹配补空格。</li>
+<li>外连接：保留两边，不匹配补空格。</li>
+</ul>
+<p>多表连接。</p>
+<h2 id="嵌套查询"><a href="#嵌套查询" class="headerlink" title="嵌套查询"></a>嵌套查询</h2><p><strong>分类</strong>：</p>
+<p>不相关子查询：子查询的条件不依赖父查询。</p>
+<p>相关子查询：子查询的查询条件依赖父查询。</p>
+<p><strong>ANY和ALL</strong>：必须同时使用比较运算符。</p>
+<p>ANY：查询结果的某个值。</p>
+<p>ALL：查询结果的所有值。</p>
+<h2 id="集合查询"><a href="#集合查询" class="headerlink" title="集合查询"></a>集合查询</h2><p>INTERSECT 交、UNION 并、EXCEPT 差。</p>
+<h2 id="数据更新"><a href="#数据更新" class="headerlink" title="数据更新"></a>数据更新</h2><p>插入数据 INSERT INTO VALUES。插入子查询结果。</p>
+<p>修改 UPDATE SET WHERE。</p>
+<p>删除 DELETE FROM WHERE。</p>
+<h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>创建视图，删除视图。</p>
+<p>查询视图，更新视图与基本表类似。</p>
+<h1 id="四、数据库安全性"><a href="#四、数据库安全性" class="headerlink" title="四、数据库安全性"></a>四、数据库安全性</h1><h2 id="数据库安全性控制的常用方法"><a href="#数据库安全性控制的常用方法" class="headerlink" title="数据库安全性控制的常用方法"></a>数据库安全性控制的常用方法</h2><ul>
+<li>用户身份鉴别。</li>
+<li>存取控制。</li>
+<li>审计。</li>
+<li>视图。</li>
+<li>数据加密。</li>
+</ul>
+<h2 id="接收、授予"><a href="#接收、授予" class="headerlink" title="接收、授予"></a>接收、授予</h2><p>GRANT 权限 ON 对象类型 TO 用户 [WITH GRANT OPT]</p>
+<p>REVOKE 权限 ON 对象类型 FROM 用户</p>
+<h1 id="五、数据库完整性"><a href="#五、数据库完整性" class="headerlink" title="五、数据库完整性"></a>五、数据库完整性</h1><p>见上。</p>
+<h1 id="六、范式"><a href="#六、范式" class="headerlink" title="六、范式"></a>六、范式</h1><p><strong>闭包</strong>（左边元素的集合）推出所有元素。</p>
+<p><strong>候选码</strong>由主属性构成，剩下非主属性。</p>
+<p><strong>范式</strong>：1NF &gt; 2NF &gt; 3NF &gt; BCNF。</p>
+<p>1NF：每个元素不可分割。</p>
+<p>2NF：上述情况下。不存在非主属性对码的部分依赖。</p>
+<p>3NF：上述情况下。不存在非主属性之间的依赖关系。（不存在非主属性对码的传递依赖。）</p>
+<p>BCNF：上述情况下。不存在主属性对候选码的部分或传递依赖。（决定因素都含有码。）</p>
+<h1 id="七、E-R-图"><a href="#七、E-R-图" class="headerlink" title="七、E-R 图"></a>七、E-R 图</h1><p>实体是矩形，属性是椭圆，联系是菱形。</p>
+<p>根据题设画 E-R 图。</p>
+<p>转换关系模式：</p>
+<ul>
+<li>每一个实体都是一个关系模式。</li>
+<li>1对1联系：将联系和另一个关系的主码加进另一个关系中。</li>
+<li>1对n联系：将联系的和 1 端关系的主码加进 n 端关系中。</li>
+<li>m对n联系：联系自己成立关系模式，主码为两端关系的主码组。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库系统概论</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
       </tags>
   </entry>
 </search>
