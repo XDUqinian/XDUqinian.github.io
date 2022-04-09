@@ -2591,6 +2591,8 @@
     <url>/2022/04/02/RemoteSecureTransfer/</url>
     <content><![CDATA[<h1 id><a href="#" class="headerlink" title></a><img src="/2022/04/02/RemoteSecureTransfer/8.png" alt="hhh"></h1><p>现代密码学基础技能实验，感觉挺有意思的，就简单记录一下吧。</p>
 <span id="more"></span>
+<p>2022.4.8 20:00</p>
+<p>验收成功，9.8分，应该是最高分吧，哈哈。</p>
 <h1 id="内容和要求"><a href="#内容和要求" class="headerlink" title="内容和要求"></a>内容和要求</h1><ol>
 <li>真实网络环境实现任意类型文件的远程传输。</li>
 <li>采用socket进行网络传输。</li>
@@ -2614,7 +2616,7 @@
 <ol>
 <li>Alice 向 Bob 发送两个质数 P、G。<ul>
 <li><em>P 必须是大质数，G 是和 P 相关的数，称为生成元。</em></li>
-<li><em>P 和 Q 不需要保密，被窃听者窃听也没关系。</em></li>
+<li><em>P 和 G 不需要保密，被窃听者窃听也没关系。</em></li>
 </ul>
 </li>
 <li>Alice 生成随机数 A。<ul>
@@ -2699,6 +2701,169 @@
         <tag>密码</tag>
         <tag>Java</tag>
         <tag>Socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>c++ 正则化表达式</title>
+    <url>/2022/04/04/regex/</url>
+    <content><![CDATA[<p>c4训练赛被字符串处理的题折磨疯了，临走前老师提到了正则化处理，就学习一下。</p>
+<p>众所周知，c4又被称为字符串大赛。</p>
+<span id="more"></span>
+<h1 id="语法规则"><a href="#语法规则" class="headerlink" title="语法规则"></a>语法规则</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">\</th>
+<th style="text-align:left">表示将下一字符标记为特殊字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">^</td>
+<td style="text-align:left">表示字符串的开始，匹配字符串开始的位置</td>
+</tr>
+<tr>
+<td style="text-align:left">$</td>
+<td style="text-align:left">表示字符串的结尾，匹配字符串结束的位置</td>
+</tr>
+<tr>
+<td style="text-align:left">\w</td>
+<td style="text-align:left">任意字母、数字、下划线；w大写取反</td>
+</tr>
+<tr>
+<td style="text-align:left">\s</td>
+<td style="text-align:left">任意空白字符；s大写取反</td>
+</tr>
+<tr>
+<td style="text-align:left">\d</td>
+<td style="text-align:left">单个数字字符；d大写为单个非数字字符</td>
+</tr>
+<tr>
+<td style="text-align:left">{n}</td>
+<td style="text-align:left">正好匹配n次前面的字符；o{n}表示正好n个o</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,}</td>
+<td style="text-align:left">至少匹配n次前面的字符</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,m}</td>
+<td style="text-align:left">至少匹配n次至多匹配m次前面的字符</td>
+</tr>
+<tr>
+<td style="text-align:left">\b</td>
+<td style="text-align:left">表示单词边界</td>
+</tr>
+<tr>
+<td style="text-align:left">()</td>
+<td style="text-align:left">匹配括号内的表达式；(abc)匹配abc</td>
+</tr>
+<tr>
+<td style="text-align:left">[]</td>
+<td style="text-align:left">集合，匹配一组字符；[abc]匹配a和b和c</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">等价于{1，}</td>
+</tr>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">等价于{0，}</td>
+</tr>
+<tr>
+<td style="text-align:left">？</td>
+<td style="text-align:left">等价于{0，1}</td>
+</tr>
+<tr>
+<td style="text-align:left">(?=)</td>
+<td style="text-align:left">括号里的紧随其后，但不被匹配</td>
+</tr>
+<tr>
+<td style="text-align:left">.</td>
+<td style="text-align:left">表示除换行外的任意字符</td>
+</tr>
+<tr>
+<td style="text-align:left">[[:alpha:]]</td>
+<td style="text-align:left">表示任何字母</td>
+</tr>
+<tr>
+<td style="text-align:left">\</td>
+<td style="text-align:left"></td>
+<td>表示或</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">regex <span class="title">r1</span><span class="params">(<span class="string">"6{4,9}"</span>)</span></span>;<span class="comment">//正则化表达式的声明</span></span><br><span class="line"><span class="function">regex <span class="title">r2</span><span class="params">(<span class="string">"6{10,}"</span>)</span></span>;</span><br><span class="line">str=<span class="built_in">regex_replace</span>(str,r2,<span class="string">"27"</span>);<span class="comment">//替换匹配</span></span><br><span class="line">str=<span class="built_in">regex_replace</span>(str,r1,<span class="string">"9"</span>);</span><br><span class="line"></span><br><span class="line">regex_search<span class="comment">//搜索匹配，根据正则表达式搜索字符串中是否存在符合规则的子串</span></span><br><span class="line">regex_match<span class="comment">//全文匹配，要求整个字符串符合正则表达式的匹配规则</span></span><br></pre></td></tr></table></figure>
+<p>要注意的是，我们生成正则表达式时用的是一个字符串，字符串对\是有解释的，所以为了不解释\我们要加两个\，才表示正则的一个\。</p>
+<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h1><h2 id="GPLT-L1-058-6翻了"><a href="#GPLT-L1-058-6翻了" class="headerlink" title="[GPLT] L1-058 6翻了"></a>[GPLT] L1-058 6翻了</h2><p><a href="https://www.liuchuo.net/archives/8727">柳神题解</a></p>
+<p><strong>解题思路</strong>：先把字符串中9个6以上的”6串“换成”27“，再将3个6以上的”6“串换成9。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;regex&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    string str;</span><br><span class="line">    <span class="built_in">getline</span>(cin,str);</span><br><span class="line">    <span class="function">regex <span class="title">r1</span><span class="params">(<span class="string">"6{4,9}"</span>)</span></span>;</span><br><span class="line">    <span class="function">regex <span class="title">r2</span><span class="params">(<span class="string">"6{10,}"</span>)</span></span></span><br><span class="line"><span class="function">    str</span>=<span class="built_in">regex_replace</span>(str,r2,<span class="string">"27"</span>);<span class="comment">//替换匹配</span></span><br><span class="line">	str=<span class="built_in">regex_replace</span>(str,r1,<span class="string">"9"</span>);</span><br><span class="line">    cout&lt;&lt;str&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="GPLT-L1-059-敲笨钟"><a href="#GPLT-L1-059-敲笨钟" class="headerlink" title="[GPLT] L1-059 敲笨钟"></a>[GPLT] L1-059 敲笨钟</h2><p><a href="https://www.liuchuo.net/archives/8729">题解</a></p>
+<p><strong>解题思路</strong>：用正则表达式模式匹配，若前半句和后半句都是以ong结尾，则表示匹配成功。然后用regex_replace进行字符替换。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;regex&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">int</span> t;</span><br><span class="line">    cin&gt;&gt;t;</span><br><span class="line">    cin.<span class="built_in">ignore</span>();</span><br><span class="line">    <span class="keyword">while</span>(t--)</span><br><span class="line">    {</span><br><span class="line">        string str;</span><br><span class="line">        <span class="built_in">getline</span>(cin,str);</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">regex_match</span>(str,<span class="built_in">regex</span>(<span class="string">".*ong,.*ong\\."</span>)))</span><br><span class="line">        {</span><br><span class="line">            <span class="function">regex <span class="title">r1</span><span class="params">(<span class="string">"[[:alpha:]]* [[:alpha:]]* [[:alpha:]]*\\."</span>)</span></span>;</span><br><span class="line">            str=<span class="built_in">regex_replace</span>(str,r1,<span class="string">"qiao ben zhong."</span>);</span><br><span class="line">            cout&lt;&lt;str&lt;&lt;endl;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> cout&lt;&lt;<span class="string">"Skipped"</span>&lt;&lt;endl;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="GPLT-L1-064-估值一亿的AI核心代码"><a href="#GPLT-L1-064-估值一亿的AI核心代码" class="headerlink" title="[GPLT] L1-064 估值一亿的AI核心代码"></a>[GPLT] L1-064 估值一亿的AI核心代码</h2><p><a href="https://www.liuchuo.net/archives/8741">题解</a></p>
+<p><strong>使用regex_replace的正则语句来处理:</strong></p>
+<ol>
+<li>str储存输入的句子，将若干个空格转换为一个空格，使用\s+来表示若干个空格。</li>
+<li>将句子开头、结尾的空格，以及标点符号前面的空格消除。^表示开头，$表示结尾，\W是非数字、字母的字符。</li>
+<li>将’I’暂时用 “mark_mark” 代替，以防后续转换后出现的 ‘I’ 与原句中的 ‘I’ 混淆，\b匹配单词的边界。</li>
+<li>把所非’I’字母转换成小写字母。</li>
+<li>将 “can you” 和 “could you” 转换为对应的 “I can” 和 “I could”。</li>
+<li>把原本句子中的’I’——现在是 “mark_mark”，和 “me” 转换为 “you”。</li>
+<li>把所有问号用感叹号替换。</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;regex&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">string str;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">	<span class="keyword">int</span> t;</span><br><span class="line">	cin&gt;&gt;t;</span><br><span class="line">	cin.<span class="built_in">ignore</span>();</span><br><span class="line">	<span class="keyword">while</span>(t--)</span><br><span class="line">	{</span><br><span class="line">		<span class="built_in">getline</span>(cin,str);</span><br><span class="line">		cout&lt;&lt;str&lt;&lt;<span class="string">"\n"</span>&lt;&lt;<span class="string">"AI: "</span>;</span><br><span class="line">		str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"\\s+"</span>), <span class="string">" "</span>);</span><br><span class="line">        str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"^\\s+|\\s+$|\\s+(?=\\W)"</span>), <span class="string">""</span>);</span><br><span class="line">		str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"(\\bI\\b)"</span>), <span class="string">"mark_mark"</span>);</span><br><span class="line">		<span class="keyword">int</span> len=str.<span class="built_in">length</span>();</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i &lt;len; i++) <span class="keyword">if</span> (str[i] !=<span class="string">'I'</span>) str[i]=<span class="built_in">tolower</span>(str[i]);</span><br><span class="line">		str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"(\\bcan you\\b)"</span>), <span class="string">"I can"</span>);</span><br><span class="line">       	str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"(\\bcould you\\b)"</span>), <span class="string">"I could"</span>);</span><br><span class="line">       	str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"(\\bmark_mark\\b|\\bme\\b)"</span>), <span class="string">"you"</span>);</span><br><span class="line">        str= <span class="built_in">regex_replace</span>(str, <span class="built_in">regex</span>(<span class="string">"(\\?)"</span>), <span class="string">"!"</span>);</span><br><span class="line">		cout&lt;&lt;str&lt;&lt;<span class="string">"\n"</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>regex</tag>
+        <tag>c4</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法刷题日志</title>
+    <url>/2022/04/05/CodingLog/</url>
+    <content><![CDATA[<p>有些错误犯一次就够了。</p>
+<span id="more"></span>
+<h1 id="注意的东西"><a href="#注意的东西" class="headerlink" title="注意的东西"></a>注意的东西</h1><ol>
+<li><p>如果选择对输入一个个读入，循环体不能随便break，因为可能会导致该询问的输出 输出到下个询问。</p>
+</li>
+<li><p>比较麻烦的字符串处理题，可以先考虑简化版怎么处理，再加上特殊判断。</p>
+</li>
+<li><p>结构体重载运算符作比较时，可以再写一个比较函数cmp进行基本比较，然后再在重载运算符里写总的比较规则，遇到重复的基本比较时就可以调用cmp，简化了代码。</p>
+</li>
+<li><p>优先队列默认大根堆，小根堆要修改。<strong>小根堆要重载大于号，大根堆要重载小于号。</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">priority_queue&lt;<span class="keyword">int</span>,vector&lt;<span class="keyword">int</span>&gt;,greater&lt;<span class="keyword">int</span>&gt; &gt;q;</span><br><span class="line"><span class="comment">//可以记成 &lt;类型,&lt;存储方式&gt;,&lt;比较函数&gt; &gt;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>;</span></span><br><span class="line">priority_queue&lt;node,vector&lt;node&gt;,greater&lt;node&gt; &gt; coll;</span><br><span class="line"><span class="comment">//一样的道理，但是这个node只能是结构体，不能是define的定义</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>看清楚题目有没有说第一个是根，有没有说按顺序输入。没有的话，要注意。</p>
+</li>
+<li><p>pair的声明</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> pis pair<span class="meta-string">&lt;int,int&gt;</span></span></span><br><span class="line">pis a=&#123;<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line">cout&lt;&lt;a.first&lt;&lt;<span class="string">&quot; &quot;</span>&lt;&lt;a.second&lt;&lt;endl;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完全二叉树用数组存储，只要知道任意四种遍历方式的一种，就可以给数组填上值构造出完全二叉树。</p>
+</li>
+<li><p><code>std::string</code> 的方法 <code>find</code>，返回值类型是<code>std::string::size_type</code>， 对应的是查找对象在字符串中的位置（从0开始），如果未查找到，该返回值是一个很大的数据（4294967295），判断时与 <code>std::string::npos</code>进行对比。</p>
+</li>
+</ol>
+<h2 id="字符串处理"><a href="#字符串处理" class="headerlink" title="字符串处理"></a>字符串处理</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//str的pos位置前插入str1,注意若pos是循环的下表，pos要加上插入字符串的长度</span></span><br><span class="line">str.<span class="built_in">insert</span>(pos,str1);</span><br><span class="line"><span class="comment">//返回从str的pos开始长度为len的子串，记得前面要加个str=，不然相当于啥也没干</span></span><br><span class="line">str=str.<span class="built_in">substr</span>(pos,len);</span><br><span class="line"><span class="comment">//创建一个输入流ss，内容是str</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;sstream&gt;</span></span></span><br><span class="line"><span class="function">stringstream <span class="title">ss</span><span class="params">(str)</span></span>;</span><br><span class="line"><span class="keyword">while</span>(ss&gt;&gt;str)</span><br><span class="line"><span class="comment">//把字母变成小写</span></span><br><span class="line"><span class="built_in">tolower</span>(<span class="keyword">char</span> x)</span><br><span class="line"><span class="comment">//返回从pos开始找str1的第一个位置    </span></span><br><span class="line">str.<span class="built_in">find</span>(pos,str1)</span><br></pre></td></tr></table></figure>
+<h2 id="哈夫曼树和哈夫曼编码"><a href="#哈夫曼树和哈夫曼编码" class="headerlink" title="哈夫曼树和哈夫曼编码"></a>哈夫曼树和哈夫曼编码</h2><ol>
+<li>哈夫曼树的带权路径长度 = 非叶子结点的权值之和。可以用小根堆计算。</li>
+<li>判断哈夫曼编码的合法性：<ul>
+<li>带权路径和对不对。小根堆。</li>
+<li>有无前缀。<code>str.find()</code></li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>算法竞赛</category>
+      </categories>
+      <tags>
+        <tag>c4</tag>
+        <tag>code</tag>
       </tags>
   </entry>
 </search>
