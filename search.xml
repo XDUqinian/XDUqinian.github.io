@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/01/10/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<span id="more"></span>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-      <categories>
-        <category>博客开发测试</category>
-      </categories>
-  </entry>
-  <entry>
     <title>hexo博客搭建</title>
     <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
@@ -118,32 +100,6 @@
       </categories>
       <tags>
         <tag>problem</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>picture</title>
-    <url>/2022/01/11/picture/</url>
-    <content><![CDATA[<p><img src="/2022/01/11/picture/1.jpg" alt="应该行了吧"></p>
-]]></content>
-      <categories>
-        <category>博客开发测试</category>
-      </categories>
-      <tags>
-        <tag>图片</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>test</title>
-    <url>/2022/01/10/test/</url>
-    <content><![CDATA[<p>一个小测试，我现在会markdown了。</p>
-<span id="more"></span>
-<p>hhhhhh</p>
-]]></content>
-      <categories>
-        <category>博客开发测试</category>
-      </categories>
-      <tags>
-        <tag>message</tag>
       </tags>
   </entry>
   <entry>
@@ -1615,114 +1571,6 @@
       </tags>
   </entry>
   <entry>
-    <title>大数据安全与隐私（一）</title>
-    <url>/2022/03/03/BigData1/</url>
-    <content><![CDATA[<p>大数据安全与隐私绪论。</p>
-<span id="more"></span>
-<h1 id="大数据的概念及内涵"><a href="#大数据的概念及内涵" class="headerlink" title="大数据的概念及内涵"></a>大数据的概念及内涵</h1><p>数据在改变世界。</p>
-<p>安全技术是一切新兴技术的伴生技术，大数据安全作为大数据技术的伴生技术，是我们在大数据时代保障安全的必不可少的技术。</p>
-<h2 id="大数据-5V-特征"><a href="#大数据-5V-特征" class="headerlink" title="大数据 5V 特征"></a>大数据 5V 特征</h2><p><strong>数量：</strong>大数据是指大小<strong>超出常规数据库</strong>工具获取、存储、管理和分析能力的数据集。</p>
-<p><strong>速度：</strong>大数据不仅数据量大，而且数据产生的速度快，对数据的<strong>实时处理能力</strong>提出了非常高的要求。</p>
-<p><strong>种类：</strong>大数据不仅有传统数据库管理的结构化数据，还有各种<strong>非结构化、半结构化数据</strong>。</p>
-<p><strong>价值：</strong>需要有效的技术才能从<strong>价值密度低的大量数据</strong>中，以可以接受的成本，创造出价值。</p>
-<p><strong>质量：</strong>数据的<strong>质量参差不齐</strong>。</p>
-<p>数量和速度，挑战信息处理的容量和速度。主要靠系统构建技术解决：<strong>云计算技术、雾计算</strong>。</p>
-<p>种类和质量，挑战计算机系统的<strong>数据理解能力</strong>，要求计算机不仅能理解规范的结构化数据，还要能理解不规范的半结构化和非结构化数据，甚至要像人类一样能够<strong>识别出错误数据、恶意数据、不准确数据</strong>。</p>
-<p>最终目标是提取数据的价值。以可接受的成本从数据中发现价值，在应用中创造价值。</p>
-<p>数据质量参差不齐：</p>
-<ul>
-<li>互联网上的大量<strong>无标注数据</strong>。</li>
-<li><strong>人为的错误数据</strong>（网络水军、恶意攻击等）。</li>
-<li>物联网设备采集的正常数据中混杂着由于设备故障、环境原因、精度原因导致的<strong>机器错误数据</strong>。</li>
-</ul>
-<h1 id="大数据的典型应用"><a href="#大数据的典型应用" class="headerlink" title="大数据的典型应用"></a>大数据的典型应用</h1><h2 id="生活"><a href="#生活" class="headerlink" title="生活"></a>生活</h2><p>地址、手机号、点外卖，借书</p>
-<h2 id="健康"><a href="#健康" class="headerlink" title="健康"></a>健康</h2><p>谷歌<strong>流感趋势</strong>未卜先知的故事，常被看作大数据分析优势的明证。</p>
-<p><strong>技术应用：</strong>Logistic 回归。</p>
-<p><strong>热门原因：</strong>大数据解决大问题，大就是一切，不需要复杂算法。</p>
-<p><strong>结论</strong>：只依靠数据无法解决问题。</p>
-<p>新冠肺炎疫情全球预测系统：兰州大学团队<strong>基于实时更新的流行病数据</strong>，对每个国家的逐日和季节性新增新冠肺炎发病数进行可靠预报。考虑气象因素和隔离措施对于 COVID-19 传播的影响。</p>
-<p><strong>技术应用：</strong>SIR、SEIR 模型，最优化方法等。</p>
-<p><strong>热门原因：</strong> <strong>疫情的影响</strong>，准确预测解封时间。</p>
-<p><strong>结论：</strong>需要一定的复杂模型。</p>
-<h2 id="经济"><a href="#经济" class="headerlink" title="经济"></a>经济</h2><p>华尔街<strong>利用微博数据预测股票</strong>。</p>
-<p><strong>近1000万条推特文本</strong>。</p>
-<p>推特反映出的情绪在一定程度上预测3~4天后的股市变化。</p>
-<p>模型预测的<strong>准确性73.3%~86.7%</strong>。</p>
-<h2 id="政治"><a href="#政治" class="headerlink" title="政治"></a>政治</h2><p>利用大数据<strong>预测美国大选</strong>。</p>
-<p>2012年美国大选：奥巴马团队<strong>数据挖掘</strong>。</p>
-<p>2016年美国大选：</p>
-<p>特朗普背后的大数据团队着重希拉里过去的演讲，通过关键词和数据分析来洞悉希拉里演讲的漏洞和缺点，从而为特朗普提供有力的攻击武器。</p>
-<p>希拉里有一支堪比硅谷公司的大数据团队。</p>
-<h1 id="大数据隐私与安全"><a href="#大数据隐私与安全" class="headerlink" title="大数据隐私与安全"></a>大数据隐私与安全</h1><h2 id="大数据安全"><a href="#大数据安全" class="headerlink" title="大数据安全"></a>大数据安全</h2><p>大数据安全即<strong>针对大数据服务系统</strong>，从数据的<strong>生成与采集</strong>、<strong>组织与存储</strong>、<strong>处理</strong>、<strong>共享使用</strong>、<strong>存档及销毁</strong>等多个角度来分析其安全问题及解决方案。</p>
-<p><strong>大数据技术也可以作为解决安全问题的技术手段</strong>，加强系统安全防护能力。</p>
-<p><strong>典型问题：</strong></p>
-<p>大数据服务系统的数据安全采集。</p>
-<p>大数据的访问控制。</p>
-<p>加密数据的可用性问题（可搜索性、可计算性等）。</p>
-<p>利用大数据服务的系统漏洞，攻击系统功能。</p>
-<p>利用大数据服务的算法缺陷或者训练数据管理的漏洞，注入攻击数据。</p>
-<p>利用大数据服务的合法功能，获取隐私信息。</p>
-<h2 id="隐私"><a href="#隐私" class="headerlink" title="隐私"></a>隐私</h2><p>大数据安全与隐私问题要求我们能够在大数据时代<strong>兼顾安全与自由、个性化服务与商业利益</strong>。</p>
-<p>我们所管理的数据（存储）<strong>分布在互联网上的各种账号中</strong>，通过这些账号才能访问我们的个人数据。</p>
-<p><strong>账号安全机制</strong>能够帮助我们抵御黑客及其他攻击者的非法访问。</p>
-<p>但是，<strong>管理好这些账号（保证账号的安全）</strong>其实是一件非常困难的事情。</p>
-<p>隐私不仅是我们直接管理的数据，还有很多不为我们所控制的数据。</p>
-<p>各种元数据：“窃听”到“监视”，如通话记录而不是通话内容。</p>
-<p>各种行为数据：从网络空间到物理空间。</p>
-<h3 id="网络空间：个人网络行为被跟踪。"><a href="#网络空间：个人网络行为被跟踪。" class="headerlink" title="网络空间：个人网络行为被跟踪。"></a>网络空间：个人网络行为被跟踪。</h3><ul>
-<li>搜索记录、浏览记录</li>
-<li>电子邮件：电子邮件保存在电邮供应商的日志文件中。</li>
-<li>通话记录：通话记录被加上时间标记备份在电话公司的大容量硬盘上。</li>
-<li>信息发布与社交网络：所有的个人网页、空间、微博、短视频文件，还有博客的信息被保存在多个服务器上。</li>
-<li>购物记录：何时何地买了何物。喜好品味以及支付能力，被信用卡提供商编目归档。</li>
-</ul>
-<h3 id="物理空间：行为被网络获取"><a href="#物理空间：行为被网络获取" class="headerlink" title="物理空间：行为被网络获取"></a>物理空间：行为被网络获取</h3><ul>
-<li>即时行踪：定位服务，WIFI服务，电信运营商的蜂窝网络。我们的即时行踪完全被手机供应商和电信运营商所掌握。</li>
-<li>容貌与打扮：谷歌地球、谷歌街景。我们的容貌和穿着打扮都被安装在各大商场和街角的摄像头捕捉并记录。基础设施的分布。</li>
-</ul>
-<h3 id="典型事件"><a href="#典型事件" class="headerlink" title="典型事件"></a>典型事件</h3><p>谷歌地球，谷歌街景对个人隐私侵犯。</p>
-<p>苹果手机收集用户位置信息事件。</p>
-<h1 id="大数据安全与隐私的法律法规"><a href="#大数据安全与隐私的法律法规" class="headerlink" title="大数据安全与隐私的法律法规"></a>大数据安全与隐私的法律法规</h1><h2 id="GDPR-规则"><a href="#GDPR-规则" class="headerlink" title="GDPR 规则"></a>GDPR 规则</h2><p>欧盟《通用数据保护条例》是20年来数据隐私条例的最重要变化。</p>
-<p>针对从欧盟公民处收集数据的企业：强制企业遵循 Privacy by Design 原则。</p>
-<ul>
-<li><strong>数据转移权：</strong>用户可要求自己的个人数据畅通无阻地直接迁移至新的提供商，数据以机器可读的格式迁移。当用户不再使用该公司产品时，它们将会丢失大量数据。</li>
-<li><strong>被遗忘权：</strong>每个数据主体有权要求数据控制者删除个人数据，并且不能过分延长数据留存时间。</li>
-<li><strong>算法公平性：</strong>数据主体有权要求<strong>对算法自动决策给出解释</strong>。对技术公司而言，这是<strong>对人工智能的严重限制</strong>，将大幅减缓 AI 技术的发展。</li>
-</ul>
-<h2 id="网络安全法"><a href="#网络安全法" class="headerlink" title="网络安全法"></a>网络安全法</h2><p>2017年6月1日正式实施《中华人民共和国网络安全法》：</p>
-<ul>
-<li>明确网络空间主权的原则。</li>
-<li>明确网络产品和服务提供者的安全义务。</li>
-<li>明确网络运营者的安全义务。</li>
-<li>进一步完善了个人信息保护规则。</li>
-<li>建立了关键信息基础设施的安全保护制度。</li>
-<li>确定了关键信息基础设施重要数据跨境传输的规则。</li>
-</ul>
-<p>2018年1月《信息安全技术 个人信息安全规范》：<strong>推荐性的国家标准</strong>。</p>
-<p>2020年7月3日，《中华人民共和国数据安全法（草案）》。<strong>2021年9月1日起正式实施</strong>。</p>
-<ul>
-<li>确定数据作为生产要素。</li>
-<li>确立行业安全责任、监管与统筹协调主体。</li>
-<li>更加重数据安全制度的建设。</li>
-<li>明确数据分级分类保护制度。</li>
-<li>要求数据活动具备制度+技术+培训+其他安全措施。</li>
-<li>首次确定数据交易中介服务机构的义务。</li>
-<li>弥补电信条例上位法缺失问题。</li>
-</ul>
-<p>数据安全保护：</p>
-<ul>
-<li>利用互联网等信息网络开展数据处理活动，应在网络安全等级保护制度的基础上，履行<strong>数据安全保护义务</strong>。</li>
-<li>重要数据的处理者应明确数据安全负责人和管理机构，落实<strong>数据安全保护责任</strong>。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>大数据安全与隐私</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>2021期末数据库复习总结</title>
     <url>/2022/03/14/DataBase/</url>
     <content><![CDATA[<p><img src="/2022/03/14/DataBase/cover.png" alt="cover"></p>
@@ -2995,221 +2843,19 @@
       </tags>
   </entry>
   <entry>
-    <title>大数据安全与隐私（二）</title>
-    <url>/2022/04/21/BigData2/</url>
-    <content><![CDATA[<p>数据安全基础。</p>
+    <title>关于用github进行版本控制的一些学习</title>
+    <url>/2022/05/03/learnGit/</url>
+    <content><![CDATA[<p>每次用 github 的时候都得重新找教程，就很浪费时间，刚好和果果组队做软工大作业要用到版本控制，就决定这回把 GitHub 的一些操作给记录一下，以后就不用到处找了。</p>
 <span id="more"></span>
-<h1 id="现代密码学基础（基础工具）"><a href="#现代密码学基础（基础工具）" class="headerlink" title="现代密码学基础（基础工具）"></a>现代密码学基础（基础工具）</h1><h2 id="密码学主要历史"><a href="#密码学主要历史" class="headerlink" title="密码学主要历史"></a>密码学主要历史</h2><ul>
-<li>古典密码阶段：数据的安全基于<strong>算法的保密</strong>。</li>
-<li>凯撒密码。</li>
-<li>频率分析法：每个字母的使用频率不同。</li>
-<li>近代密码阶段：数据的安全基于<strong>密钥的保密</strong>。</li>
-<li>对称密码：共享密钥前提下，解决信息保密传输问题。</li>
-<li>现代密码阶段：发送端和接收端<strong>无密钥</strong>的保密通信成为可能。</li>
-<li>公钥密码：RSA公钥算法，椭圆曲线等其它公钥算法。</li>
-<li>未来的密码阶段：量子时代&amp;后量子密码时代。</li>
-<li>量子计算机的出现使传统的数学难解问题不再困难。</li>
-<li>大整数分解问题，离散对数求解问题。</li>
-</ul>
-<h2 id="密码学基础"><a href="#密码学基础" class="headerlink" title="密码学基础"></a>密码学基础</h2><ul>
-<li>密码学：研究信息系统安全保密的科学。</li>
-<li>密码编码学：研究对信息进行编码，实现对信息的隐蔽。</li>
-<li>密码分析学：研究加密消息的破译或信息的伪造。</li>
-<li>参与者：<ul>
-<li>发送方：发送消息。</li>
-<li>接收方：接收消息。</li>
-<li>窃听者：尝试窃取信息的攻击者。</li>
-</ul>
-</li>
-<li>主要对象：<ul>
-<li>消息 m：明文、原始消息。</li>
-<li>密文 c：加密后的消息。</li>
-<li>加密 E：由明文转变为密文的函数。</li>
-<li>解密 D：由密文转变为明文的函数。</li>
-<li>密钥 k：用于加密或解密的钥匙。</li>
-</ul>
-</li>
-<li>古典密码<ul>
-<li>方法：针对每一类攻击进行安全分析。</li>
-<li>缺陷：攻击者可能发现新的攻击。</li>
-</ul>
-</li>
-<li><p>现代密码：证明密码方案能够抵挡某一类攻击者。</p>
-</li>
-<li><p>现代密码三原则</p>
-<ul>
-<li>形式化安全性定义：密码方案应该<strong>达到怎样的安全属性</strong>。</li>
-<li>精确假设：安全性建立在怎样的假设基础上。</li>
-<li>安全性证明：证明当假设成立时，加密方案满足形式化定义。</li>
-</ul>
-</li>
-<li>安全性定义的必要性<ul>
-<li>对于方案：不同方案达到不同的安全性。</li>
-<li>对于证明：安全性证明仅针对特定的安全性定义有意义。</li>
-</ul>
-</li>
-<li>安全性的衡量：信息安全保密性的高地是通过破解它的难易程度来衡量的。<ul>
-<li>威胁模型（攻击者的能力）：<ul>
-<li>唯密文攻击</li>
-<li>已知明文攻击</li>
-<li>选择明文攻击</li>
-<li>选择密文攻击</li>
-</ul>
-</li>
-<li>攻击模型（安全目标）：一个攻击者攻破加密方案后的含义。</li>
-</ul>
-</li>
-<li>密码分析是研究在不知道密钥的情况下来恢复明文的科学。攻击类型如上。</li>
-<li>安全目标<ul>
-<li>攻击者不能计算出完整明文。但泄露部分明文信息，有时候也很关键。</li>
-<li>攻击者不能计算出明文的任何有意义信息。但对有意义没有严格的定义。</li>
-<li>最终安全目标：不能从密文中计算出任何关于明文的函数。等价于攻击者不能从密文中计算出任何信息。</li>
-</ul>
-</li>
-<li>采用不可区分性定义最终安全目标。<ul>
-<li>攻击者对两个明文 m0 和 m1 进行挑战。</li>
-<li>挑战者随机选择其中的一个明文用给定的加密方案加密得到密文cb，并发送给攻击者。</li>
-<li>攻击者猜对 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.439ex" xmlns="http://www.w3.org/2000/svg" width="7.633ex" height="2.156ex" role="img" focusable="false" viewbox="0 -759 3373.7 953"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"/></g><g data-mml-node="mo" transform="translate(462,363) scale(0.707)"><path data-c="2032" d="M79 43Q73 43 52 49T30 61Q30 68 85 293T146 528Q161 560 198 560Q218 560 240 545T262 501Q262 496 260 486Q259 479 173 263T84 45T79 43Z"/></g></g><g data-mml-node="mo" transform="translate(984.2,0)"><path data-c="2208" d="M84 250Q84 372 166 450T360 539Q361 539 377 539T419 540T469 540H568Q583 532 583 520Q583 511 570 501L466 500Q355 499 329 494Q280 482 242 458T183 409T147 354T129 306T124 272V270H568Q583 262 583 250T568 230H124V228Q124 207 134 177T167 112T231 48T328 7Q355 1 466 0H570Q583 -10 583 -20Q583 -32 568 -40H471Q464 -40 446 -40T417 -41Q262 -41 172 45Q84 127 84 250Z"/></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(1929,0)"><g data-mml-node="mn"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"/></g><g data-mml-node="mo" transform="translate(500,0)"><path data-c="2C" d="M78 35T78 60T94 103T137 121Q165 121 187 96T210 8Q210 -27 201 -60T180 -117T154 -158T130 -185T117 -194Q113 -194 104 -185T95 -172Q95 -168 106 -156T131 -126T157 -76T173 -3V9L172 8Q170 7 167 6T161 3T152 1T140 0Q113 0 96 17Z"/></g><g data-mml-node="mn" transform="translate(944.7,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/></g></g></g></g></svg></mjx-container>，若满足下式称该加密方案是不可区分安全的<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="29.041ex" height="2.283ex" role="img" focusable="false" viewbox="0 -759 12836 1009"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mo" transform="translate(0 -0.5)"><path data-c="7C" d="M139 -249H137Q125 -249 119 -235V251L120 737Q130 750 139 750Q152 750 159 735V-235Q151 -249 141 -249H139Z"/></g><g data-mml-node="mi" transform="translate(278,0)"><path data-c="1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"/></g><g data-mml-node="mi" transform="translate(1029,0)"><path data-c="1D45F" d="M21 287Q22 290 23 295T28 317T38 348T53 381T73 411T99 433T132 442Q161 442 183 430T214 408T225 388Q227 382 228 382T236 389Q284 441 347 441H350Q398 441 422 400Q430 381 430 363Q430 333 417 315T391 292T366 288Q346 288 334 299T322 328Q322 376 378 392Q356 405 342 405Q286 405 239 331Q229 315 224 298T190 165Q156 25 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 114 189T154 366Q154 405 128 405Q107 405 92 377T68 316T57 280Q55 278 41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mo" transform="translate(1480,0)"><path data-c="5B" d="M118 -250V750H255V710H158V-210H255V-250H118Z"/></g><g data-mml-node="mi" transform="translate(1758,0)"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"/></g><g data-mml-node="mo" transform="translate(2464.8,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"/></g><g data-mml-node="msup" transform="translate(3520.6,0)"><g data-mml-node="mi"><path data-c="1D44F" d="M73 647Q73 657 77 670T89 683Q90 683 161 688T234 694Q246 694 246 685T212 542Q204 508 195 472T180 418L176 399Q176 396 182 402Q231 442 283 442Q345 442 383 396T422 280Q422 169 343 79T173 -11Q123 -11 82 27T40 150V159Q40 180 48 217T97 414Q147 611 147 623T109 637Q104 637 101 637H96Q86 637 83 637T76 640T73 647ZM336 325V331Q336 405 275 405Q258 405 240 397T207 376T181 352T163 330L157 322L136 236Q114 150 114 114Q114 66 138 42Q154 26 178 26Q211 26 245 58Q270 81 285 114T318 219Q336 291 336 325Z"/></g><g data-mml-node="mo" transform="translate(462,363) scale(0.707)"><path data-c="2032" d="M79 43Q73 43 52 49T30 61Q30 68 85 293T146 528Q161 560 198 560Q218 560 240 545T262 501Q262 496 260 486Q259 479 173 263T84 45T79 43Z"/></g></g><g data-mml-node="mo" transform="translate(4227,0)"><path data-c="5D" d="M22 710V750H159V-250H22V-210H119V710H22Z"/></g><g data-mml-node="mo" transform="translate(4727.2,0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"/></g><g data-mml-node="mn" transform="translate(5727.5,0)"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/></g><g data-mml-node="TeXAtom" data-mjx-texclass="ORD" transform="translate(6227.5,0)"><g data-mml-node="mo"><path data-c="2F" d="M423 750Q432 750 438 744T444 730Q444 725 271 248T92 -240Q85 -250 75 -250Q68 -250 62 -245T56 -231Q56 -221 230 257T407 740Q411 750 423 750Z"/></g></g><g data-mml-node="mn" transform="translate(6727.5,0)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g><g data-mml-node="mo" transform="translate(7227.5,0) translate(0 -0.5)"><path data-c="7C" d="M139 -249H137Q125 -249 119 -235V251L120 737Q130 750 139 750Q152 750 159 735V-235Q151 -249 141 -249H139Z"/></g><g data-mml-node="mo" transform="translate(7783.2,0)"><path data-c="3C" d="M694 -11T694 -19T688 -33T678 -40Q671 -40 524 29T234 166L90 235Q83 240 83 250Q83 261 91 266Q664 540 678 540Q681 540 687 534T694 519T687 505Q686 504 417 376L151 250L417 124Q686 -4 687 -5Q694 -11 694 -19Z"/><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z" transform="translate(778,0)"/></g><g data-mml-node="mi" transform="translate(9617,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mi" transform="translate(10217,0)"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"/></g><g data-mml-node="mi" transform="translate(10683,0)"><path data-c="1D454" d="M311 43Q296 30 267 15T206 0Q143 0 105 45T66 160Q66 265 143 353T314 442Q361 442 401 394L404 398Q406 401 409 404T418 412T431 419T447 422Q461 422 470 413T480 394Q480 379 423 152T363 -80Q345 -134 286 -169T151 -205Q10 -205 10 -137Q10 -111 28 -91T74 -71Q89 -71 102 -80T116 -111Q116 -121 114 -130T107 -144T99 -154T92 -162L90 -164H91Q101 -167 151 -167Q189 -167 211 -155Q234 -144 254 -122T282 -75Q288 -56 298 -13Q311 35 311 43ZM384 328L380 339Q377 350 375 354T369 368T359 382T346 393T328 402T306 405Q262 405 221 352Q191 313 171 233T151 117Q151 38 213 38Q269 38 323 108L331 118L384 328Z"/></g><g data-mml-node="mi" transform="translate(11160,0)"><path data-c="1D459" d="M117 59Q117 26 142 26Q179 26 205 131Q211 151 215 152Q217 153 225 153H229Q238 153 241 153T246 151T248 144Q247 138 245 128T234 90T214 43T183 6T137 -11Q101 -11 70 11T38 85Q38 97 39 102L104 360Q167 615 167 623Q167 626 166 628T162 632T157 634T149 635T141 636T132 637T122 637Q112 637 109 637T101 638T95 641T94 647Q94 649 96 661Q101 680 107 682T179 688Q194 689 213 690T243 693T254 694Q266 694 266 686Q266 675 193 386T118 83Q118 81 118 75T117 65V59Z"/></g><g data-mml-node="mo" transform="translate(11458,0)"><path data-c="28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"/></g><g data-mml-node="mi" transform="translate(11847,0)"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mo" transform="translate(12447,0)"><path data-c="29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"/></g></g></g></svg></mjx-container></li>
-</ul>
-</li>
-<li>不可区分安全性：<ul>
-<li>IND-COA：惟密文攻击下的不可区分性。 </li>
-<li>IND-KPA：已知明文攻击下的不可区分性。</li>
-<li>实用的安全性定义 </li>
-<li>IND-CPA：选择明文攻击下的不可区分性。</li>
-<li>IND-CCA：选择密文攻击下的不可区分性。</li>
-<li>新型密码的不可区分安全性：</li>
-<li>IND-OCPA、IND-CKA、PEKS-IND-CPA等。</li>
-</ul>
-</li>
-</ul>
-<h2 id="现代密码学工具"><a href="#现代密码学工具" class="headerlink" title="现代密码学工具"></a>现代密码学工具</h2><ul>
-<li>从文字到比特序列。<ul>
-<li>编码：将现实世界的东西映射为比特序列的操作。</li>
-<li>异或：计算机内数值的一个基本操作。</li>
-</ul>
-</li>
-<li>一次一密，一次性密码本。<ul>
-<li><strong>绝对不会被破译的密码。</strong></li>
-<li>原理：将明文与一段等长的随机比特序列进行异或运算。</li>
-<li>若破解，要尝试<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex" xmlns="http://www.w3.org/2000/svg" width="6.242ex" height="1.912ex" role="img" focusable="false" viewbox="0 -833.9 2759 844.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mo" transform="translate(822.2,0)"><path data-c="D7" d="M630 29Q630 9 609 9Q604 9 587 25T493 118L389 222L284 117Q178 13 175 11Q171 9 168 9Q160 9 154 15T147 29Q147 36 161 51T255 146L359 250L255 354Q174 435 161 449T147 471Q147 480 153 485T168 490Q173 490 175 489Q178 487 284 383L389 278L493 382Q570 459 587 475T609 491Q630 491 630 471Q630 464 620 453T522 355L418 250L522 145Q606 61 618 48T630 29Z"/></g><g data-mml-node="msup" transform="translate(1822.4,0)"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="38" d="M70 417T70 494T124 618T248 666Q319 666 374 624T429 515Q429 485 418 459T392 417T361 389T335 371T324 363L338 354Q352 344 366 334T382 323Q457 264 457 174Q457 95 399 37T249 -22Q159 -22 101 29T43 155Q43 263 172 335L154 348Q133 361 127 368Q70 417 70 494ZM286 386L292 390Q298 394 301 396T311 403T323 413T334 425T345 438T355 454T364 471T369 491T371 513Q371 556 342 586T275 624Q268 625 242 625Q201 625 165 599T128 534Q128 511 141 492T167 463T217 431Q224 426 228 424L286 386ZM250 21Q308 21 350 55T392 137Q392 154 387 169T375 194T353 216T330 234T301 253T274 270Q260 279 244 289T218 306L210 311Q204 311 181 294T133 239T107 157Q107 98 150 60T250 21Z"/></g></g></g></g></g></svg></mjx-container>个密钥进行解密。</li>
-<li>无条件安全。</li>
-<li>一次一密不实用。</li>
-</ul>
-</li>
-<li>一次一密的缺陷：<ul>
-<li><strong>长密钥</strong>：密钥长度与明文<strong>长度一致</strong>。</li>
-<li><strong>难管理</strong>：密钥难以管理。</li>
-<li><strong>难以在公开信道生成密钥</strong>。</li>
-</ul>
-</li>
-<li>对称加密算法<ul>
-<li>加解密的密钥是相同的。</li>
-<li>发送方和接收方在安全通信之前，商定一个密钥。</li>
-<li>安全性依赖于密钥。</li>
-<li>采用的手段：混淆和扩散。</li>
-</ul>
-</li>
-<li>现代密码设计的准则：<ul>
-<li>算法必须<strong>公开征集</strong>。</li>
-<li>算法提供<strong>高度的安全性</strong>。</li>
-<li>算法必须有详细的说明并易于理解。</li>
-<li>算法的<strong>安全性必须取决于密钥，不依赖于算法本身的保密</strong>。</li>
-<li>算法必须<strong>使用高效</strong>（软硬件适配）。</li>
-</ul>
-</li>
-<li>DES 不再安全。</li>
-<li>3DES效率较低。<ul>
-<li>3次 DES 算法执行。</li>
-<li>数据分组为 64 b。</li>
-<li>未考虑 32 位机甚至 64 位机的普及。</li>
-</ul>
-</li>
-<li>扩散和混淆：<ul>
-<li>如果敌手知道明文的某些统计特性，那么敌手就有可能得出加密密钥或其一部分。</li>
-<li>理想密码的密码系统中，密码的所有统计特性都与所使用的密钥独立。</li>
-<li>扩散和混淆成功地实现了对称密码的本质属性，因而成为设计现代分组密码的基础。</li>
-</ul>
-</li>
-<li>扩散：将明文的统计特性散步到密文中去，实现方法是使得明文的每一位影响密文中多位的值。使<strong>明文和密文</strong>之间的统计关系尽可能复杂。</li>
-<li>混淆：使<strong>密文和密钥</strong>之间的统计关系尽可能复杂，以使敌手无法得到密钥。使用复杂的代换算法可以得到预期的混淆效果，而简单的<strong>线性代换函数得到的混淆效果不够理想</strong>。</li>
-<li>分组密码：将明文分组进行加密。</li>
-<li>离散对数问题：离散对数是难解的。</li>
-<li>单向函数<ul>
-<li>由 y 求 x 极为困难。</li>
-<li>由 x 求 y 易于实现。</li>
-<li>极为困难是<strong>针对现有的计算资源和算法而言的</strong>。</li>
-</ul>
-</li>
-<li>DH协议<ul>
-<li>约定一个素数𝑞 = 17及生成元𝑔 = 3。 </li>
-<li>各自选择私钥：𝑎 = 15，𝑏 = 13。</li>
-<li>计算各自的公开信息：<ul>
-<li>𝑌𝑎 = 𝑔𝑎 𝑚𝑜𝑑 𝑞 = <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.937ex" role="img" focusable="false" viewbox="0 -833.9 1290.1 855.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"/></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(500,0)"/></g></g></g></g></g></svg></mjx-container> 𝑚𝑜𝑑 17 = 6； </li>
-<li>𝑌b = 𝑔𝑏 𝑚𝑜𝑑 𝑞 = <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.937ex" role="img" focusable="false" viewbox="0 -833.9 1290.1 855.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z"/></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z" transform="translate(500,0)"/></g></g></g></g></g></svg></mjx-container> 𝑚𝑜𝑑 17 = 12</li>
-</ul>
-</li>
-<li>计算会话密钥：<ul>
-<li>𝐾𝑎b = 𝑌𝑏𝑎 𝑚𝑜𝑑 𝑞 = <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0" xmlns="http://www.w3.org/2000/svg" width="4.05ex" height="1.955ex" role="img" focusable="false" viewbox="0 -864 1790.1 864"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z" transform="translate(500,0)"/></g><g data-mml-node="TeXAtom" transform="translate(1033,393.1) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="35" d="M164 157Q164 133 148 117T109 101H102Q148 22 224 22Q294 22 326 82Q345 115 345 210Q345 313 318 349Q292 382 260 382H254Q176 382 136 314Q132 307 129 306T114 304Q97 304 95 310Q93 314 93 485V614Q93 664 98 664Q100 666 102 666Q103 666 123 658T178 642T253 634Q324 634 389 662Q397 666 402 666Q410 666 410 648V635Q328 538 205 538Q174 538 149 544L139 546V374Q158 388 169 396T205 412T256 420Q337 420 393 355T449 201Q449 109 385 44T229 -22Q148 -22 99 32T50 154Q50 178 61 192T84 210T107 214Q132 214 148 197T164 157Z" transform="translate(500,0)"/></g></g></g></g></g></svg></mjx-container>  𝑚𝑜𝑑 17 = 10； </li>
-<li>𝐾𝑎b = 𝑌𝑎𝑏 𝑚𝑜𝑑 𝑞 =<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex" xmlns="http://www.w3.org/2000/svg" width="2.919ex" height="1.937ex" role="img" focusable="false" viewbox="0 -833.9 1290.1 855.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msup"><g data-mml-node="mn"><path data-c="36" d="M42 313Q42 476 123 571T303 666Q372 666 402 630T432 550Q432 525 418 510T379 495Q356 495 341 509T326 548Q326 592 373 601Q351 623 311 626Q240 626 194 566Q147 500 147 364L148 360Q153 366 156 373Q197 433 263 433H267Q313 433 348 414Q372 400 396 374T435 317Q456 268 456 210V192Q456 169 451 149Q440 90 387 34T253 -22Q225 -22 199 -14T143 16T92 75T56 172T42 313ZM257 397Q227 397 205 380T171 335T154 278T148 216Q148 133 160 97T198 39Q222 21 251 21Q302 21 329 59Q342 77 347 104T352 209Q352 289 347 316T329 361Q302 397 257 397Z"/></g><g data-mml-node="TeXAtom" transform="translate(533,363) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"/><path data-c="33" d="M127 463Q100 463 85 480T69 524Q69 579 117 622T233 665Q268 665 277 664Q351 652 390 611T430 522Q430 470 396 421T302 350L299 348Q299 347 308 345T337 336T375 315Q457 262 457 175Q457 96 395 37T238 -22Q158 -22 100 21T42 130Q42 158 60 175T105 193Q133 193 151 175T169 130Q169 119 166 110T159 94T148 82T136 74T126 70T118 67L114 66Q165 21 238 21Q293 21 321 74Q338 107 338 175V195Q338 290 274 322Q259 328 213 329L171 330L168 332Q166 335 166 348Q166 366 174 366Q202 366 232 371Q266 376 294 413T322 525V533Q322 590 287 612Q265 626 240 626Q208 626 181 615T143 592T132 580H135Q138 579 143 578T153 573T165 566T175 555T183 540T186 520Q186 498 172 481T127 463Z" transform="translate(500,0)"/></g></g></g></g></g></svg></mjx-container>  𝑚𝑜𝑑 17 = 10；</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>对称密钥体制：<ul>
-<li>用相同的密钥进行加密和解密。</li>
-<li>存在问题：<ul>
-<li><strong>通信开销大</strong>（每次保密通信，均需重新协商密钥）</li>
-<li><strong>密钥量大</strong>（密钥总数随着用户的增加而迅速增加）</li>
-<li><strong>必须双方在线</strong>。</li>
-<li><strong>难以追责</strong>。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>非对称加密体制（公钥加密体制）<ul>
-<li>场景：多用户、异步信息发送、追责溯源。</li>
-<li>目标：公钥加密，私钥解密。</li>
-<li><strong>开辟了密码学研究的新篇章</strong>。</li>
-</ul>
-</li>
-<li>大整数分解：将一个大整数分解成两个大素数的积是困难的。</li>
-<li>陷门单向函数：<ul>
-<li>在不知陷门信息 t 下，由 y 求 x 极为困难。</li>
-<li>知道陷门信息 t 后，由 y 求 x 是易于实现的。</li>
-<li>极为困难是针对现有的计算资源和算法而言。</li>
-</ul>
-</li>
-<li>散列函数：输入为任意长度的消息，输出为一个<strong>固定长度的散列值</strong>，称为消息摘要。<ul>
-<li>散列值是消息所有位的函数，提供<strong>错误检测能力</strong>。</li>
-<li>消息中的<strong>任何一位或多位</strong>的变化都将导致该散列值的变化。</li>
-</ul>
-</li>
-<li>数字签名：用私钥对散列值加密。</li>
-</ul>
-<h1 id="公钥基础设施-（系统架构）"><a href="#公钥基础设施-（系统架构）" class="headerlink" title="公钥基础设施 （系统架构）"></a>公钥基础设施 （系统架构）</h1><ul>
-<li>身份认证必要性：<ul>
-<li>我是我。</li>
-<li>别人不是我。</li>
-</ul>
-</li>
-<li>参与的实体：<ul>
-<li>服务请求者：向服务者申请<strong>特定的服务</strong>。</li>
-<li>身份认证服务器：认证服务请求者的申请，并给合法请求者颁布<strong>可用于获取服务的授权令牌</strong>。</li>
-<li>服务提供者：用于向服务请求者提供<strong>特定的服务</strong>。</li>
-<li>有时身份认证服务器和服务提供者是一个实体。</li>
-</ul>
-</li>
-</ul>
-<h2 id="N-S-对称密钥协议"><a href="#N-S-对称密钥协议" class="headerlink" title="N-S 对称密钥协议"></a>N-S 对称密钥协议</h2><ul>
-<li>目标：协商会话密钥。</li>
-</ul>
-<h2 id="Kerberos"><a href="#Kerberos" class="headerlink" title="Kerberos"></a>Kerberos</h2><h2 id="X-509-证书"><a href="#X-509-证书" class="headerlink" title="X.509 证书"></a>X.509 证书</h2>]]></content>
+<h1 id="一些基本操作"><a href="#一些基本操作" class="headerlink" title="一些基本操作"></a>一些基本操作</h1><p><a href="https://blog.csdn.net/GentleCP/article/details/89296614?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522165158802516780366543801%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fblog.%2522%257D&amp;request_id=165158802516780366543801&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~blog~first_rank_ecpm_v1~rank_v31_ecpm-1-89296614.article_score_rank_blog&amp;utm_term=github%E6%AF%8F%E6%AC%A1%E4%BF%AE%E6%94%B9%E9%83%BD%E8%A6%81%E5%AF%86%E7%A0%81&amp;spm=1018.2226.3001.4450">如何将提交方式改成ssh？</a></p>
+<p>因为用https的时候老是让我输入密码，就改成ssh方式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#查看提交方式</span><br><span class="line">git remote -v</span><br><span class="line">#移除旧的提交方式</span><br><span class="line">git remote rm origin</span><br><span class="line">#添加新的ssh提交方式</span><br><span class="line">git remote add origin git@xxx.git</span><br><span class="line">#初始化一个新的库</span><br><span class="line">git init</span><br><span class="line">#添加文件</span><br><span class="line">git add README.md</span><br><span class="line">#提交修改</span><br><span class="line">git commit -m "first commit"</span><br><span class="line">#上传到 github</span><br><span class="line">git push -u origin master</span><br><span class="line">#创建新的分支</span><br><span class="line">git checkout -b ice</span><br><span class="line">#查看分支</span><br><span class="line">git branch</span><br></pre></td></tr></table></figure>
+]]></content>
       <categories>
-        <category>大数据安全与隐私</category>
+        <category>教程</category>
       </categories>
       <tags>
-        <tag>密码</tag>
+        <tag>git</tag>
       </tags>
   </entry>
 </search>
