@@ -2863,6 +2863,7 @@
     <url>/2022/05/27/K-Anonymity-Diff/</url>
     <content><![CDATA[<p><img src="/2022/05/27/K-Anonymity-Diff/cover.jpg" alt="cover"></p>
 <span id="more"></span>
+<p>传送门：<a href="https://github.com/XDUqinian/K-Anonymity-Diff">开源仓库</a></p>
 <h1 id="K匿名算法"><a href="#K匿名算法" class="headerlink" title="K匿名算法"></a>K匿名算法</h1><p><strong>标识符</strong>：可以直接确定一个个体，如身份证号、姓名等。</p>
 <p><strong>准标识符集</strong>：可以和外部表链接来识别个体的最小属性集，如邮编、生日、性别等。</p>
 <p><strong>敏感数据</strong>：用户不希望被人知道的数据，如薪水、疾病历史、购买偏好等。</p>
