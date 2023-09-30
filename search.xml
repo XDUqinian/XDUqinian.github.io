@@ -439,9 +439,13 @@
 <span id="more"></span>
 <p><img src="/common/img/loading.jpg" data-original="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
 <h2 id="换成-butterfly">换成 butterfly</h2>
+<p><strong>2023.9.29</strong></p>
 <p>想把博客弄得好看一点，改一个主题，发现这个主题的文档比较完善。</p>
 <p><a href="https://butterfly.js.org/">hexo-butterfly 使用教程</a></p>
 <p><a href="https://butterfly.zhheo.com/home.html">butterfly 魔改</a></p>
+<p><strong>2023.9.30</strong></p>
+<p>首页图片加载太慢了，加了个免费的图床。</p>
+<p><a href="https://www.imagehub.cc/">知乎上搜到的 imagehub</a></p>
 <h2 id="问题及解决方式">问题及解决方式</h2>
 <ol>
 <li>
