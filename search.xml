@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mondrian算法与差分隐私</title>
+    <url>/2022/05/27/K-Anonymity-Diff/</url>
+    <content><![CDATA[<p>K匿名保证存储在发布数据集中的每条个体记录对于敏感属性不能与其他的K-1个个体相区分，通俗的说就是同一个准标识符集至少要有K条记录，因此观察者无法通过准标识符集链接记录。差分隐私需要做到的就是攻击者的知识不会因为新样本的出现或消失而发生变化。</p>
+<span id="more"></span>
+<p>传送门：<a href="https://github.com/XDUqinian/K-Anonymity-Diff">开源仓库</a></p>
+<h1>K匿名算法</h1>
+<p><strong>标识符</strong>：可以直接确定一个个体，如身份证号、姓名等。</p>
+<p><strong>准标识符集</strong>：可以和外部表链接来识别个体的最小属性集，如邮编、生日、性别等。</p>
+<p><strong>敏感数据</strong>：用户不希望被人知道的数据，如薪水、疾病历史、购买偏好等。</p>
+<p><strong>K-匿名技术</strong>可以保证存储在发布数据集中的每条个体记录对于敏感属性不能与其他的K-1个个体相区分，通俗的说就是同一个准标识符集至少要有K条记录，因此观察者无法通过准标识符集链接记录。</p>
+<p><strong>K-匿名实施</strong>通常是通过<strong>概括</strong>和<strong>隐匿</strong>。概括指对数据进一步抽象描述，比如把年龄概括成年龄段。隐匿指隐藏数据的部分信息，比如邮政编码隐藏后几位。这么处理降低了数据的精度，使得每条记录与其他K-1条记录有完全相同的准标识符集，降低了链接攻击所导致的隐私泄露风险。</p>
+<p><strong>K-匿名技术</strong>保证了：</p>
+<ol>
+<li>无法得知特定的人是否在公开的数据中</li>
+<li>无法确定特定的人是否有某项敏感属性</li>
+<li>无法确认某条数据对应哪个人</li>
+</ol>
+<p><strong>K-匿名的缺陷</strong>：虽然可以阻止身份信息的公开，但无法防止属性信息的公开，导致无法抵抗同质攻击、背景知识攻击、补充数据攻击等。</p>
+<ol>
+<li>同质攻击：K-匿名的敏感数据一样，则只要知道一个用户的准标识符集，就能知道该用户具有这个敏感数据。</li>
+<li>背景攻击：通过用户的准标识符集确定用户所在的等价信息表，同时观察者通过背景知识了解到用户没有某一敏感数据，就可以用排除法得到用户的敏感数据。</li>
+<li>补充数据攻击：当公开的数据有多种类型，若这些数据的K-匿名方法不同，那么攻击者可以通过关联多种数据推测用户信息。</li>
+</ol>
+<h1>差分隐私</h1>
+<p><a href="https://www.bilibili.com/video/BV1Tk4y117uA?from=search&amp;seid=2914351004507868385">关于差分隐私的讲解</a></p>
+<p>差分隐私需要做到的就是 <strong>攻击者的知识不会因为新样本的出现或消失而发生变化</strong>。</p>
+<p>比如说一群人出去聚餐，已知总共10个人，有8个是现充，2个是单身狗，然后聚会到一半张三有事情走了，这时还剩下8个现充和1个单身狗，这样就暴露了张三是单身狗的事实。就没有做到差分隐私保护。</p>
+<p><strong>相邻数据集</strong>：两个数据集有且仅有一条数据不一样，则二者互为相邻数据集。</p>
+<p><strong>差分隐私的形式化定义</strong>：对于一个随机化算法，其分别作用于两个相邻数据集得到的两个输出分布难以区分。</p>
+<p>通俗来说就是，如果该算法作用于任何相邻数据集，得到一个特定输出O的概率差不多，那么我们就说这个算法能达到差分隐私效果。观察者通过观察输出结果很难察觉出数据集的微小变化。</p>
+<p><strong>一般做法</strong>：从一个不满足差分隐私的算法出发，往算法里适当加入一定噪声，使其输出满足差分隐私的要求。</p>
+<h2 id="拉普拉斯机制">拉普拉斯机制</h2>
+<p>假设发布一个数据集D中糖尿病患者的数目，修改D中任意一个病患的数据，查询结果最多会改变1。直观地说，如果能用噪声“掩盖”这种不大于1的改变，就能满足差分隐私。</p>
+<p>可以向查询结果中加入一个服从拉普拉斯分布的噪声：</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>d</mi><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>λ</mi></mrow></mfrac><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><mo>−</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><mi>x</mi><mi mathvariant="normal">∣</mi></mrow><mi>λ</mi></mfrac><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">pdf(x)=\frac{1}{2\lambda}exp(-\frac{|x|}{\lambda})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.10764em;">df</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">λ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">λ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∣</span><span class="mord mathnormal mtight">x</span><span class="mord mtight">∣</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span></span></span></span></p>
+<p>噪声参数 lambda 决定拉普拉斯分布的方差，噪声越大方差越大。</p>
+<p>噪声参数取决于修改一个人的数据时，查询结果最大会改变多少(敏感度)。</p>
+<h1>Mondrian</h1>
+<p><strong>等价类</strong>：表T由多组元组组成。 T关于属性x1，…，xd的等价类是T中所有包含x1，…，xd的相同值(x1，…，xd)的元组的集合。 在SQL中，这类似于x1，…，xd上的group by查询。</p>
+<h2 id="Partitioning">Partitioning</h2>
+<p>整个数据集分区肯定是符合K-匿名的。</p>
+<p>算法过程就是不断将符合K-匿名的分区再进行细分，直到分区不能按列中值划分成更小的K-匿名分区为止。</p>
+<p><strong>算法如下</strong>：</p>
+<ol>
+<li>初始化结果集为空集。<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>f</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi><mi>e</mi><mi>d</mi></mrow></msub><mo>=</mo><mo stretchy="false">[</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">P_{finished}=[]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">ini</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mclose">]</span></span></span></span></li>
+<li>初始化工作集为一个原数据集的分区。<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>w</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi>i</mi><mi>n</mi><mi>g</mi></mrow></msub><mo>=</mo><mo stretchy="false">[</mo><mo stretchy="false">[</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>N</mi><mo stretchy="false">]</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">P_{working}=[[1,2,…,N]]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">or</span><span class="mord mathnormal mtight">kin</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">]]</span></span></span></span></li>
+<li>当工作集非空时，从工作集中取出一个分区：
+<ul>
+<li>计算该分区中所有列的相对跨度（就是有多少种取值再除以总的规模）</li>
+<li>对分区中的列按相对跨度降序排序，然后遍历这些列。对遍历到的那一列：
+<ul>
+<li>用该列的中值的位置将分区划分为两个新分区。</li>
+<li>判断新的分区是否符合K-匿名要求：
+<ul>
+<li>若符合，将两个新分区加入工作集中，退出循环。</li>
+<li>若不符合，继续遍历下一个列。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果没有一个列能有效划分(符合K-匿名)，就不再细分该分区，将该分区加入结果集中。</li>
+</ul>
+</li>
+<li>返回结果集。</li>
+</ol>
+<h2 id="Data-Aggregation">Data Aggregation</h2>
+<p>获得分区后，还要对数据进行聚合。可以将数值聚合为它们的范围或平均值，将分类属性聚合为它们的联合。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>K匿名</tag>
+        <tag>差分隐私</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第七届团体程序设计天梯赛</title>
     <url>/2022/04/05/CodingLog/</url>
     <content><![CDATA[<p>国三啦！</p>
@@ -211,219 +288,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Mondrian算法与差分隐私</title>
-    <url>/2022/05/27/K-Anonymity-Diff/</url>
-    <content><![CDATA[<p>K匿名保证存储在发布数据集中的每条个体记录对于敏感属性不能与其他的K-1个个体相区分，通俗的说就是同一个准标识符集至少要有K条记录，因此观察者无法通过准标识符集链接记录。差分隐私需要做到的就是攻击者的知识不会因为新样本的出现或消失而发生变化。</p>
-<span id="more"></span>
-<p>传送门：<a href="https://github.com/XDUqinian/K-Anonymity-Diff">开源仓库</a></p>
-<h1>K匿名算法</h1>
-<p><strong>标识符</strong>：可以直接确定一个个体，如身份证号、姓名等。</p>
-<p><strong>准标识符集</strong>：可以和外部表链接来识别个体的最小属性集，如邮编、生日、性别等。</p>
-<p><strong>敏感数据</strong>：用户不希望被人知道的数据，如薪水、疾病历史、购买偏好等。</p>
-<p><strong>K-匿名技术</strong>可以保证存储在发布数据集中的每条个体记录对于敏感属性不能与其他的K-1个个体相区分，通俗的说就是同一个准标识符集至少要有K条记录，因此观察者无法通过准标识符集链接记录。</p>
-<p><strong>K-匿名实施</strong>通常是通过<strong>概括</strong>和<strong>隐匿</strong>。概括指对数据进一步抽象描述，比如把年龄概括成年龄段。隐匿指隐藏数据的部分信息，比如邮政编码隐藏后几位。这么处理降低了数据的精度，使得每条记录与其他K-1条记录有完全相同的准标识符集，降低了链接攻击所导致的隐私泄露风险。</p>
-<p><strong>K-匿名技术</strong>保证了：</p>
-<ol>
-<li>无法得知特定的人是否在公开的数据中</li>
-<li>无法确定特定的人是否有某项敏感属性</li>
-<li>无法确认某条数据对应哪个人</li>
-</ol>
-<p><strong>K-匿名的缺陷</strong>：虽然可以阻止身份信息的公开，但无法防止属性信息的公开，导致无法抵抗同质攻击、背景知识攻击、补充数据攻击等。</p>
-<ol>
-<li>同质攻击：K-匿名的敏感数据一样，则只要知道一个用户的准标识符集，就能知道该用户具有这个敏感数据。</li>
-<li>背景攻击：通过用户的准标识符集确定用户所在的等价信息表，同时观察者通过背景知识了解到用户没有某一敏感数据，就可以用排除法得到用户的敏感数据。</li>
-<li>补充数据攻击：当公开的数据有多种类型，若这些数据的K-匿名方法不同，那么攻击者可以通过关联多种数据推测用户信息。</li>
-</ol>
-<h1>差分隐私</h1>
-<p><a href="https://www.bilibili.com/video/BV1Tk4y117uA?from=search&amp;seid=2914351004507868385">关于差分隐私的讲解</a></p>
-<p>差分隐私需要做到的就是 <strong>攻击者的知识不会因为新样本的出现或消失而发生变化</strong>。</p>
-<p>比如说一群人出去聚餐，已知总共10个人，有8个是现充，2个是单身狗，然后聚会到一半张三有事情走了，这时还剩下8个现充和1个单身狗，这样就暴露了张三是单身狗的事实。就没有做到差分隐私保护。</p>
-<p><strong>相邻数据集</strong>：两个数据集有且仅有一条数据不一样，则二者互为相邻数据集。</p>
-<p><strong>差分隐私的形式化定义</strong>：对于一个随机化算法，其分别作用于两个相邻数据集得到的两个输出分布难以区分。</p>
-<p>通俗来说就是，如果该算法作用于任何相邻数据集，得到一个特定输出O的概率差不多，那么我们就说这个算法能达到差分隐私效果。观察者通过观察输出结果很难察觉出数据集的微小变化。</p>
-<p><strong>一般做法</strong>：从一个不满足差分隐私的算法出发，往算法里适当加入一定噪声，使其输出满足差分隐私的要求。</p>
-<h2 id="拉普拉斯机制">拉普拉斯机制</h2>
-<p>假设发布一个数据集D中糖尿病患者的数目，修改D中任意一个病患的数据，查询结果最多会改变1。直观地说，如果能用噪声“掩盖”这种不大于1的改变，就能满足差分隐私。</p>
-<p>可以向查询结果中加入一个服从拉普拉斯分布的噪声：</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>d</mi><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>λ</mi></mrow></mfrac><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><mo>−</mo><mfrac><mrow><mi mathvariant="normal">∣</mi><mi>x</mi><mi mathvariant="normal">∣</mi></mrow><mi>λ</mi></mfrac><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">pdf(x)=\frac{1}{2\lambda}exp(-\frac{|x|}{\lambda})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.10764em;">df</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mathnormal mtight">λ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">λ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∣</span><span class="mord mathnormal mtight">x</span><span class="mord mtight">∣</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span></span></span></span></p>
-<p>噪声参数 lambda 决定拉普拉斯分布的方差，噪声越大方差越大。</p>
-<p>噪声参数取决于修改一个人的数据时，查询结果最大会改变多少(敏感度)。</p>
-<h1>Mondrian</h1>
-<p><strong>等价类</strong>：表T由多组元组组成。 T关于属性x1，…，xd的等价类是T中所有包含x1，…，xd的相同值(x1，…，xd)的元组的集合。 在SQL中，这类似于x1，…，xd上的group by查询。</p>
-<h2 id="Partitioning">Partitioning</h2>
-<p>整个数据集分区肯定是符合K-匿名的。</p>
-<p>算法过程就是不断将符合K-匿名的分区再进行细分，直到分区不能按列中值划分成更小的K-匿名分区为止。</p>
-<p><strong>算法如下</strong>：</p>
-<ol>
-<li>初始化结果集为空集。<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>f</mi><mi>i</mi><mi>n</mi><mi>i</mi><mi>s</mi><mi>h</mi><mi>e</mi><mi>d</mi></mrow></msub><mo>=</mo><mo stretchy="false">[</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">P_{finished}=[]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">ini</span><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">h</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mclose">]</span></span></span></span></li>
-<li>初始化工作集为一个原数据集的分区。<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>w</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi>i</mi><mi>n</mi><mi>g</mi></mrow></msub><mo>=</mo><mo stretchy="false">[</mo><mo stretchy="false">[</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>N</mi><mo stretchy="false">]</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">P_{working}=[[1,2,…,N]]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">or</span><span class="mord mathnormal mtight">kin</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">]]</span></span></span></span></li>
-<li>当工作集非空时，从工作集中取出一个分区：
-<ul>
-<li>计算该分区中所有列的相对跨度（就是有多少种取值再除以总的规模）</li>
-<li>对分区中的列按相对跨度降序排序，然后遍历这些列。对遍历到的那一列：
-<ul>
-<li>用该列的中值的位置将分区划分为两个新分区。</li>
-<li>判断新的分区是否符合K-匿名要求：
-<ul>
-<li>若符合，将两个新分区加入工作集中，退出循环。</li>
-<li>若不符合，继续遍历下一个列。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>如果没有一个列能有效划分(符合K-匿名)，就不再细分该分区，将该分区加入结果集中。</li>
-</ul>
-</li>
-<li>返回结果集。</li>
-</ol>
-<h2 id="Data-Aggregation">Data Aggregation</h2>
-<p>获得分区后，还要对数据进行聚合。可以将数值聚合为它们的范围或平均值，将分类属性聚合为它们的联合。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>K匿名</tag>
-        <tag>差分隐私</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hexo博客搭建</title>
-    <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
-<span id="more"></span>
-<p><img src="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
-<h2 id="换成-butterfly">换成 butterfly</h2>
-<p>想把博客弄得好看一点，改一个主题，发现这个主题的文档比较完善。</p>
-<p><a href="https://butterfly.js.org/">hexo-butterfly 使用教程</a></p>
-<p><a href="https://butterfly.zhheo.com/home.html">butterfly 魔改</a></p>
-<h2 id="问题及解决方式">问题及解决方式</h2>
-<ol>
-<li>
-<p>md 加不上图片。 <strong>解决方式</strong>：<a href="https://www.jianshu.com/p/f72aaad7b852">hexo插入图片</a>。</p>
-</li>
-<li>
-<p>手机端的背景会被拉伸。<strong>解决方式</strong>：把背景放到header里，然后拉长head高度，设为absolute。</p>
-</li>
-<li>
-<p>首页的文章显示全文而不是摘要。</p>
-<p><strong>解决方法：</strong> 在文章中加上&lt; !–more-- &gt;标记 ，该标记以后部分就不在显示了，只有展开全部才显示，这是hexo定义的。</p>
-</li>
-<li>
-<p>无法显示 markdown 的数学公式。</p>
-<p><strong>解决方法</strong>：几个博客的方法都试了一遍，莫名其妙就好了。</p>
-<p><a href="https://blog.csdn.net/yexiaohhjk/article/details/82526604">hexo next主题解决无法显示数学公式</a></p>
-<p><a href="https://blog.csdn.net/weixin_43014927/article/details/99619627?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">在HEXO主题中添加数学公式支持</a></p>
-<p><a href="https://blog.csdn.net/weixin_45511189/article/details/115798563?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-115798563.pc_agg_new_rank&amp;utm_term=hexo+next+%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F&amp;spm=1000.2123.3001.4430">hexo博客next主题添加对数学公式的支持</a></p>
-</li>
-<li>
-<p>分页不显示封图。</p>
-<p><strong>解决方法</strong>：在 images 的路径前加个/。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/w573719227/article/details/100704952">HEXO博客使用LeanCloud报错</a>。</p>
-</li>
-<li>
-<p>无语，为什么部署到服务器以后的搜索框这么丑……可能要等一等？？？</p>
-</li>
-</ol>
-<h2 id="实现的功能">实现的功能</h2>
-<h3 id="一些小修改">一些小修改</h3>
-<ul>
-<li>
-<p>将14号字体改为了16号。<a href="https://blog.csdn.net/dpdpdppp/article/details/102387532">hexo修改字体大小</a></p>
-</li>
-<li>
-<p>将灰色字体改成了纯黑色。</p>
-</li>
-<li>
-<p>文本框由灰色透明改为了纯白。</p>
-</li>
-<li>
-<p>实现 markdown 行内数学公式的渲染。</p>
-</li>
-<li>
-<p>文章页宽修改为900px。这篇教程往后拉：<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改文章页宽</a></p>
-</li>
-<li>
-<p>修改文章底部#号标签为图标。</p>
-<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;</code>，将后面的内容换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code>。</p>
-</li>
-<li>
-<p>将侧边栏弹出改为 always。改了半天才想起来，不成功是因为之前又设置了一个 nest.yml……捏马……</p>
-</li>
-<li>
-<p>把背景图放在了header里，body 背景改为白灰色。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/gfl1427097103/article/details/104814979">修改首页文章间距并添加边框阴影</a>。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改了链接文字样式与 Read More样式</a>。</p>
-</li>
-<li>
-<p>修改了<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">标签云颜色</a>。</p>
-</li>
-<li>
-<p>将 github 的源改为中科大的源，网页加载优化，性能提升。</p>
-</li>
-<li>
-<p>实现文章图片懒加载。</p>
-</li>
-<li>
-<p>文章背景与首页文章卡片设置圆角。</p>
-</li>
-<li>
-<p>搜索结果框内部字体颜色改动。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/qq_38747027/article/details/107967518">修改创建文章时的固定模板</a>。</p>
-</li>
-<li>
-<p>修改菜单标签。<a href="https://blog.csdn.net/lijing742180/article/details/85622524#_39">配置主题菜单</a></p>
-</li>
-<li>
-<p>可参考的一些修改。<a href="https://www.cnblogs.com/antmoe/p/12846393.html#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E">优雅魔改</a></p>
-</li>
-<li>
-<p>修改评论样式。<a href="https://blog.csdn.net/qq_42889280/article/details/103087637">评论框美化</a></p>
-</li>
-<li>
-<p>Ctrl+Shift+c 可以看到网页某部分的源码位置。<a href="https://blog.csdn.net/wugenqiang/article/details/105744843">Hexo NexT 评论系统 Valine 的使用，详细版</a></p>
-</li>
-</ul>
-<h3 id="一些功能">一些功能</h3>
-<ul>
-<li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
-<li>实现首页文章简介与封图设置，使首页更加简洁美观。</li>
-<li>实现了文章分类和标签功能，便于根据需求找到想要的内容。</li>
-<li>实现博客首页分页。<a href="https://blog.csdn.net/qq_43773164/article/details/106389652">hexo博客主页分页</a></li>
-<li>页面点击小红心！csdn上说的都实现不了，最后从lq神的博客里扒到了github上的js。<a href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js">click-heart!</a></li>
-<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
-<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
-<li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
-<li>友情链接实现。<a href="https://zhuanlan.zhihu.com/p/384472746">友链</a></li>
-<li>显示当前浏览进度。主题配置文件 b2t 和 scrollpercnet 修改为 true。</li>
-<li>设置about的时候应该会用上。<a href="https://blog.csdn.net/hhh132/article/details/97029059">post-banner</a></li>
-<li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
-</ul>
-<h3 id="待实现的功能与小任务">待实现的功能与小任务</h3>
-<ul>
-<li>站点信息显示：已运行时间等。</li>
-<li>评论回复邮箱审核。</li>
-<li>首页封图LazyLoading。</li>
-<li>滚动条优化。</li>
-<li>首页背景 scroll-down。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>教程</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于Socket和DH密钥交换协议的远程文件安全传输</title>
     <url>/2022/04/02/RemoteSecureTransfer/</url>
     <content><![CDATA[<p>现代密码学基础技能实验，感觉挺有意思的，就简单记录一下。</p>
@@ -566,6 +430,142 @@
         <tag>Java</tag>
         <tag>密码</tag>
         <tag>Socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo博客搭建</title>
+    <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
+<span id="more"></span>
+<p><img src="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
+<h2 id="换成-butterfly">换成 butterfly</h2>
+<p>想把博客弄得好看一点，改一个主题，发现这个主题的文档比较完善。</p>
+<p><a href="https://butterfly.js.org/">hexo-butterfly 使用教程</a></p>
+<p><a href="https://butterfly.zhheo.com/home.html">butterfly 魔改</a></p>
+<h2 id="问题及解决方式">问题及解决方式</h2>
+<ol>
+<li>
+<p>md 加不上图片。 <strong>解决方式</strong>：<a href="https://www.jianshu.com/p/f72aaad7b852">hexo插入图片</a>。</p>
+</li>
+<li>
+<p>手机端的背景会被拉伸。<strong>解决方式</strong>：把背景放到header里，然后拉长head高度，设为absolute。</p>
+</li>
+<li>
+<p>首页的文章显示全文而不是摘要。</p>
+<p><strong>解决方法：</strong> 在文章中加上&lt; !–more-- &gt;标记 ，该标记以后部分就不在显示了，只有展开全部才显示，这是hexo定义的。</p>
+</li>
+<li>
+<p>无法显示 markdown 的数学公式。</p>
+<p><strong>解决方法</strong>：几个博客的方法都试了一遍，莫名其妙就好了。</p>
+<p><a href="https://blog.csdn.net/yexiaohhjk/article/details/82526604">hexo next主题解决无法显示数学公式</a></p>
+<p><a href="https://blog.csdn.net/weixin_43014927/article/details/99619627?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">在HEXO主题中添加数学公式支持</a></p>
+<p><a href="https://blog.csdn.net/weixin_45511189/article/details/115798563?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-115798563.pc_agg_new_rank&amp;utm_term=hexo+next+%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F&amp;spm=1000.2123.3001.4430">hexo博客next主题添加对数学公式的支持</a></p>
+</li>
+<li>
+<p>分页不显示封图。</p>
+<p><strong>解决方法</strong>：在 images 的路径前加个/。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/w573719227/article/details/100704952">HEXO博客使用LeanCloud报错</a>。</p>
+</li>
+<li>
+<p>无语，为什么部署到服务器以后的搜索框这么丑……可能要等一等？？？</p>
+</li>
+</ol>
+<h2 id="实现的功能">实现的功能</h2>
+<h3 id="一些小修改">一些小修改</h3>
+<ul>
+<li>
+<p>将14号字体改为了16号。<a href="https://blog.csdn.net/dpdpdppp/article/details/102387532">hexo修改字体大小</a></p>
+</li>
+<li>
+<p>将灰色字体改成了纯黑色。</p>
+</li>
+<li>
+<p>文本框由灰色透明改为了纯白。</p>
+</li>
+<li>
+<p>实现 markdown 行内数学公式的渲染。</p>
+</li>
+<li>
+<p>文章页宽修改为900px。这篇教程往后拉：<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改文章页宽</a></p>
+</li>
+<li>
+<p>修改文章底部#号标签为图标。</p>
+<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;</code>，将后面的内容换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code>。</p>
+</li>
+<li>
+<p>将侧边栏弹出改为 always。改了半天才想起来，不成功是因为之前又设置了一个 nest.yml……捏马……</p>
+</li>
+<li>
+<p>把背景图放在了header里，body 背景改为白灰色。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/gfl1427097103/article/details/104814979">修改首页文章间距并添加边框阴影</a>。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改了链接文字样式与 Read More样式</a>。</p>
+</li>
+<li>
+<p>修改了<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">标签云颜色</a>。</p>
+</li>
+<li>
+<p>将 github 的源改为中科大的源，网页加载优化，性能提升。</p>
+</li>
+<li>
+<p>实现文章图片懒加载。</p>
+</li>
+<li>
+<p>文章背景与首页文章卡片设置圆角。</p>
+</li>
+<li>
+<p>搜索结果框内部字体颜色改动。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/qq_38747027/article/details/107967518">修改创建文章时的固定模板</a>。</p>
+</li>
+<li>
+<p>修改菜单标签。<a href="https://blog.csdn.net/lijing742180/article/details/85622524#_39">配置主题菜单</a></p>
+</li>
+<li>
+<p>可参考的一些修改。<a href="https://www.cnblogs.com/antmoe/p/12846393.html#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E">优雅魔改</a></p>
+</li>
+<li>
+<p>修改评论样式。<a href="https://blog.csdn.net/qq_42889280/article/details/103087637">评论框美化</a></p>
+</li>
+<li>
+<p>Ctrl+Shift+c 可以看到网页某部分的源码位置。<a href="https://blog.csdn.net/wugenqiang/article/details/105744843">Hexo NexT 评论系统 Valine 的使用，详细版</a></p>
+</li>
+</ul>
+<h3 id="一些功能">一些功能</h3>
+<ul>
+<li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
+<li>实现首页文章简介与封图设置，使首页更加简洁美观。</li>
+<li>实现了文章分类和标签功能，便于根据需求找到想要的内容。</li>
+<li>实现博客首页分页。<a href="https://blog.csdn.net/qq_43773164/article/details/106389652">hexo博客主页分页</a></li>
+<li>页面点击小红心！csdn上说的都实现不了，最后从lq神的博客里扒到了github上的js。<a href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js">click-heart!</a></li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
+<li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
+<li>友情链接实现。<a href="https://zhuanlan.zhihu.com/p/384472746">友链</a></li>
+<li>显示当前浏览进度。主题配置文件 b2t 和 scrollpercnet 修改为 true。</li>
+<li>设置about的时候应该会用上。<a href="https://blog.csdn.net/hhh132/article/details/97029059">post-banner</a></li>
+<li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
+</ul>
+<h3 id="待实现的功能与小任务">待实现的功能与小任务</h3>
+<ul>
+<li>站点信息显示：已运行时间等。</li>
+<li>评论回复邮箱审核。</li>
+<li>首页封图LazyLoading。</li>
+<li>滚动条优化。</li>
+<li>首页背景 scroll-down。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>教程</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
