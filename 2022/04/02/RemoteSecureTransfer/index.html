@@ -183,14 +183,14 @@
 <li>TCP/IP：传输控制协议/网间协议，是为广域网设计的。</li>
 <li>UDP：用户数据报协议，与 TCP 相对应。</li>
 </ul>
-<p><img src="/2022/04/02/RemoteSecureTransfer/1.png" alt="1"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/1.png" alt="1"></p>
 <h3 id="Socket-2">Socket</h3>
 <p>Socket 是应用层与 TCP/IP 协议族通信的中间软件抽象层，是一组接口。</p>
 <p>它把复杂的 TCP/IP 协议族隐藏在 Socket 接口后面，让 Socket 去组织数据，以符合指定的协议。</p>
-<p><img src="/2022/04/02/RemoteSecureTransfer/2.png" alt="2"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/2.png" alt="2"></p>
 <h4 id="交互">交互</h4>
 <p>服务器端初始化 Socket，与端口绑定 bind，对端口监听 listen，调用 accept 阻塞，等待客户端连接。若有个客户端初始化一个 Socket，连接服务器 connect，若成功就建立了连接。客户端发送数据请求，服务器端接收数据请求并处理，然后向客户端发送回应数据，客户端读取数据，最后关闭连接，一次交互结束。</p>
-<p><img src="/2022/04/02/RemoteSecureTransfer/3.png" alt="3"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/3.png" alt="3"></p>
 <h2 id="DH-密钥交换">DH 密钥交换</h2>
 <p>理论依据：离散对数难解问题。</p>
 <p>Alice 和 Bob需要共享一个对称密码的密钥，而不安全信道被 Eve 窃听。</p>
@@ -235,20 +235,20 @@
 <li>甲方通过私钥和乙方公钥，用约定数据加密算法构建本地密钥，用本地密钥加密数据，发送给乙方。乙方使用私钥、甲方公钥、约定数据加密算法构建本地密钥，然后通过本地密钥对数据解密。</li>
 <li>乙方通过私钥和甲方公钥，用约定数据加密算法构建本地密钥，用本地密钥加密数据，发送给甲方。甲方使用私钥、乙方公钥、约定数据加密算法构建本地密钥，然后通过本地密钥对数据解密。</li>
 </ol>
-<p><img src="/2022/04/02/RemoteSecureTransfer/4.png" alt="4"></p>
-<p><img src="/2022/04/02/RemoteSecureTransfer/5.png" alt="5"></p>
-<p><img src="/2022/04/02/RemoteSecureTransfer/6.png" alt="6"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/4.png" alt="4"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/5.png" alt="5"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/6.png" alt="6"></p>
 <h1>实验开发</h1>
 <h2 id="环境配置">环境配置</h2>
 <p>eclipse上的Java开发。</p>
 <h2 id="文件结构与效果图">文件结构与效果图</h2>
 <h3 id="文件结构">文件结构</h3>
-<p><img src="/2022/04/02/RemoteSecureTransfer/7.png" alt="7"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/7.png" alt="7"></p>
 <h3 id="效果图">效果图</h3>
 <h4 id="主界面">主界面</h4>
-<p><img src="/2022/04/02/RemoteSecureTransfer/8.png" alt="8"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/8.png" alt="8"></p>
 <h4 id="文件选择">文件选择</h4>
-<p><img src="/2022/04/02/RemoteSecureTransfer/9.png" alt="9"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2022/04/02/RemoteSecureTransfer/9.png" alt="9"></p>
 <h2 id="功能实现">功能实现</h2>
 <ul>
 <li>多线程提高程序效率。</li>
