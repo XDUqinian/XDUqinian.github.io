@@ -662,7 +662,7 @@
 <p>其实本科学计组时讲过单机系统中的 Cache 一致性问题，但是单机系统中只考虑单个 Cache 与主存之间的数据不一致，通过直写法或回写法就可以简单地解决。而并行计算机体系结构中要考虑多处理机系统中的 Cache 一致性问题，需要考虑不同 Cache 之间、Cache 与主存之间的数据一致性，单纯的直写法或回写法并不能保证多处理机的多数据副本一致。</p>
 <p>由于要求实现三状态的 Cache 一致性模拟，所以我先学了一下 MSI 协议。</p>
 <h2 id="MSI">MSI</h2>
-<p>在 MSI 协议将 Cache 中的数据块分为三种状态：</p>
+<p>MSI 协议将 Cache 中的数据块分为三种状态：</p>
 <ol>
 <li><strong>S (Shared)</strong> 表示该数据块被共享，正确数据块分别在 Cache 和 Memory 中，或者在不同的 Cache 中。</li>
 <li><strong>M (Modified)</strong> 表示该数据块在系统中唯一正确。</li>
@@ -726,7 +726,8 @@
 <li>主存地址范围 0~9。</li>
 </ol>
 <p>这样以来，我只需要实现一个 Cache 类、一个 Memory 类以及一个控制全局的 Controll 类即可。</p>
-<h2 id="继承中的构造函数">继承中的构造函数</h2>
+<h2 id="遇到的一些问题">遇到的一些问题</h2>
+<h3 id="继承中的构造函数">继承中的构造函数</h3>
 <p>我发现 Cache 类与 Memory 类有很多相似的地方，所以就写了一个 Device 父类做继承。但是在实现的过程中，发现子类的构造函数总是报错，上网搜了一圈才发现原因。</p>
 <p>大致来说是因为父类的构造函数是不能被子类继承的，构造原则如下：</p>
 <ol>
@@ -735,11 +736,28 @@
 <li>如果父类只定义了有参数构造函数，子类的构造函数没有显示调用父类构造函数，则出错。也就是说如果父类只有有参数的构造方法，子类必须显示调用此带参构造方法。</li>
 </ol>
 <p>所以解决问题方法就是，父类同时定义带参构造方法以及空的无参构造方法，然后子类就可以定义自己的构造方法了。</p>
-<h2 id="静态成员数组的访问">静态成员数组的访问</h2>
+<h3 id="静态成员数组的访问">静态成员数组的访问</h3>
 <p>最开始的时候，我写了一个表示状态的 Status 类，并在其中用 <code>constexpr static</code> 关键字定义了一个 <code>char</code> 类型的静态数组 <code>mp[]</code>，但是在后续使用的时候发现报错。</p>
 <p>后来发现常量表达式(constexpr)在编译期就可以计算出结果，所以不能在数组中用变量下标，只能用常量下标。于是我就大笔一挥，把<code>constexpr</code>给去掉了。</p>
-<h1>写在最后</h1>
+<h2 id="整体设计思路">整体设计思路</h2>
+<p>写一个控制器Controll，控制器通过<code>run()</code>方法运行，在<code>run()</code>方法中会要求用户输入要访问的 Cache 的 <code>id</code>、要进行的读或写操作<code>op</code>以及数据块的地址<code>address</code>，然后根据操作的不同调用<code>read()</code>或<code>write()</code>。上述被调用的两个方法在访问数据块时先通过<code>visit()</code>判断 Cache 是否命中，如果未命中则需要替换<code>change()</code>，然后再根据是本地读写或是远程读写来进行相应的状态变化。<code>run()</code>在最后会打印出各个 Cache 以及主存中的状态。</p>
+<h2 id="结果">结果</h2>
 <p><a href="https://github.com/XDUqinian/fake_cache">开源仓库</a></p>
+<p>系统：<code>Linux ubuntu-20.04.6</code></p>
+<p>需要安装 <code>gcc</code> <code>cmake</code></p>
+<p><strong>运行</strong>:</p>
+<p>到项目目录下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake .</span><br><span class="line">make</span><br><span class="line">./test</span><br></pre></td></tr></table></figure>
+<p>随便敲了几个样例，感觉没什么问题。</p>
+<p><code>w 1 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 1.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  0  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 1 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  M  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 0 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<p><code>r 3 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is S,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is S,the address is 2.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  S  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  3  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<h1>写在最后</h1>
 <p>这个作业还是比较好做的，其实可以不用C++多文件，整个项目下来可能有点繁琐，但是就是想试一试所以就这么写了。要求用文件读写的方式来做控制，但是还没实现，离 deadline 还有一个多月，到时候可以再补上。</p>
 <p>其实一直以来我都是用 c++ 比较多，但是因为以前都在用 devc++ 写算法题，大三以后的课程作业基本都用 python 写了，所以对怎么用 C++ 写小实验还是比较陌生。算是弥补了一直以来的遗憾吧。</p>
 ]]></content>
