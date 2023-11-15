@@ -288,149 +288,132 @@
       </tags>
   </entry>
   <entry>
-    <title>hexo博客搭建</title>
-    <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
-    <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
-<span id="more"></span>
-<p><img src="/common/img/loading.jpg" data-original="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
-<h2 id="换成-butterfly">换成 butterfly</h2>
-<p><strong>2023.11.12</strong></p>
-<p>发现数学公式渲染不太对，改了一下。</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi=\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">π</span></span></span></span></p>
-<p><a href="https://nickxu.me/2022/04/17/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%85%AB%EF%BC%89%E4%BD%BF%E7%94%A8-KaTeX-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/">hexo butterfly ktex</a></p>
-<p>增加了对<mark>等号高亮</mark>的支持。</p>
-<p><a href="https://blog.kukmoon.com/3eacfb91/">等号高亮</a></p>
-<p><strong>2023.9.29</strong></p>
-<p>想把博客弄得好看一点，改一个主题，发现这个主题的文档比较完善。</p>
-<p><a href="https://butterfly.js.org/">hexo-butterfly 使用教程</a></p>
-<p><a href="https://butterfly.zhheo.com/home.html">butterfly 魔改</a></p>
-<p><strong>2023.9.30</strong></p>
-<p>首页图片加载太慢了，加了个免费的图床。</p>
-<p><a href="https://www.imagehub.cc/">知乎上搜到的 imagehub</a></p>
-<h2 id="问题及解决方式">问题及解决方式</h2>
+    <title>基于MSI协议的Cache一致性模拟器设计</title>
+    <url>/2023/10/02/fake_cache/</url>
+    <content><![CDATA[<p>前段时间我在研究怎么在 linux 环境下用 C++ 写一些东西，刚好就拿这个作业练练手。</p>
+<p>老师要求用 C++ 实现一种基于 WB 策略的一致性维护的 Cache 模拟器，该模拟器仅考虑4核的 CPU，且每个核只有一级 Cache，Cache 行长度为 64 字节，观察 CPU读、写数据后各个核上 Cache 中数据状态的变化情况。</p>
+<p>我思考了一下，准备分三步来完成这个任务：原理学习、程序设计、程序编写。</p>
+<h1 id="一些原理"><a class="markdownIt-Anchor" href="#一些原理"></a> 一些原理</h1>
+<p>首先要了解 Cache 一致性维护相关的知识。</p>
+<p>其实本科学计组时讲过单机系统中的 Cache 一致性问题，但是单机系统中只考虑单个 Cache 与主存之间的数据不一致，通过直写法或回写法就可以简单地解决。而并行计算机体系结构中要考虑多处理机系统中的 Cache 一致性问题，需要考虑不同 Cache 之间、Cache 与主存之间的数据一致性，单纯的直写法或回写法并不能保证多处理机的多数据副本一致。</p>
+<p>由于要求实现三状态的 Cache 一致性模拟，所以我先学了一下 MSI 协议。</p>
+<h2 id="msi"><a class="markdownIt-Anchor" href="#msi"></a> MSI</h2>
+<p>MSI 协议将 Cache 中的数据块分为三种状态：</p>
 <ol>
-<li>
-<p>md 加不上图片。 <strong>解决方式</strong>：<a href="https://www.jianshu.com/p/f72aaad7b852">hexo插入图片</a>。</p>
-</li>
-<li>
-<p>手机端的背景会被拉伸。<strong>解决方式</strong>：把背景放到header里，然后拉长head高度，设为absolute。</p>
-</li>
-<li>
-<p>首页的文章显示全文而不是摘要。</p>
-<p><strong>解决方法：</strong> 在文章中加上&lt; !–more-- &gt;标记 ，该标记以后部分就不在显示了，只有展开全部才显示，这是hexo定义的。</p>
-</li>
-<li>
-<p>无法显示 markdown 的数学公式。</p>
-<p><strong>解决方法</strong>：几个博客的方法都试了一遍，莫名其妙就好了。</p>
-<p><a href="https://blog.csdn.net/yexiaohhjk/article/details/82526604">hexo next主题解决无法显示数学公式</a></p>
-<p><a href="https://blog.csdn.net/weixin_43014927/article/details/99619627?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">在HEXO主题中添加数学公式支持</a></p>
-<p><a href="https://blog.csdn.net/weixin_45511189/article/details/115798563?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-115798563.pc_agg_new_rank&amp;utm_term=hexo+next+%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F&amp;spm=1000.2123.3001.4430">hexo博客next主题添加对数学公式的支持</a></p>
-</li>
-<li>
-<p>分页不显示封图。</p>
-<p><strong>解决方法</strong>：在 images 的路径前加个/。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/w573719227/article/details/100704952">HEXO博客使用LeanCloud报错</a>。</p>
-</li>
-<li>
-<p>无语，为什么部署到服务器以后的搜索框这么丑……可能要等一等？？？</p>
-</li>
+<li><strong>S (Shared)</strong> 表示该数据块被共享，正确数据块分别在 Cache 和 Memory 中，或者在不同的 Cache 中。</li>
+<li><strong>M (Modified)</strong> 表示该数据块在系统中唯一正确。</li>
+<li><strong>I (Invalid)</strong> 表示该数据块无效。</li>
 </ol>
-<h2 id="实现的功能">实现的功能</h2>
-<h3 id="一些小修改">一些小修改</h3>
+<p>这三种状态之间的转换由四种操作来决定：</p>
 <ul>
 <li>
-<p>将14号字体改为了16号。<a href="https://blog.csdn.net/dpdpdppp/article/details/102387532">hexo修改字体大小</a></p>
-</li>
-<li>
-<p>将灰色字体改成了纯黑色。</p>
-</li>
-<li>
-<p>文本框由灰色透明改为了纯白。</p>
-</li>
-<li>
-<p>实现 markdown 行内数学公式的渲染。</p>
-</li>
-<li>
-<p>文章页宽修改为900px。这篇教程往后拉：<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改文章页宽</a></p>
-</li>
-<li>
-<p>修改文章底部#号标签为图标。</p>
-<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;</code>，将后面的内容换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code>。</p>
-</li>
-<li>
-<p>将侧边栏弹出改为 always。改了半天才想起来，不成功是因为之前又设置了一个 nest.yml……捏马……</p>
-</li>
-<li>
-<p>把背景图放在了header里，body 背景改为白灰色。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/gfl1427097103/article/details/104814979">修改首页文章间距并添加边框阴影</a>。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改了链接文字样式与 Read More样式</a>。</p>
-</li>
-<li>
-<p>修改了<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">标签云颜色</a>。</p>
-</li>
-<li>
-<p>将 github 的源改为中科大的源，网页加载优化，性能提升。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/tingqinxiyin/article/details/93494680">实现文章图片懒加载</a>。</p>
-</li>
-<li>
-<p>文章背景与首页文章卡片设置圆角。</p>
-</li>
-<li>
-<p>搜索结果框内部字体颜色改动。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/qq_38747027/article/details/107967518">修改创建文章时的固定模板</a>。</p>
-</li>
-<li>
-<p>修改菜单标签。<a href="https://blog.csdn.net/lijing742180/article/details/85622524#_39">配置主题菜单</a></p>
-</li>
-<li>
-<p>可参考的一些修改。<a href="https://www.cnblogs.com/antmoe/p/12846393.html#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E">优雅魔改</a></p>
-</li>
-<li>
-<p>修改评论样式。<a href="https://blog.csdn.net/qq_42889280/article/details/103087637">评论框美化</a></p>
-</li>
-<li>
-<p>Ctrl+Shift+c 可以看到网页某部分的源码位置。<a href="https://blog.csdn.net/wugenqiang/article/details/105744843">Hexo NexT 评论系统 Valine 的使用，详细版</a></p>
-</li>
-</ul>
-<h3 id="一些功能">一些功能</h3>
+<p><strong>本地读</strong>：本地处理机对该数据块读。</p>
 <ul>
-<li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
-<li>实现首页文章简介与封图设置，使首页更加简洁美观。</li>
-<li>实现了文章分类和标签功能，便于根据需求找到想要的内容。</li>
-<li>实现博客首页分页。<a href="https://blog.csdn.net/qq_43773164/article/details/106389652">hexo博客主页分页</a></li>
-<li>页面点击小红心！csdn上说的都实现不了，最后从lq神的博客里扒到了github上的js。<a href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js">click-heart!</a></li>
-<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
-<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
-<li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
-<li>友情链接实现。<a href="https://zhuanlan.zhihu.com/p/384472746">友链</a></li>
-<li>显示当前浏览进度。主题配置文件 b2t 和 scrollpercnet 修改为 true。</li>
-<li>设置about的时候应该会用上。<a href="https://blog.csdn.net/hhh132/article/details/97029059">post-banner</a></li>
-<li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
+<li>M：不变</li>
+<li>S：不变</li>
+<li>I：变 S</li>
 </ul>
-<h3 id="待实现的功能与小任务">待实现的功能与小任务</h3>
+</li>
+<li>
+<p><strong>本地写</strong>：本地处理机对该数据块写。</p>
 <ul>
-<li>站点信息显示：已运行时间等。</li>
-<li>评论回复邮箱审核。</li>
-<li>首页封图LazyLoading。</li>
-<li>滚动条优化。</li>
-<li>首页背景 scroll-down。</li>
+<li>M：不变</li>
+<li>S：变 M</li>
+<li>I：变 M</li>
 </ul>
+</li>
+<li>
+<p><strong>远程读</strong>：远程处理机对该数据块读。</p>
+<ul>
+<li>M：变 S</li>
+<li>S：不变</li>
+<li>I：不变</li>
+</ul>
+</li>
+<li>
+<p><strong>远程写</strong>：远程处理机对该数据块写。</p>
+<ul>
+<li>M：变 I</li>
+<li>S：变 I</li>
+<li>I：不变</li>
+</ul>
+</li>
+</ul>
+<p>大概就长下面这样：</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/10/02/fake_cache/MSI.jpg" alt="MSI 状态转移图"></p>
+<h2 id="wb"><a class="markdownIt-Anchor" href="#wb"></a> WB</h2>
+<p>在单机系统中，回写策略指被修改的 Cache 行只有在被替换时才将修改的内容写回内存中。而多机系统中的回写策略还要考虑 Cache 行与主存块的状态变化。这种变化在两种情形下发生，一种是 Cache 未命中时与主存替换，另一种是当无效的数据块被读取时，唯一正确数据写回主存并传递给无效数据块所在的 Cache。</p>
+<p>当 Cache 未命中并发生替换时，写回对应主存块的状态变化如下：</p>
+<ol>
+<li>若 Cache 行的状态为 I，则无需写回。</li>
+<li>若 Cache 行的状态为 M，则写回并将主存中对应块状态置为 M。</li>
+<li>若 Cache 行的状态为 S，无需写回（共享状态下，主存中的数据也一定是正确的）。判断当前共享数量是否为1，若为1则将主存对应块状态置为 M。</li>
+</ol>
+<p>对于替换进 Cache 的数据块，考虑 Cache 行的状态：</p>
+<ol>
+<li>内存块为 M，则一起置 S。</li>
+<li>内存块为 S，Cache 行置 S。</li>
+<li>内存块为 I，Cache 行置 I。</li>
+</ol>
+<h1 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h1>
+<p>了解 Cache 一致性的原理之后，我就开始了程序的设计。因为重点是对协议的模拟，只需要模拟出状态的变化，无需实现数据的真实传输，同时我不想去实现复杂的替换策略，也不希望模拟太大的主存空间，于是我就大胆做出了如下假设：</p>
+<ol>
+<li>4个 Cache 都只包含 1 个 Cache 行。</li>
+<li>主存地址范围 0~9。</li>
+</ol>
+<p>这样以来，我只需要实现一个 Cache 类、一个 Memory 类以及一个控制全局的 Controll 类即可。</p>
+<h2 id="遇到的一些问题"><a class="markdownIt-Anchor" href="#遇到的一些问题"></a> 遇到的一些问题</h2>
+<h3 id="继承中的构造函数"><a class="markdownIt-Anchor" href="#继承中的构造函数"></a> 继承中的构造函数</h3>
+<p>我发现 Cache 类与 Memory 类有很多相似的地方，所以就写了一个 Device 父类做继承。但是在实现的过程中，发现子类的构造函数总是报错，上网搜了一圈才发现原因。</p>
+<p>大致来说是因为父类的构造函数是不能被子类继承的，构造原则如下：</p>
+<ol>
+<li>如果子类没有定义构造方法，则调用父类的无参数构造方法。</li>
+<li>如果子类定义了构造方法，在创建子类对象时，首先执行父类的无参数构造方法，然后再执行自己的构造方法。</li>
+<li>如果父类只定义了有参数构造函数，子类的构造函数没有显示调用父类构造函数，则出错。也就是说如果父类只有有参数的构造方法，子类必须显示调用此带参构造方法。</li>
+</ol>
+<p>所以解决问题方法就是，父类同时定义带参构造方法以及空的无参构造方法，然后子类就可以定义自己的构造方法了。</p>
+<h3 id="静态成员数组的访问"><a class="markdownIt-Anchor" href="#静态成员数组的访问"></a> 静态成员数组的访问</h3>
+<p>最开始的时候，我写了一个表示状态的 Status 类，并在其中用 <code>constexpr static</code> 关键字定义了一个 <code>char</code> 类型的静态数组 <code>mp[]</code>，但是在后续使用的时候发现报错。</p>
+<p>后来发现常量表达式(constexpr)在编译期就可以计算出结果，所以不能在数组中用变量下标，只能用常量下标。于是我就大笔一挥，把<code>constexpr</code>给去掉了。</p>
+<h2 id="整体设计思路"><a class="markdownIt-Anchor" href="#整体设计思路"></a> 整体设计思路</h2>
+<p>写一个控制器Controll，控制器通过<code>run()</code>方法运行，在<code>run()</code>方法中会要求用户输入要访问的 Cache 的 <code>id</code>、要进行的读或写操作<code>op</code>以及数据块的地址<code>address</code>，然后根据操作的不同调用<code>read()</code>或<code>write()</code>。上述被调用的两个方法在访问数据块时先通过<code>visit()</code>判断 Cache 是否命中，如果未命中则需要替换<code>change()</code>，然后再根据是本地读写或是远程读写来进行相应的状态变化。<code>run()</code>在最后会打印出各个 Cache 以及主存中的状态。</p>
+<h3 id="status"><a class="markdownIt-Anchor" href="#status"></a> Status</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> STATUS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STATUS_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Status</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> M=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> S=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> I=<span class="number">3</span>;</span><br><span class="line">        <span class="type">char</span> mp[<span class="number">4</span>]=&#123;<span class="string">&#x27; &#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;I&#x27;</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="device"><a class="markdownIt-Anchor" href="#device"></a> Device</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DEVICE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Device</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">int</span> id;</span><br><span class="line">        <span class="type">int</span> address;</span><br><span class="line">        <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Device</span>();</span><br><span class="line">        <span class="built_in">Device</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_address</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">char</span> <span class="title">get_status</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toS</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toI</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toM</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="cache"><a class="markdownIt-Anchor" href="#cache"></a> Cache</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CACHE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CACHE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cache</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Cache</span>();</span><br><span class="line">        <span class="built_in">Cache</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">set_address</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="memory"><a class="markdownIt-Anchor" href="#memory"></a> Memory</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MEMORY_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MEMORY_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Memory</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Memory</span>();</span><br><span class="line">        <span class="built_in">Memory</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="controll"><a class="markdownIt-Anchor" href="#controll"></a> Controll</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CONTROLL_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CONTROLL_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Status.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Cache.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Memory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Controll</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        Cache c[<span class="number">4</span>];</span><br><span class="line">        Memory m[<span class="number">10</span>];</span><br><span class="line">        <span class="type">int</span> share[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Controll</span>();</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">read</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">change</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> cache_adr,<span class="type">int</span> mem_adr)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="test"><a class="markdownIt-Anchor" href="#test"></a> test</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Controll.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Controll ice;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) ice.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h2>
+<p><a href="https://github.com/XDUqinian/fake_cache">开源仓库</a></p>
+<p>系统：<code>Linux ubuntu-20.04.6</code></p>
+<p>需要安装 <code>gcc</code> <code>cmake</code></p>
+<p><strong>运行</strong>:</p>
+<p>到项目目录下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake .</span><br><span class="line">make</span><br><span class="line">./test</span><br></pre></td></tr></table></figure>
+<p>随便敲了几个样例，感觉没什么问题。</p>
+<p><code>w 1 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 1.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  0  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 1 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  M  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 0 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<p><code>r 3 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is S,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is S,the address is 2.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  S  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  3  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<h1 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h1>
+<p>这个作业还是比较好做的，其实可以不用C++多文件，整个项目下来可能有点繁琐，但是就是想试一试所以就这么写了。要求用文件读写的方式来做控制，但是还没实现，离 deadline 还有一个多月，到时候可以再补上。</p>
+<p>其实一直以来我都是用 c++ 比较多，但是因为以前都在用 devc++ 写算法题，大三以后的课程作业基本都用 python 写了，所以对怎么用 C++ 写小实验还是比较陌生。算是弥补了一直以来的遗憾吧。</p>
 ]]></content>
       <categories>
-        <category>教程</category>
+        <category>笔记</category>
       </categories>
       <tags>
-        <tag>web</tag>
+        <tag>c++</tag>
       </tags>
   </entry>
   <entry>
@@ -579,132 +562,149 @@
       </tags>
   </entry>
   <entry>
-    <title>基于MSI协议的Cache一致性模拟器设计</title>
-    <url>/2023/10/02/fake_cache/</url>
-    <content><![CDATA[<p>前段时间我在研究怎么在 linux 环境下用 C++ 写一些东西，刚好就拿这个作业练练手。</p>
-<p>老师要求用 C++ 实现一种基于 WB 策略的一致性维护的 Cache 模拟器，该模拟器仅考虑4核的 CPU，且每个核只有一级 Cache，Cache 行长度为 64 字节，观察 CPU读、写数据后各个核上 Cache 中数据状态的变化情况。</p>
-<p>我思考了一下，准备分三步来完成这个任务：原理学习、程序设计、程序编写。</p>
-<h1 id="一些原理"><a class="markdownIt-Anchor" href="#一些原理"></a> 一些原理</h1>
-<p>首先要了解 Cache 一致性维护相关的知识。</p>
-<p>其实本科学计组时讲过单机系统中的 Cache 一致性问题，但是单机系统中只考虑单个 Cache 与主存之间的数据不一致，通过直写法或回写法就可以简单地解决。而并行计算机体系结构中要考虑多处理机系统中的 Cache 一致性问题，需要考虑不同 Cache 之间、Cache 与主存之间的数据一致性，单纯的直写法或回写法并不能保证多处理机的多数据副本一致。</p>
-<p>由于要求实现三状态的 Cache 一致性模拟，所以我先学了一下 MSI 协议。</p>
-<h2 id="msi"><a class="markdownIt-Anchor" href="#msi"></a> MSI</h2>
-<p>MSI 协议将 Cache 中的数据块分为三种状态：</p>
+    <title>hexo博客搭建</title>
+    <url>/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p>搭建博客过程中的一些问题以及解决方式。</p>
+<span id="more"></span>
+<p><img src="/common/img/loading.jpg" data-original="/2022/01/11/hexo%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/1.png" alt="成功插入图片啦！"></p>
+<h2 id="换成-butterfly"><a class="markdownIt-Anchor" href="#换成-butterfly"></a> 换成 butterfly</h2>
+<p><strong>2023.11.12</strong></p>
+<p>发现数学公式渲染不太对，改了一下。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi=\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></p>
+<p><a href="https://nickxu.me/2022/04/17/Hexo-Butterfly-%E5%BB%BA%E7%AB%99%E6%8C%87%E5%8D%97%EF%BC%88%E5%85%AB%EF%BC%89%E4%BD%BF%E7%94%A8-KaTeX-%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F/">hexo butterfly ktex</a></p>
+<p>增加了对<mark>等号高亮</mark>的支持。</p>
+<p><a href="https://blog.kukmoon.com/3eacfb91/">等号高亮</a></p>
+<p><strong>2023.9.29</strong></p>
+<p>想把博客弄得好看一点，改一个主题，发现这个主题的文档比较完善。</p>
+<p><a href="https://butterfly.js.org/">hexo-butterfly 使用教程</a></p>
+<p><a href="https://butterfly.zhheo.com/home.html">butterfly 魔改</a></p>
+<p><strong>2023.9.30</strong></p>
+<p>首页图片加载太慢了，加了个免费的图床。</p>
+<p><a href="https://www.imagehub.cc/">知乎上搜到的 imagehub</a></p>
+<h2 id="问题及解决方式"><a class="markdownIt-Anchor" href="#问题及解决方式"></a> 问题及解决方式</h2>
 <ol>
-<li><strong>S (Shared)</strong> 表示该数据块被共享，正确数据块分别在 Cache 和 Memory 中，或者在不同的 Cache 中。</li>
-<li><strong>M (Modified)</strong> 表示该数据块在系统中唯一正确。</li>
-<li><strong>I (Invalid)</strong> 表示该数据块无效。</li>
-</ol>
-<p>这三种状态之间的转换由四种操作来决定：</p>
-<ul>
 <li>
-<p><strong>本地读</strong>：本地处理机对该数据块读。</p>
-<ul>
-<li>M：不变</li>
-<li>S：不变</li>
-<li>I：变 S</li>
-</ul>
+<p>md 加不上图片。 <strong>解决方式</strong>：<a href="https://www.jianshu.com/p/f72aaad7b852">hexo插入图片</a>。</p>
 </li>
 <li>
-<p><strong>本地写</strong>：本地处理机对该数据块写。</p>
-<ul>
-<li>M：不变</li>
-<li>S：变 M</li>
-<li>I：变 M</li>
-</ul>
+<p>手机端的背景会被拉伸。<strong>解决方式</strong>：把背景放到header里，然后拉长head高度，设为absolute。</p>
 </li>
 <li>
-<p><strong>远程读</strong>：远程处理机对该数据块读。</p>
-<ul>
-<li>M：变 S</li>
-<li>S：不变</li>
-<li>I：不变</li>
-</ul>
+<p>首页的文章显示全文而不是摘要。</p>
+<p><strong>解决方法：</strong> 在文章中加上&lt; !–more-- &gt;标记 ，该标记以后部分就不在显示了，只有展开全部才显示，这是hexo定义的。</p>
 </li>
 <li>
-<p><strong>远程写</strong>：远程处理机对该数据块写。</p>
+<p>无法显示 markdown 的数学公式。</p>
+<p><strong>解决方法</strong>：几个博客的方法都试了一遍，莫名其妙就好了。</p>
+<p><a href="https://blog.csdn.net/yexiaohhjk/article/details/82526604">hexo next主题解决无法显示数学公式</a></p>
+<p><a href="https://blog.csdn.net/weixin_43014927/article/details/99619627?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">在HEXO主题中添加数学公式支持</a></p>
+<p><a href="https://blog.csdn.net/weixin_45511189/article/details/115798563?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-115798563.pc_agg_new_rank&amp;utm_term=hexo+next+%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F&amp;spm=1000.2123.3001.4430">hexo博客next主题添加对数学公式的支持</a></p>
+</li>
+<li>
+<p>分页不显示封图。</p>
+<p><strong>解决方法</strong>：在 images 的路径前加个/。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/w573719227/article/details/100704952">HEXO博客使用LeanCloud报错</a>。</p>
+</li>
+<li>
+<p>无语，为什么部署到服务器以后的搜索框这么丑……可能要等一等？？？</p>
+</li>
+</ol>
+<h2 id="实现的功能"><a class="markdownIt-Anchor" href="#实现的功能"></a> 实现的功能</h2>
+<h3 id="一些小修改"><a class="markdownIt-Anchor" href="#一些小修改"></a> 一些小修改</h3>
 <ul>
-<li>M：变 I</li>
-<li>S：变 I</li>
-<li>I：不变</li>
-</ul>
+<li>
+<p>将14号字体改为了16号。<a href="https://blog.csdn.net/dpdpdppp/article/details/102387532">hexo修改字体大小</a></p>
+</li>
+<li>
+<p>将灰色字体改成了纯黑色。</p>
+</li>
+<li>
+<p>文本框由灰色透明改为了纯白。</p>
+</li>
+<li>
+<p>实现 markdown 行内数学公式的渲染。</p>
+</li>
+<li>
+<p>文章页宽修改为900px。这篇教程往后拉：<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改文章页宽</a></p>
+</li>
+<li>
+<p>修改文章底部#号标签为图标。</p>
+<p>修改模板<code>/themes/next/layout/_macro/post.swig</code>，搜索 <code>rel=&quot;tag&quot;&gt;</code>，将后面的内容换成<code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code>。</p>
+</li>
+<li>
+<p>将侧边栏弹出改为 always。改了半天才想起来，不成功是因为之前又设置了一个 nest.yml……捏马……</p>
+</li>
+<li>
+<p>把背景图放在了header里，body 背景改为白灰色。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/gfl1427097103/article/details/104814979">修改首页文章间距并添加边框阴影</a>。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">修改了链接文字样式与 Read More样式</a>。</p>
+</li>
+<li>
+<p>修改了<a href="https://blog.csdn.net/weixin_33913377/article/details/91426006">标签云颜色</a>。</p>
+</li>
+<li>
+<p>将 github 的源改为中科大的源，网页加载优化，性能提升。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/tingqinxiyin/article/details/93494680">实现文章图片懒加载</a>。</p>
+</li>
+<li>
+<p>文章背景与首页文章卡片设置圆角。</p>
+</li>
+<li>
+<p>搜索结果框内部字体颜色改动。</p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/qq_38747027/article/details/107967518">修改创建文章时的固定模板</a>。</p>
+</li>
+<li>
+<p>修改菜单标签。<a href="https://blog.csdn.net/lijing742180/article/details/85622524#_39">配置主题菜单</a></p>
+</li>
+<li>
+<p>可参考的一些修改。<a href="https://www.cnblogs.com/antmoe/p/12846393.html#%E5%89%8D%E7%BD%AE%E8%AF%B4%E6%98%8E">优雅魔改</a></p>
+</li>
+<li>
+<p>修改评论样式。<a href="https://blog.csdn.net/qq_42889280/article/details/103087637">评论框美化</a></p>
+</li>
+<li>
+<p>Ctrl+Shift+c 可以看到网页某部分的源码位置。<a href="https://blog.csdn.net/wugenqiang/article/details/105744843">Hexo NexT 评论系统 Valine 的使用，详细版</a></p>
 </li>
 </ul>
-<p>大概就长下面这样：</p>
-<p><img src="/common/img/loading.jpg" data-original="/2023/10/02/fake_cache/MSI.jpg" alt="MSI 状态转移图"></p>
-<h2 id="wb"><a class="markdownIt-Anchor" href="#wb"></a> WB</h2>
-<p>在单机系统中，回写策略指被修改的 Cache 行只有在被替换时才将修改的内容写回内存中。而多机系统中的回写策略还要考虑 Cache 行与主存块的状态变化。这种变化在两种情形下发生，一种是 Cache 未命中时与主存替换，另一种是当无效的数据块被读取时，唯一正确数据写回主存并传递给无效数据块所在的 Cache。</p>
-<p>当 Cache 未命中并发生替换时，写回对应主存块的状态变化如下：</p>
-<ol>
-<li>若 Cache 行的状态为 I，则无需写回。</li>
-<li>若 Cache 行的状态为 M，则写回并将主存中对应块状态置为 M。</li>
-<li>若 Cache 行的状态为 S，无需写回（共享状态下，主存中的数据也一定是正确的）。判断当前共享数量是否为1，若为1则将主存对应块状态置为 M。</li>
-</ol>
-<p>对于替换进 Cache 的数据块，考虑 Cache 行的状态：</p>
-<ol>
-<li>内存块为 M，则一起置 S。</li>
-<li>内存块为 S，Cache 行置 S。</li>
-<li>内存块为 I，Cache 行置 I。</li>
-</ol>
-<h1 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h1>
-<p>了解 Cache 一致性的原理之后，我就开始了程序的设计。因为重点是对协议的模拟，只需要模拟出状态的变化，无需实现数据的真实传输，同时我不想去实现复杂的替换策略，也不希望模拟太大的主存空间，于是我就大胆做出了如下假设：</p>
-<ol>
-<li>4个 Cache 都只包含 1 个 Cache 行。</li>
-<li>主存地址范围 0~9。</li>
-</ol>
-<p>这样以来，我只需要实现一个 Cache 类、一个 Memory 类以及一个控制全局的 Controll 类即可。</p>
-<h2 id="遇到的一些问题"><a class="markdownIt-Anchor" href="#遇到的一些问题"></a> 遇到的一些问题</h2>
-<h3 id="继承中的构造函数"><a class="markdownIt-Anchor" href="#继承中的构造函数"></a> 继承中的构造函数</h3>
-<p>我发现 Cache 类与 Memory 类有很多相似的地方，所以就写了一个 Device 父类做继承。但是在实现的过程中，发现子类的构造函数总是报错，上网搜了一圈才发现原因。</p>
-<p>大致来说是因为父类的构造函数是不能被子类继承的，构造原则如下：</p>
-<ol>
-<li>如果子类没有定义构造方法，则调用父类的无参数构造方法。</li>
-<li>如果子类定义了构造方法，在创建子类对象时，首先执行父类的无参数构造方法，然后再执行自己的构造方法。</li>
-<li>如果父类只定义了有参数构造函数，子类的构造函数没有显示调用父类构造函数，则出错。也就是说如果父类只有有参数的构造方法，子类必须显示调用此带参构造方法。</li>
-</ol>
-<p>所以解决问题方法就是，父类同时定义带参构造方法以及空的无参构造方法，然后子类就可以定义自己的构造方法了。</p>
-<h3 id="静态成员数组的访问"><a class="markdownIt-Anchor" href="#静态成员数组的访问"></a> 静态成员数组的访问</h3>
-<p>最开始的时候，我写了一个表示状态的 Status 类，并在其中用 <code>constexpr static</code> 关键字定义了一个 <code>char</code> 类型的静态数组 <code>mp[]</code>，但是在后续使用的时候发现报错。</p>
-<p>后来发现常量表达式(constexpr)在编译期就可以计算出结果，所以不能在数组中用变量下标，只能用常量下标。于是我就大笔一挥，把<code>constexpr</code>给去掉了。</p>
-<h2 id="整体设计思路"><a class="markdownIt-Anchor" href="#整体设计思路"></a> 整体设计思路</h2>
-<p>写一个控制器Controll，控制器通过<code>run()</code>方法运行，在<code>run()</code>方法中会要求用户输入要访问的 Cache 的 <code>id</code>、要进行的读或写操作<code>op</code>以及数据块的地址<code>address</code>，然后根据操作的不同调用<code>read()</code>或<code>write()</code>。上述被调用的两个方法在访问数据块时先通过<code>visit()</code>判断 Cache 是否命中，如果未命中则需要替换<code>change()</code>，然后再根据是本地读写或是远程读写来进行相应的状态变化。<code>run()</code>在最后会打印出各个 Cache 以及主存中的状态。</p>
-<h3 id="status"><a class="markdownIt-Anchor" href="#status"></a> Status</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> STATUS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STATUS_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Status</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> M=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> S=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> I=<span class="number">3</span>;</span><br><span class="line">        <span class="type">char</span> mp[<span class="number">4</span>]=&#123;<span class="string">&#x27; &#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;I&#x27;</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="device"><a class="markdownIt-Anchor" href="#device"></a> Device</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DEVICE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Device</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">int</span> id;</span><br><span class="line">        <span class="type">int</span> address;</span><br><span class="line">        <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Device</span>();</span><br><span class="line">        <span class="built_in">Device</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_address</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">char</span> <span class="title">get_status</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toS</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toI</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toM</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="cache"><a class="markdownIt-Anchor" href="#cache"></a> Cache</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CACHE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CACHE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cache</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Cache</span>();</span><br><span class="line">        <span class="built_in">Cache</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">set_address</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="memory"><a class="markdownIt-Anchor" href="#memory"></a> Memory</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MEMORY_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MEMORY_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Memory</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Memory</span>();</span><br><span class="line">        <span class="built_in">Memory</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="controll"><a class="markdownIt-Anchor" href="#controll"></a> Controll</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CONTROLL_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CONTROLL_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Status.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Cache.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Memory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Controll</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        Cache c[<span class="number">4</span>];</span><br><span class="line">        Memory m[<span class="number">10</span>];</span><br><span class="line">        <span class="type">int</span> share[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Controll</span>();</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">read</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">change</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> cache_adr,<span class="type">int</span> mem_adr)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="test"><a class="markdownIt-Anchor" href="#test"></a> test</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Controll.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Controll ice;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) ice.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h2>
-<p><a href="https://github.com/XDUqinian/fake_cache">开源仓库</a></p>
-<p>系统：<code>Linux ubuntu-20.04.6</code></p>
-<p>需要安装 <code>gcc</code> <code>cmake</code></p>
-<p><strong>运行</strong>:</p>
-<p>到项目目录下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake .</span><br><span class="line">make</span><br><span class="line">./test</span><br></pre></td></tr></table></figure>
-<p>随便敲了几个样例，感觉没什么问题。</p>
-<p><code>w 1 1</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 1.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  0  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
-<p><code>w 1 2</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  M  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
-<p><code>w 0 1</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
-<p><code>r 3 2</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is S,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is S,the address is 2.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  S  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  3  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
-<h1 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h1>
-<p>这个作业还是比较好做的，其实可以不用C++多文件，整个项目下来可能有点繁琐，但是就是想试一试所以就这么写了。要求用文件读写的方式来做控制，但是还没实现，离 deadline 还有一个多月，到时候可以再补上。</p>
-<p>其实一直以来我都是用 c++ 比较多，但是因为以前都在用 devc++ 写算法题，大三以后的课程作业基本都用 python 写了，所以对怎么用 C++ 写小实验还是比较陌生。算是弥补了一直以来的遗憾吧。</p>
+<h3 id="一些功能"><a class="markdownIt-Anchor" href="#一些功能"></a> 一些功能</h3>
+<ul>
+<li>将本地的markdown文本编辑器改成了 typroa，轻量级编辑器能够实时呈现最后的显示结果。<a href="https://jckling.github.io/2021/12/24/Other/Typora%20%E6%BF%80%E6%B4%BB%E6%95%99%E7%A8%8B/"> typroa 的激活教程</a>。</li>
+<li>实现首页文章简介与封图设置，使首页更加简洁美观。</li>
+<li>实现了文章分类和标签功能，便于根据需求找到想要的内容。</li>
+<li>实现博客首页分页。<a href="https://blog.csdn.net/qq_43773164/article/details/106389652">hexo博客主页分页</a></li>
+<li>页面点击小红心！csdn上说的都实现不了，最后从lq神的博客里扒到了github上的js。<a href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js">click-heart!</a></li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80787998">文章阅读量统计</a>。</li>
+<li><a href="https://blog.csdn.net/weixin_39345384/article/details/80785373">文章末版权声明</a>。</li>
+<li>添加了搜索功能。<a href="https://www.jianshu.com/p/d388119a90ec">hexo 搜索框</a></li>
+<li>友情链接实现。<a href="https://zhuanlan.zhihu.com/p/384472746">友链</a></li>
+<li>显示当前浏览进度。主题配置文件 b2t 和 scrollpercnet 修改为 true。</li>
+<li>设置about的时候应该会用上。<a href="https://blog.csdn.net/hhh132/article/details/97029059">post-banner</a></li>
+<li>简单的评论与回复系统。<a href="https://blog.csdn.net/blue_zy/article/details/79071414">hexo+Valine</a></li>
+</ul>
+<h3 id="待实现的功能与小任务"><a class="markdownIt-Anchor" href="#待实现的功能与小任务"></a> 待实现的功能与小任务</h3>
+<ul>
+<li>站点信息显示：已运行时间等。</li>
+<li>评论回复邮箱审核。</li>
+<li>首页封图LazyLoading。</li>
+<li>滚动条优化。</li>
+<li>首页背景 scroll-down。</li>
+</ul>
 ]]></content>
       <categories>
-        <category>笔记</category>
+        <category>教程</category>
       </categories>
       <tags>
-        <tag>c++</tag>
+        <tag>web</tag>
       </tags>
   </entry>
   <entry>
@@ -1431,6 +1431,528 @@ M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 </ul>
 <p>Cache 一致性维护中，关键是解决<mark>减轻网络负载</mark>和<mark>多副本同时写操作冲突</mark>问题。</p>
 <p>对连续处理倾向的进程，作废法较好；对多个处理器频繁交换处理的进程，更新法较好。</p>
+<h2 id="四-互连网络"><a class="markdownIt-Anchor" href="#四-互连网络"></a> 四、互连网络</h2>
+<h3 id="互连网络特性"><a class="markdownIt-Anchor" href="#互连网络特性"></a> 互连网络特性</h3>
+<p>计算/处理单元、存储单元和 I/O 单元等称为<strong>节点</strong>，节点间通过<strong>互联网络连接</strong>以交换信息，互连网络由有向或无向图来表示，是并行计算机系统的关键部件，它决定了<strong>系统能效和规模可扩展性</strong>，决定了<strong>系统的体系架构</strong>、适应的应用领域。</p>
+<h4 id="互连网络分类"><a class="markdownIt-Anchor" href="#互连网络分类"></a> 互连网络分类</h4>
+<p>专门定制和高速商用互连网络：</p>
+<ul>
+<li><strong>专门定制互连网络</strong>：用于处理器、存储器和 I/O 设备之间的互连。</li>
+<li><strong>商用网络</strong>：用于连接独立完整的计算机节点，组成 COW 结构集群，当前已有用于 MPP 的商用网络。</li>
+</ul>
+<p>互连网络的技术分类：</p>
+<ul>
+<li><strong>静态</strong>互连网：节点间直接相连，连接方式固定不变。</li>
+<li><strong>动态</strong>互连网：由开关实现，可以动态改变节点间连接。</li>
+</ul>
+<h4 id="互连网络结构性参数"><a class="markdownIt-Anchor" href="#互连网络结构性参数"></a> 互连网络结构性参数</h4>
+<ul>
+<li>节点度：与节点相连接的边数（即链路或通道）。
+<ul>
+<li>反映了节点需要的 I/O 端口数。</li>
+<li>反映了节点的复杂度、价格成本。</li>
+</ul>
+</li>
+<li>网络直径：任意两个节点之间最短距离的最大值。
+<ul>
+<li>用<mark>遍历路径的链路数</mark>度量，是网络通信性能的一个指标。</li>
+<li>网络直径应尽可能小，以减少通信延迟。</li>
+</ul>
+</li>
+<li>等分宽度：网络被切分成相等的两半，沿切口的最小边数（通道），用 w 表示。
+<ul>
+<li>线等分宽度 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>=</mo><mi>w</mi><mo>×</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">B=w \times b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span></span></span></span>表示通道宽度（位）。</li>
+</ul>
+</li>
+<li>节点间线长：两个节点间线的长度。</li>
+<li>对称性：从任何节点看网络的拓扑结构都是一样的，乘该网络为对称网络。</li>
+<li>寻径功能：实现节点间连接方法。</li>
+</ul>
+<h4 id="互连网络的性能指标"><a class="markdownIt-Anchor" href="#互连网络的性能指标"></a> 互连网络的性能指标</h4>
+<ol>
+<li>通信时延：从源节点到目的节点传送一条消息所需的<mark>总时间</mark>。包括：软件开销、通道时延、选路时延、竞争时延。</li>
+<li>网络时延：通道时延、选路时延。</li>
+<li>端口带宽：单位时间传送到其他端口的最大信息量。</li>
+<li>聚集带宽：从一半节点到另一半节点，单位时间传送的最大信息量。</li>
+<li>对剖带宽：最小对剖平面的所有边单位时间传送的最大信息量。</li>
+</ol>
+<h4 id="互连网络表示法"><a class="markdownIt-Anchor" href="#互连网络表示法"></a> 互连网络表示法</h4>
+<ul>
+<li>函数表示法
+<ul>
+<li>变量 x ：输入</li>
+<li>函数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>：输出</li>
+</ul>
+</li>
+<li>输入输出对表示法</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E5%AF%B9.png" alt="输入输出对"></p>
+<ul>
+<li>图形表示法
+<ul>
+<li>用输入输出的<mark>连线图</mark>表示变换关系。</li>
+</ul>
+</li>
+<li>循环互连函数表示法
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">)</mo><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>=</mo><msub><mi>x</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>=</mo><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">f(x_0)=x_1,f(x_1)=x_2,…,f(x_{j-1})=x_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>。</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>j</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">(x_0,x_1,x_2,…,x_j),j+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>称为<mark>循环长度</mark>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="寻径函数"><a class="markdownIt-Anchor" href="#寻径函数"></a> 寻径函数</h3>
+<p>寻径函数描述相互连接的输入端号和输出端号之间的一一对应关系。</p>
+<p>设 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>2</mn></msub><mi>N</mi><mo separator="true">,</mo><mo stretchy="false">(</mo><mi>N</mi><mo>=</mo><msup><mn>2</mn><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">n=log_2N,(N=2^n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>，则可以用 n 位二进制表示 N 个输入端和输出端的二进制地址，互连函数表示为： <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>x</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x_{n-1}x_{n-2}…x_1x_0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>。</p>
+<h4 id="交换置换"><a class="markdownIt-Anchor" href="#交换置换"></a> 交换置换</h4>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ε</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><mover accent="true"><msub><mi>b</mi><mi>k</mi></msub><mo>ˉ</mo></mover><mo>…</mo><msub><mi>b</mi><mn>1</mn></msub><msub><mi>b</mi><mn>0</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\varepsilon_{(k)}(x)=\{b_{n-1}b_{n-2}…\bar{b_k}…b_1b_0\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal">ε</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0812199999999998em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8312199999999998em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.26344em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˉ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p>实现节点<mark>二进制编址中第k位值不同</mark>的输入端和输出端之间的连接。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%BA%A4%E6%8D%A2%E7%BD%AE%E6%8D%A2.png" alt="交换置换"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E7%AB%8B%E6%96%B9%E4%BD%93%E4%BA%92%E8%BF%9E.png" alt="立方体互连"></p>
+<h4 id="全混洗置换"><a class="markdownIt-Anchor" href="#全混洗置换"></a> 全混洗置换</h4>
+<p>全混洗是把节点的二进制编码 <mark>循环左移</mark> 一位。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\sigma(x)=\{b_{n-2}b_{n-3}…b_0b_{n-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>子混洗</strong> 最低 k 位进行混洗，高位不变。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mi>k</mi></msub><msub><mi>b</mi><mrow><mi>k</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\sigma_{(k)}(x)=\{b_{n-1}b_{n-2}…b_kb_{k-2}…b_0b_{k-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>超混洗</strong> 最高 k 位进行混洗，低位不变。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>0</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\sigma^{(k)}(x)=\{b_{n-2}b_{n-3}…b_{n-k}b_{n-1}b_{n-k-1}…b_0\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E6%B7%B7%E6%B4%97.png" alt="混洗"></p>
+<h4 id="蝶式置换"><a class="markdownIt-Anchor" href="#蝶式置换"></a> 蝶式置换</h4>
+<p>节点编址的 <mark>最高位和最低位交换</mark> 。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>1</mn></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\beta(x)=\{b_0b_{n-2}…b_1b_{n-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>子蝶式</strong> 最低 k 位进行蝶式置换，高位不变。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mi>k</mi></msub><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mrow><mi>k</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>1</mn></msub><msub><mi>b</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\beta_{(k)}(x)=\{b_{n-1}b_{n-2}…b_kb_0b_{k-2}…b_1b_{k-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>超蝶式</strong> 最高 k 位进行蝶式置换，低位不变。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>0</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\beta^{(k)}(x)=\{b_{n-k}b_{n-2}…b_{n-k+1}b_{n-1}b_{n-k-1}…b_0\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E8%9D%B6%E5%BC%8F.png" alt="蝶式"></p>
+<h4 id="位序颠倒置换"><a class="markdownIt-Anchor" href="#位序颠倒置换"></a> 位序颠倒置换</h4>
+<p>将输入端二进制地址的<mark>位序颠倒</mark>过来。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>…</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\rho(x)=\{b_0b_1…b_{n-2}b_{n-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>子反位序</strong></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mi>k</mi></msub><msub><mi>b</mi><mn>0</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>…</mo><msub><mi>b</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\rho_{(k)}(x)=\{b_{n-1}b_{n-2}…b_kb_0b_1…b_{k-1}\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1052em;vertical-align:-0.3551999999999999em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><strong>超反位序</strong></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>ρ</mi><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>b</mi><mrow><mi>n</mi><mo>−</mo><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>…</mo><msub><mi>b</mi><mn>0</mn></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">\rho^{(k)}(x)=\{b_{n-k}b_{n-k+1}…b_{n-1}b_{n-k-1}…b_0\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8879999999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%8F%8D%E4%BD%8D%E5%BA%8F.png" alt="反位序"></p>
+<h4 id="移数置换"><a class="markdownIt-Anchor" href="#移数置换"></a> 移数置换</h4>
+<p>在 n 位末尾加 1，再对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span> 取模防溢出。</p>
+<p><strong>子移数</strong> 最低 k 位移数置换，高位不变。</p>
+<p><strong>超移数</strong> 最高 k 位移数置换，低位不变。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E7%A7%BB%E6%95%B0.png" alt="移数"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%8D%95%E5%90%91%E7%8E%AF%E7%BD%91.png" alt="单向环网"></p>
+<h4 id="恒等置换"><a class="markdownIt-Anchor" href="#恒等置换"></a> 恒等置换</h4>
+<p>相同编号的输入端与输出端一一对应。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">I(x)=x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span></p>
+<h4 id="逆置换"><a class="markdownIt-Anchor" href="#逆置换"></a> 逆置换</h4>
+<p>若置换<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x),g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>满足<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>×</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)\times g(x)=I(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>，则称<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x),g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>互为逆置换。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>的逆置换记作<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>f</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f^{-1}(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>。</p>
+<h3 id="静态互连网络"><a class="markdownIt-Anchor" href="#静态互连网络"></a> 静态互连网络</h3>
+<p>静态互连网络的入/出端节点固定。一个节点可以和多个节点直接连接，每种连接可以用一种寻径函数表示。</p>
+<p>一个静态互连网络 SW，可用多寻径函数表示为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>W</mi><mo>=</mo><mrow><msub><mi>f</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>f</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>f</mi><mi>m</mi></msub></mrow></mrow><annotation encoding="application/x-tex">SW={f_1,f_2,…,f_m}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>。</p>
+<p>当和没有直接连接的节点通信时，需要循环使用该互连网络。</p>
+<h4 id="一维线性阵列"><a class="markdownIt-Anchor" href="#一维线性阵列"></a> 一维线性阵列</h4>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%B8%80%E7%BB%B4%E7%BA%BF%E6%80%A7.png" alt="一维线性阵列"></p>
+<h4 id="环形互连网络"><a class="markdownIt-Anchor" href="#环形互连网络"></a> 环形互连网络</h4>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E7%8E%AF%E5%BD%A2.png" alt="环形网络"></p>
+<p>带弦环网，<mark>解决数据拥塞，减少路径长度</mark>。</p>
+<p>增加的链路越多，网络直径越小，但节点度越高。</p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/带弦环网.png" alt="带弦环网" style="zoom: 80%;">
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/带弦环网2.png" alt="带弦环网" style="zoom:80%;">
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/全互连环网.png" alt="全互连环网" style="zoom:80%;">
+<h4 id="树形网络"><a class="markdownIt-Anchor" href="#树形网络"></a> 树形网络</h4>
+<p>根及叶子节点具有 I/O 功能，叶子节点执行并行计算，内节点仅负责节点间的通信。</p>
+<p>最长通信路径为树高的倍数。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E6%A0%91%E5%BD%A2.png" alt="树形"></p>
+<p>在树形网络中，根节点为<mark>通信性能</mark>和<mark>故障瓶颈</mark>。</p>
+<ul>
+<li>使用 X- 树，使<mark>同级兄弟节点相连</mark>。</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/X-%E6%A0%91.png" alt="X-树"></p>
+<ul>
+<li>使用<mark>胖树</mark>，除根外共两层，每个节点有4个子节点和2个父节点。</li>
+</ul>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/胖树.png" alt="胖树" style="zoom:80%;">
+<p>从通信性能的角度看，树的跳数少，优于网孔。将二者结合成<mark>树-网连接</mark>。</p>
+<ul>
+<li>原网孔的水平和纵向连接用<mark>二叉树构成</mark>。</li>
+<li>原网孔的节点变成二叉树的<mark>叶子</mark>节点。</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E6%A0%91%E7%BD%91%E8%BF%9E%E6%8E%A5.png" alt="树网连接"></p>
+<p>既具有良好的通信性能，又具有许多网孔上的有效算法。</p>
+<p>除此以外，<mark>金字塔连接</mark>也是一种树与网孔的结合。</p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/金字塔.png" alt="金字塔" style="zoom:80%;">
+<h4 id="超立方体网"><a class="markdownIt-Anchor" href="#超立方体网"></a> 超立方体网</h4>
+<ul>
+<li>节点个数为  <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span>。</li>
+<li>节点用 n 位二进制数表示。</li>
+<li>节点的编号每位取反得到的编号构成该节点的邻居节点。</li>
+</ul>
+<p><strong>路由方法：</strong> 当前节点与目的节点编号从高位到地位依次比较，相同不动，不同则按该位取反的相邻节点移动。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E8%B6%85%E7%AB%8B%E6%96%B9%E4%BD%93.png" alt="超立方体"></p>
+<ul>
+<li>性能优异
+<ul>
+<li>网络直径短，为 n。</li>
+<li>点与点之间的跳数少，小于 n。</li>
+<li>对剖宽度大，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2^{n-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span>。</li>
+</ul>
+</li>
+<li>路由简单，包容性好，应用算法扩展性好。</li>
+<li>容错能力强。
+<ul>
+<li>任意两个节点距离为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi></mrow><annotation encoding="application/x-tex">D</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span></span></span></span>，则它们有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false">!</mo></mrow><annotation encoding="application/x-tex">D!</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mclose">!</span></span></span></span> 条最短互连路径。</li>
+</ul>
+</li>
+<li>大规模时，网络物理端口、链路连接实现太困难。
+<ul>
+<li><mark>大规模时不会采用</mark>。</li>
+</ul>
+</li>
+</ul>
+<p><mark>带环立方体</mark> 结合环网与立方体的优点及性质，将立方体的每一个顶点由一个环替代。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%B8%A6%E7%8E%AF%E7%AB%8B%E6%96%B9%E4%BD%93.png" alt="带环立方体"></p>
+<p><mark>k 元 n 立方体</mark>，n 表示立方体维数，k 是基数（每个方向节点数）。</p>
+<p>节点用基数为 k 的 n 位地址表示 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>a</mi><mn>1</mn></msub><msub><mi>a</mi><mn>2</mn></msub><mo>…</mo><msub><mi>a</mi><mi>n</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">A=\{a_1a_2…a_n\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/k%E5%85%83n%E7%AB%8B%E6%96%B9%E4%BD%93.png" alt="k元n立方体"></p>
+<h3 id="动态互连网络"><a class="markdownIt-Anchor" href="#动态互连网络"></a> 动态互连网络</h3>
+<h4 id="总线结构"><a class="markdownIt-Anchor" href="#总线结构"></a> 总线结构</h4>
+<p>处理机、存储模块及 I/O 作为节点连接到总线上。各节点以均等竞争方式使用总线，但容易引发冲突。</p>
+<p><strong>总线仲裁</strong></p>
+<ul>
+<li>排队器：优先权编码器。
+<ul>
+<li>当多个节点同时发出请求，排队器仲裁，仲裁结果经过译码器控制节点发送信息。</li>
+</ul>
+</li>
+<li>菊花链：
+<ul>
+<li>静态菊花链：每个节点分配固定优先权。
+<ul>
+<li>节点测试总线状态。</li>
+<li>当总线“空”时发出总线请求。</li>
+<li>总线控制器发出响应信号。</li>
+<li>没有申请总线的节点传递响应信号。</li>
+<li>发出总线申请的节点接收到响应信号，不再传递并置状态线为“忙”。</li>
+<li>节点发送信息到总线。</li>
+<li>传送结束，置状态线为“空”。</li>
+</ul>
+</li>
+<li>动态菊花链：节点优先权动态变化。
+<ul>
+<li>循环法：节点最高优先权依次循环，刚使用过的总线具有最低优先权。</li>
+<li>基于某种函数确定优先权。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="全互连开关"><a class="markdownIt-Anchor" href="#全互连开关"></a> 全互连开关</h4>
+<p>任何时刻任何节点可以访问任一其他节点，无冲突，但对于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">n\times n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 的交叉开关，开关数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">n^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span>，<mark>成本高、连接复杂</mark>。</p>
+<h4 id="多级交叉开关网"><a class="markdownIt-Anchor" href="#多级交叉开关网"></a> 多级交叉开关网</h4>
+<ul>
+<li>开关形式
+<ul>
+<li>如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>×</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">2 \times 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span> 交叉开关：具有 2 个输入及 2 个输出的交换单元。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%BA%A4%E5%8F%89%E5%BC%80%E5%85%B3.png" alt="交叉开关"></p>
+<ul>
+<li>级间拓扑结构</li>
+<li>开关控制方式
+<ul>
+<li>级控制：同级开关使用同一个控制信号。</li>
+<li>单元控制：每个开关都有自己的控制信号。</li>
+<li>部分级控制：用 m 个控制信号控制 n 个开关。</li>
+</ul>
+</li>
+</ul>
+<p><strong>多级开关路径冲突</strong>：存在多个消息寻径共享一个开关或路径。引发冲突的多级开关网称为<mark>阻塞网</mark>。</p>
+<ul>
+<li>解决阻塞：增加冗余路径。
+<ul>
+<li>将两个多级开关网串接。
+<ul>
+<li>发生冲突时，一个走正确的路径，一个走剩下的路径。</li>
+<li>时间延迟增加了一倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缓解阻塞：减少使用链路，如数据包合并。</li>
+</ul>
+<p>无阻塞网不一定<mark>耐故障</mark>。</p>
+<p>通过增加冗余路径：</p>
+<ul>
+<li><strong>增加段</strong>：会增加延时。</li>
+<li><strong>增加旁路</strong>：会使控制复杂。</li>
+</ul>
+<h3 id="消息传递机制"><a class="markdownIt-Anchor" href="#消息传递机制"></a> 消息传递机制</h3>
+<p>共享内存系统基于变量共享完成子任务之间的数据传输，而多机系统基于<mark>消息传递</mark>完成子任务之间的数据传输。</p>
+<h4 id="寻径方式"><a class="markdownIt-Anchor" href="#寻径方式"></a> 寻径方式</h4>
+<ul>
+<li>线路交换：传递消息前，先建立一条源到目的节点的物理通路，再传递消息。
+<ul>
+<li>物理通道不共享、开销大。</li>
+</ul>
+</li>
+<li>存储转发寻径：包从源节点经中间节点存储转发到达目的节点。
+<ul>
+<li>包缓冲区大、时延与节点距离成正比。</li>
+</ul>
+</li>
+<li>虚拟直通寻径：没有必要等到整个消息全部接收后再寻径，只要收到消息头部就寻径。
+<ul>
+<li>遇到阻塞时依然是存储转发，节点需要包缓冲区大，且包缓冲区独立在寻径芯片外，转发时延大。</li>
+</ul>
+</li>
+<li>虫蚀寻径：包分成更小的数据片，节点的寻径硬件中只设置片缓冲区。
+<ul>
+<li>缓冲区较小、网络传输时延低、通道共享性好、易于实现选播和广播通信方式。</li>
+<li>数据包仍然是传送的最小单位，所有数据片必须跟着头片，不能交叉。</li>
+<li>因为包会同时占用多个节点寻径器的缓存和通道，通道争用时更容易引起阻塞、死锁。
+<ul>
+<li>防死锁路由算法：限制某方向传输，不形成死锁循环等待。</li>
+<li>缓解死锁：增加物理硬件通道。</li>
+</ul>
+</li>
+<li>虫蚀寻径更适合虚拟通道，物理链路由所有虚拟通道分时共享。</li>
+</ul>
+</li>
+</ul>
+<h4 id="包冲突时处理策略"><a class="markdownIt-Anchor" href="#包冲突时处理策略"></a> 包冲突时处理策略</h4>
+<p>当两个包到达同一个节点时，可能请求同一个接收缓冲区或用同一个输出通道。</p>
+<ul>
+<li>阻塞法：后续包不再前进。
+<ul>
+<li>控制简单，但可能引起大面积阻塞。</li>
+</ul>
+</li>
+<li>扬弃并重发法：后续包扬弃。
+<ul>
+<li>控制简单，重发效果未知，会加大网络负载。</li>
+</ul>
+</li>
+<li>虚拟直通法：后续包缓冲。
+<ul>
+<li>不浪费已分配资源，但需要一个能存放整个包的存储器作为缓冲区，存储延迟较大。</li>
+</ul>
+</li>
+<li>绕道法：后续包转发到其他寻径器。
+<ul>
+<li>绕道结果未知。</li>
+</ul>
+</li>
+</ul>
+<h4 id="防死锁寻径算法"><a class="markdownIt-Anchor" href="#防死锁寻径算法"></a> 防死锁寻径算法</h4>
+<ul>
+<li>维序寻径：按维度次序依次寻径。<mark>先编址高位相等，再低位相等。</mark>
+<ul>
+<li>无死锁、可扩展、最短路径。</li>
+<li>针对链路故障问题，需要增加物理或虚拟通道，只能缓解。</li>
+<li>针对节点故障问题，需要绕道自适应寻径，破坏维序规则，可能形成环，造成死锁。</li>
+</ul>
+</li>
+<li>自适应寻径：Subnet 法。
+<ul>
+<li>网格网络中，同一维的所有连接使用多个虚拟通道。</li>
+</ul>
+</li>
+</ul>
+<h3 id="通信模式"><a class="markdownIt-Anchor" href="#通信模式"></a> 通信模式</h3>
+<ul>
+<li>单播模式：一个源节点到一个 目的节点。</li>
+<li>选播模式：一个源节点到多个目的节点。（多播、组播）</li>
+<li>广播模式：一个源节点到全体节点。</li>
+<li>会议模式：多个源节点与多个目的间相互。</li>
+</ul>
+<p>寻径算法效率需考虑的因素：</p>
+<ul>
+<li>信道量：传输有关消息所使用的通道数。</li>
+<li>通信时延：包最长传输时间。</li>
+</ul>
+<p>不同寻径方法关注的因素：</p>
+<ul>
+<li>虫蚀寻径占信道多、易阻塞、延时与跳数关系不大，信道量参数比较重要。</li>
+<li>存储转发中，占信道少、不易阻塞、延时与跳数成正比，通信时延较重要。</li>
+</ul>
+<p><strong>广播树：</strong> 节点中的数字表示树的层次号。</p>
+<p><strong>贪婪树法：</strong> 向可达最多剩余节点的维方向发包。</p>
+<h2 id="五-并行计算机系统结构"><a class="markdownIt-Anchor" href="#五-并行计算机系统结构"></a> 五、并行计算机系统结构</h2>
+<h3 id="uma"><a class="markdownIt-Anchor" href="#uma"></a> UMA</h3>
+<h4 id="bus"><a class="markdownIt-Anchor" href="#bus"></a> Bus</h4>
+<ul>
+<li>单总线：资源共享、独占资源，适用规模较小。
+<ul>
+<li>减少使用总线
+<ul>
+<li>硬件：增加 Cache，基于局部性特征以减少总线使用</li>
+<li>软件：开发数据局部性，充分发挥 Cache 作用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多总线：扩展性能</li>
+<li>多层总线：扩展系统</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%8D%95%E6%80%BB%E7%BA%BF.png" alt="单总线"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%A4%9A%E6%80%BB%E7%BA%BF.png" alt="多总线"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%A4%9A%E7%BA%A7%E6%80%BB%E7%BA%BF.png" alt="多级总线"></p>
+<p>总线仲裁：</p>
+<ul>
+<li>集中式仲裁
+<ul>
+<li>排队器</li>
+</ul>
+</li>
+<li>分散式仲裁
+<ul>
+<li>静态菊花链</li>
+<li>动态菊花链</li>
+</ul>
+</li>
+<li>需要解决饥饿问题</li>
+</ul>
+<h4 id="switch"><a class="markdownIt-Anchor" href="#switch"></a> Switch</h4>
+<ul>
+<li>Crossbar 经纬线
+<ul>
+<li>开关控制，速度快</li>
+<li>严重受 PIN 数量限制；开关数多，成本高</li>
+</ul>
+</li>
+<li>MIN 多级 IN
+<ul>
+<li>硬件成本高，适用规模较小</li>
+</ul>
+</li>
+</ul>
+<p>动态网的消息控制存在<mark>麻痹</mark>问题：数据在传输过程中，经过的路径过于集中造成的阻塞现象。</p>
+<ul>
+<li>减少请求：合并消息</li>
+<li>增加可选路径：多级、多重输出网络</li>
+</ul>
+<h3 id="numa"><a class="markdownIt-Anchor" href="#numa"></a> NUMA</h3>
+<h4 id="cc-numa"><a class="markdownIt-Anchor" href="#cc-numa"></a> cc-NUMA</h4>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/cc-NUMA.png" alt="cc-NUMA" style="zoom: 80%;">
+<ul>
+<li>
+<p>HM 中的数据管理方式：就是目录表法</p>
+<ul>
+<li>
+<p>全映射法</p>
+</li>
+<li>
+<p>有限指针法</p>
+</li>
+<li>
+<p>指针法</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Cache 一致性</p>
+</li>
+</ul>
+<p>CC-NUMA 数据一致性维护太复杂，成本高，性能损失大； HM仅数据开始、结束用到，中间可以不保存/修改HM中数据块，但目录表是需要的。</p>
+<p>简化数据一致性维护的 HM 开销，仅维护 Cache 中数据一致性；用高速小容量目录 D 替代 HM 。提出 COMA 结构。</p>
+<h4 id="coma"><a class="markdownIt-Anchor" href="#coma"></a> COMA</h4>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/COMA.png" alt="COMA" style="zoom: 80%;">
+<p>使用阶层总线，目录 D 用于存储页的位置信息。初始时数据随机分配在 Cache ，并在 D 中记录，P 待访问数据通过 Cache 和 D 找到后，拷贝本地 Cache，一段时间后，数据分布达到最优。</p>
+<p>访问数据地址虚拟化，Cache 数据变化时 D 需要重新映射。</p>
+<p>分布式缓存比共享主存中页的替换复杂、频繁。</p>
+<h4 id="dash"><a class="markdownIt-Anchor" href="#dash"></a> DASH</h4>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/Dash.png" alt="Dash" style="zoom: 80%;">
+<ul>
+<li>高速地址映射 D 将全局地址翻译为本地地址。</li>
+<li>采用分布式目录方式的缓存一致性协议，使用硬件保持缓存数据一致性，减少访问延迟。</li>
+<li>网络接口含目录，目录具有与配置在群里主存相对应的项，并保持着其他群的缓存状态信息。</li>
+<li>数据分布在各群的局部主存中，但有局部性的数据尽量分布在相应群中。</li>
+</ul>
+<p>数据在其他群(称为主群)中时，由目录间协调将数据发送到本地缓存，并由主群目录将其他群中缓存副本无效化等。</p>
+<p>需要硬件、编译和应用共同完成数据同步。</p>
+<p>多使用改进后的五状态+总线监听四状态协议。</p>
+<h3 id="nora"><a class="markdownIt-Anchor" href="#nora"></a> NORA</h3>
+<ul>
+<li>MPP
+<ul>
+<li>结构特点
+<ul>
+<li>不共享内存，无统一地址空间</li>
+<li>通过消息传递方式进行协调</li>
+<li>规模较大</li>
+</ul>
+</li>
+<li>结构分析
+<ul>
+<li>静态网连接 IN 严重影响性能</li>
+<li>任务逻辑结构由算法决定，网络结构影响算法执行效率</li>
+</ul>
+</li>
+<li>消息传输的寻径控制方式
+<ul>
+<li>线路交换</li>
+<li>存储转发</li>
+<li>虚拟直通</li>
+<li>虫蚀</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>COW
+<ul>
+<li>目的
+<ul>
+<li>提高性能</li>
+<li>降低成本</li>
+<li>提高可扩展性</li>
+<li>增强可靠性</li>
+</ul>
+</li>
+<li>分类
+<ul>
+<li>科学集群</li>
+<li>负载均衡集群</li>
+<li>高可用性集群</li>
+</ul>
+</li>
+<li>关键技术
+<ul>
+<li>网络层：网络互连结构、通信协议、信号技术</li>
+<li>节点机及操作系统层：高性能客户机或基于微内核操作系统等</li>
+<li>集群系统管理层：资源管理、资源调度、负载平衡</li>
+<li>应用层：并行程序开发环境、并行应用</li>
+</ul>
+</li>
+<li>消息的传输控制方式
+<ul>
+<li>VIA：实现零拷贝、旁路操作系统</li>
+<li>RDMA</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="节点并行技术"><a class="markdownIt-Anchor" href="#节点并行技术"></a> 节点并行技术</h3>
+<ul>
+<li>一般是 SMP、cc-NUMA架构</li>
+<li>芯片 ：定制、商用</li>
+<li>多芯片、大容量内存、高速网络接口</li>
+<li>处理器芯片：多核、众核、异构多核/众核</li>
+<li>协处理器加速
+<ul>
+<li>CELL、GPU、MIC</li>
+<li>逻辑上是 <mark>主处理器+协处理器</mark>，实现上可集成在芯片内，可在同一主板上，可是加速卡。</li>
+</ul>
+</li>
+</ul>
+<p>多核/众核具有性能/能耗优势。</p>
+<p>多核架构采用协处理器 CELL，从统一的对等设计到“主核心+协处理器”的非对等设计。</p>
+<p>CELL 可以对处理器内核的数量进行任意裁剪：</p>
+<ul>
+<li>嵌入式设备：单核心，低频，低能耗。</li>
+<li>PC：可使用与 PS3 游戏机一样标准的 CELL，或对核心适当裁剪。</li>
+<li>工作站/服务器系统：可将两枚 CELL 处理器集成在一起，获得更高效能。</li>
+</ul>
+<h3 id="六-资源管理与任务调度"><a class="markdownIt-Anchor" href="#六-资源管理与任务调度"></a> 六、资源管理与任务调度</h3>
 ]]></content>
       <categories>
         <category>笔记</category>
