@@ -288,135 +288,6 @@
       </tags>
   </entry>
   <entry>
-    <title>基于MSI协议的Cache一致性模拟器设计</title>
-    <url>/2023/10/02/fake_cache/</url>
-    <content><![CDATA[<p>前段时间我在研究怎么在 linux 环境下用 C++ 写一些东西，刚好就拿这个作业练练手。</p>
-<p>老师要求用 C++ 实现一种基于 WB 策略的一致性维护的 Cache 模拟器，该模拟器仅考虑4核的 CPU，且每个核只有一级 Cache，Cache 行长度为 64 字节，观察 CPU读、写数据后各个核上 Cache 中数据状态的变化情况。</p>
-<p>我思考了一下，准备分三步来完成这个任务：原理学习、程序设计、程序编写。</p>
-<h1 id="一些原理"><a class="markdownIt-Anchor" href="#一些原理"></a> 一些原理</h1>
-<p>首先要了解 Cache 一致性维护相关的知识。</p>
-<p>其实本科学计组时讲过单机系统中的 Cache 一致性问题，但是单机系统中只考虑单个 Cache 与主存之间的数据不一致，通过直写法或回写法就可以简单地解决。而并行计算机体系结构中要考虑多处理机系统中的 Cache 一致性问题，需要考虑不同 Cache 之间、Cache 与主存之间的数据一致性，单纯的直写法或回写法并不能保证多处理机的多数据副本一致。</p>
-<p>由于要求实现三状态的 Cache 一致性模拟，所以我先学了一下 MSI 协议。</p>
-<h2 id="msi"><a class="markdownIt-Anchor" href="#msi"></a> MSI</h2>
-<p>MSI 协议将 Cache 中的数据块分为三种状态：</p>
-<ol>
-<li><strong>S (Shared)</strong> 表示该数据块被共享，正确数据块分别在 Cache 和 Memory 中，或者在不同的 Cache 中。</li>
-<li><strong>M (Modified)</strong> 表示该数据块在系统中唯一正确。</li>
-<li><strong>I (Invalid)</strong> 表示该数据块无效。</li>
-</ol>
-<p>这三种状态之间的转换由四种操作来决定：</p>
-<ul>
-<li>
-<p><strong>本地读</strong>：本地处理机对该数据块读。</p>
-<ul>
-<li>M：不变</li>
-<li>S：不变</li>
-<li>I：变 S</li>
-</ul>
-</li>
-<li>
-<p><strong>本地写</strong>：本地处理机对该数据块写。</p>
-<ul>
-<li>M：不变</li>
-<li>S：变 M</li>
-<li>I：变 M</li>
-</ul>
-</li>
-<li>
-<p><strong>远程读</strong>：远程处理机对该数据块读。</p>
-<ul>
-<li>M：变 S</li>
-<li>S：不变</li>
-<li>I：不变</li>
-</ul>
-</li>
-<li>
-<p><strong>远程写</strong>：远程处理机对该数据块写。</p>
-<ul>
-<li>M：变 I</li>
-<li>S：变 I</li>
-<li>I：不变</li>
-</ul>
-</li>
-</ul>
-<p>大概就长下面这样：</p>
-<p><img src="/common/img/loading.jpg" data-original="/2023/10/02/fake_cache/MSI.jpg" alt="MSI 状态转移图"></p>
-<h2 id="wb"><a class="markdownIt-Anchor" href="#wb"></a> WB</h2>
-<p>在单机系统中，回写策略指被修改的 Cache 行只有在被替换时才将修改的内容写回内存中。而多机系统中的回写策略还要考虑 Cache 行与主存块的状态变化。这种变化在两种情形下发生，一种是 Cache 未命中时与主存替换，另一种是当无效的数据块被读取时，唯一正确数据写回主存并传递给无效数据块所在的 Cache。</p>
-<p>当 Cache 未命中并发生替换时，写回对应主存块的状态变化如下：</p>
-<ol>
-<li>若 Cache 行的状态为 I，则无需写回。</li>
-<li>若 Cache 行的状态为 M，则写回并将主存中对应块状态置为 M。</li>
-<li>若 Cache 行的状态为 S，无需写回（共享状态下，主存中的数据也一定是正确的）。判断当前共享数量是否为1，若为1则将主存对应块状态置为 M。</li>
-</ol>
-<p>对于替换进 Cache 的数据块，考虑 Cache 行的状态：</p>
-<ol>
-<li>内存块为 M，则一起置 S。</li>
-<li>内存块为 S，Cache 行置 S。</li>
-<li>内存块为 I，Cache 行置 I。</li>
-</ol>
-<h1 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h1>
-<p>了解 Cache 一致性的原理之后，我就开始了程序的设计。因为重点是对协议的模拟，只需要模拟出状态的变化，无需实现数据的真实传输，同时我不想去实现复杂的替换策略，也不希望模拟太大的主存空间，于是我就大胆做出了如下假设：</p>
-<ol>
-<li>4个 Cache 都只包含 1 个 Cache 行。</li>
-<li>主存地址范围 0~9。</li>
-</ol>
-<p>这样以来，我只需要实现一个 Cache 类、一个 Memory 类以及一个控制全局的 Controll 类即可。</p>
-<h2 id="遇到的一些问题"><a class="markdownIt-Anchor" href="#遇到的一些问题"></a> 遇到的一些问题</h2>
-<h3 id="继承中的构造函数"><a class="markdownIt-Anchor" href="#继承中的构造函数"></a> 继承中的构造函数</h3>
-<p>我发现 Cache 类与 Memory 类有很多相似的地方，所以就写了一个 Device 父类做继承。但是在实现的过程中，发现子类的构造函数总是报错，上网搜了一圈才发现原因。</p>
-<p>大致来说是因为父类的构造函数是不能被子类继承的，构造原则如下：</p>
-<ol>
-<li>如果子类没有定义构造方法，则调用父类的无参数构造方法。</li>
-<li>如果子类定义了构造方法，在创建子类对象时，首先执行父类的无参数构造方法，然后再执行自己的构造方法。</li>
-<li>如果父类只定义了有参数构造函数，子类的构造函数没有显示调用父类构造函数，则出错。也就是说如果父类只有有参数的构造方法，子类必须显示调用此带参构造方法。</li>
-</ol>
-<p>所以解决问题方法就是，父类同时定义带参构造方法以及空的无参构造方法，然后子类就可以定义自己的构造方法了。</p>
-<h3 id="静态成员数组的访问"><a class="markdownIt-Anchor" href="#静态成员数组的访问"></a> 静态成员数组的访问</h3>
-<p>最开始的时候，我写了一个表示状态的 Status 类，并在其中用 <code>constexpr static</code> 关键字定义了一个 <code>char</code> 类型的静态数组 <code>mp[]</code>，但是在后续使用的时候发现报错。</p>
-<p>后来发现常量表达式(constexpr)在编译期就可以计算出结果，所以不能在数组中用变量下标，只能用常量下标。于是我就大笔一挥，把<code>constexpr</code>给去掉了。</p>
-<h2 id="整体设计思路"><a class="markdownIt-Anchor" href="#整体设计思路"></a> 整体设计思路</h2>
-<p>写一个控制器Controll，控制器通过<code>run()</code>方法运行，在<code>run()</code>方法中会要求用户输入要访问的 Cache 的 <code>id</code>、要进行的读或写操作<code>op</code>以及数据块的地址<code>address</code>，然后根据操作的不同调用<code>read()</code>或<code>write()</code>。上述被调用的两个方法在访问数据块时先通过<code>visit()</code>判断 Cache 是否命中，如果未命中则需要替换<code>change()</code>，然后再根据是本地读写或是远程读写来进行相应的状态变化。<code>run()</code>在最后会打印出各个 Cache 以及主存中的状态。</p>
-<h3 id="status"><a class="markdownIt-Anchor" href="#status"></a> Status</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> STATUS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STATUS_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Status</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> M=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> S=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> I=<span class="number">3</span>;</span><br><span class="line">        <span class="type">char</span> mp[<span class="number">4</span>]=&#123;<span class="string">&#x27; &#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;I&#x27;</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="device"><a class="markdownIt-Anchor" href="#device"></a> Device</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DEVICE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Device</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">int</span> id;</span><br><span class="line">        <span class="type">int</span> address;</span><br><span class="line">        <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Device</span>();</span><br><span class="line">        <span class="built_in">Device</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_address</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">char</span> <span class="title">get_status</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toS</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toI</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toM</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="cache"><a class="markdownIt-Anchor" href="#cache"></a> Cache</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CACHE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CACHE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cache</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Cache</span>();</span><br><span class="line">        <span class="built_in">Cache</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">set_address</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="memory"><a class="markdownIt-Anchor" href="#memory"></a> Memory</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MEMORY_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MEMORY_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Memory</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Memory</span>();</span><br><span class="line">        <span class="built_in">Memory</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="controll"><a class="markdownIt-Anchor" href="#controll"></a> Controll</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CONTROLL_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CONTROLL_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Status.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Cache.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Memory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Controll</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        Cache c[<span class="number">4</span>];</span><br><span class="line">        Memory m[<span class="number">10</span>];</span><br><span class="line">        <span class="type">int</span> share[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Controll</span>();</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">read</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">change</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> cache_adr,<span class="type">int</span> mem_adr)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="test"><a class="markdownIt-Anchor" href="#test"></a> test</h3>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Controll.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Controll ice;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) ice.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h2>
-<p><a href="https://github.com/XDUqinian/fake_cache">开源仓库</a></p>
-<p>系统：<code>Linux ubuntu-20.04.6</code></p>
-<p>需要安装 <code>gcc</code> <code>cmake</code></p>
-<p><strong>运行</strong>:</p>
-<p>到项目目录下：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake .</span><br><span class="line">make</span><br><span class="line">./test</span><br></pre></td></tr></table></figure>
-<p>随便敲了几个样例，感觉没什么问题。</p>
-<p><code>w 1 1</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 1.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  0  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
-<p><code>w 1 2</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  M  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
-<p><code>w 0 1</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
-<p><code>r 3 2</code></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is S,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is S,the address is 2.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  S  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  3  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
-<h1 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h1>
-<p>这个作业还是比较好做的，其实可以不用C++多文件，整个项目下来可能有点繁琐，但是就是想试一试所以就这么写了。要求用文件读写的方式来做控制，但是还没实现，离 deadline 还有一个多月，到时候可以再补上。</p>
-<p>其实一直以来我都是用 c++ 比较多，但是因为以前都在用 devc++ 写算法题，大三以后的课程作业基本都用 python 写了，所以对怎么用 C++ 写小实验还是比较陌生。算是弥补了一直以来的遗憾吧。</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>c++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于Socket和DH密钥交换协议的远程文件安全传输</title>
     <url>/2022/04/02/RemoteSecureTransfer/</url>
     <content><![CDATA[<p>现代密码学基础技能实验，感觉挺有意思的，就简单记录一下。</p>
@@ -559,6 +430,135 @@
         <tag>Java</tag>
         <tag>密码</tag>
         <tag>Socket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于MSI协议的Cache一致性模拟器设计</title>
+    <url>/2023/10/02/fake_cache/</url>
+    <content><![CDATA[<p>前段时间我在研究怎么在 linux 环境下用 C++ 写一些东西，刚好就拿这个作业练练手。</p>
+<p>老师要求用 C++ 实现一种基于 WB 策略的一致性维护的 Cache 模拟器，该模拟器仅考虑4核的 CPU，且每个核只有一级 Cache，Cache 行长度为 64 字节，观察 CPU读、写数据后各个核上 Cache 中数据状态的变化情况。</p>
+<p>我思考了一下，准备分三步来完成这个任务：原理学习、程序设计、程序编写。</p>
+<h1 id="一些原理"><a class="markdownIt-Anchor" href="#一些原理"></a> 一些原理</h1>
+<p>首先要了解 Cache 一致性维护相关的知识。</p>
+<p>其实本科学计组时讲过单机系统中的 Cache 一致性问题，但是单机系统中只考虑单个 Cache 与主存之间的数据不一致，通过直写法或回写法就可以简单地解决。而并行计算机体系结构中要考虑多处理机系统中的 Cache 一致性问题，需要考虑不同 Cache 之间、Cache 与主存之间的数据一致性，单纯的直写法或回写法并不能保证多处理机的多数据副本一致。</p>
+<p>由于要求实现三状态的 Cache 一致性模拟，所以我先学了一下 MSI 协议。</p>
+<h2 id="msi"><a class="markdownIt-Anchor" href="#msi"></a> MSI</h2>
+<p>MSI 协议将 Cache 中的数据块分为三种状态：</p>
+<ol>
+<li><strong>S (Shared)</strong> 表示该数据块被共享，正确数据块分别在 Cache 和 Memory 中，或者在不同的 Cache 中。</li>
+<li><strong>M (Modified)</strong> 表示该数据块在系统中唯一正确。</li>
+<li><strong>I (Invalid)</strong> 表示该数据块无效。</li>
+</ol>
+<p>这三种状态之间的转换由四种操作来决定：</p>
+<ul>
+<li>
+<p><strong>本地读</strong>：本地处理机对该数据块读。</p>
+<ul>
+<li>M：不变</li>
+<li>S：不变</li>
+<li>I：变 S</li>
+</ul>
+</li>
+<li>
+<p><strong>本地写</strong>：本地处理机对该数据块写。</p>
+<ul>
+<li>M：不变</li>
+<li>S：变 M</li>
+<li>I：变 M</li>
+</ul>
+</li>
+<li>
+<p><strong>远程读</strong>：远程处理机对该数据块读。</p>
+<ul>
+<li>M：变 S</li>
+<li>S：不变</li>
+<li>I：不变</li>
+</ul>
+</li>
+<li>
+<p><strong>远程写</strong>：远程处理机对该数据块写。</p>
+<ul>
+<li>M：变 I</li>
+<li>S：变 I</li>
+<li>I：不变</li>
+</ul>
+</li>
+</ul>
+<p>大概就长下面这样：</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/10/02/fake_cache/MSI.jpg" alt="MSI 状态转移图"></p>
+<h2 id="wb"><a class="markdownIt-Anchor" href="#wb"></a> WB</h2>
+<p>在单机系统中，回写策略指被修改的 Cache 行只有在被替换时才将修改的内容写回内存中。而多机系统中的回写策略还要考虑 Cache 行与主存块的状态变化。这种变化在两种情形下发生，一种是 Cache 未命中时与主存替换，另一种是当无效的数据块被读取时，唯一正确数据写回主存并传递给无效数据块所在的 Cache。</p>
+<p>当 Cache 未命中并发生替换时，写回对应主存块的状态变化如下：</p>
+<ol>
+<li>若 Cache 行的状态为 I，则无需写回。</li>
+<li>若 Cache 行的状态为 M，则写回并将主存中对应块状态置为 M。</li>
+<li>若 Cache 行的状态为 S，无需写回（共享状态下，主存中的数据也一定是正确的）。判断当前共享数量是否为1，若为1则将主存对应块状态置为 M。</li>
+</ol>
+<p>对于替换进 Cache 的数据块，考虑 Cache 行的状态：</p>
+<ol>
+<li>内存块为 M，则一起置 S。</li>
+<li>内存块为 S，Cache 行置 S。</li>
+<li>内存块为 I，Cache 行置 I。</li>
+</ol>
+<h1 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h1>
+<p>了解 Cache 一致性的原理之后，我就开始了程序的设计。因为重点是对协议的模拟，只需要模拟出状态的变化，无需实现数据的真实传输，同时我不想去实现复杂的替换策略，也不希望模拟太大的主存空间，于是我就大胆做出了如下假设：</p>
+<ol>
+<li>4个 Cache 都只包含 1 个 Cache 行。</li>
+<li>主存地址范围 0~9。</li>
+</ol>
+<p>这样以来，我只需要实现一个 Cache 类、一个 Memory 类以及一个控制全局的 Controll 类即可。</p>
+<h2 id="遇到的一些问题"><a class="markdownIt-Anchor" href="#遇到的一些问题"></a> 遇到的一些问题</h2>
+<h3 id="继承中的构造函数"><a class="markdownIt-Anchor" href="#继承中的构造函数"></a> 继承中的构造函数</h3>
+<p>我发现 Cache 类与 Memory 类有很多相似的地方，所以就写了一个 Device 父类做继承。但是在实现的过程中，发现子类的构造函数总是报错，上网搜了一圈才发现原因。</p>
+<p>大致来说是因为父类的构造函数是不能被子类继承的，构造原则如下：</p>
+<ol>
+<li>如果子类没有定义构造方法，则调用父类的无参数构造方法。</li>
+<li>如果子类定义了构造方法，在创建子类对象时，首先执行父类的无参数构造方法，然后再执行自己的构造方法。</li>
+<li>如果父类只定义了有参数构造函数，子类的构造函数没有显示调用父类构造函数，则出错。也就是说如果父类只有有参数的构造方法，子类必须显示调用此带参构造方法。</li>
+</ol>
+<p>所以解决问题方法就是，父类同时定义带参构造方法以及空的无参构造方法，然后子类就可以定义自己的构造方法了。</p>
+<h3 id="静态成员数组的访问"><a class="markdownIt-Anchor" href="#静态成员数组的访问"></a> 静态成员数组的访问</h3>
+<p>最开始的时候，我写了一个表示状态的 Status 类，并在其中用 <code>constexpr static</code> 关键字定义了一个 <code>char</code> 类型的静态数组 <code>mp[]</code>，但是在后续使用的时候发现报错。</p>
+<p>后来发现常量表达式(constexpr)在编译期就可以计算出结果，所以不能在数组中用变量下标，只能用常量下标。于是我就大笔一挥，把<code>constexpr</code>给去掉了。</p>
+<h2 id="整体设计思路"><a class="markdownIt-Anchor" href="#整体设计思路"></a> 整体设计思路</h2>
+<p>写一个控制器Controll，控制器通过<code>run()</code>方法运行，在<code>run()</code>方法中会要求用户输入要访问的 Cache 的 <code>id</code>、要进行的读或写操作<code>op</code>以及数据块的地址<code>address</code>，然后根据操作的不同调用<code>read()</code>或<code>write()</code>。上述被调用的两个方法在访问数据块时先通过<code>visit()</code>判断 Cache 是否命中，如果未命中则需要替换<code>change()</code>，然后再根据是本地读写或是远程读写来进行相应的状态变化。<code>run()</code>在最后会打印出各个 Cache 以及主存中的状态。</p>
+<h3 id="status"><a class="markdownIt-Anchor" href="#status"></a> Status</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> STATUS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> STATUS_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Status</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> M=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> S=<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">constexpr</span> <span class="type">static</span> <span class="type">int</span> I=<span class="number">3</span>;</span><br><span class="line">        <span class="type">char</span> mp[<span class="number">4</span>]=&#123;<span class="string">&#x27; &#x27;</span>,<span class="string">&#x27;M&#x27;</span>,<span class="string">&#x27;S&#x27;</span>,<span class="string">&#x27;I&#x27;</span>&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="device"><a class="markdownIt-Anchor" href="#device"></a> Device</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> DEVICE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DEVICE_H</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Device</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="type">int</span> id;</span><br><span class="line">        <span class="type">int</span> address;</span><br><span class="line">        <span class="type">int</span> status;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Device</span>();</span><br><span class="line">        <span class="built_in">Device</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_id</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">int</span> <span class="title">get_address</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">char</span> <span class="title">get_status</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toS</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toI</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">toM</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="cache"><a class="markdownIt-Anchor" href="#cache"></a> Cache</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CACHE_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CACHE_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cache</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Cache</span>();</span><br><span class="line">        <span class="built_in">Cache</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">l_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_r</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">r_w</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">set_address</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="memory"><a class="markdownIt-Anchor" href="#memory"></a> Memory</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> MEMORY_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MEMORY_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Device.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Memory</span>:<span class="keyword">public</span> Device&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="built_in">Memory</span>();</span><br><span class="line">        <span class="built_in">Memory</span>(<span class="type">int</span> id,<span class="type">int</span> address,<span class="type">int</span> status);</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">bool</span> <span class="title">visit</span><span class="params">(<span class="type">int</span> address)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="controll"><a class="markdownIt-Anchor" href="#controll"></a> Controll</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> CONTROLL_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CONTROLL_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Status.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Cache.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Memory.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Controll</span>&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        Cache c[<span class="number">4</span>];</span><br><span class="line">        Memory m[<span class="number">10</span>];</span><br><span class="line">        <span class="type">int</span> share[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">Controll</span>();</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">read</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">write</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> address)</span></span>;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">change</span><span class="params">(<span class="type">int</span> id,<span class="type">int</span> cache_adr,<span class="type">int</span> mem_adr)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="test"><a class="markdownIt-Anchor" href="#test"></a> test</h3>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;Controll.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    Controll ice;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) ice.<span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h2>
+<p><a href="https://github.com/XDUqinian/fake_cache">开源仓库</a></p>
+<p>系统：<code>Linux ubuntu-20.04.6</code></p>
+<p>需要安装 <code>gcc</code> <code>cmake</code></p>
+<p><strong>运行</strong>:</p>
+<p>到项目目录下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cmake .</span><br><span class="line">make</span><br><span class="line">./test</span><br></pre></td></tr></table></figure>
+<p>随便敲了几个样例，感觉没什么问题。</p>
+<p><code>w 1 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 1.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  0  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 1 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is I,the address is -1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  M  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0  </span><br></pre></td></tr></table></figure>
+<p><code>w 0 1</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is M,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is I,the address is -1.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  I  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  1  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<p><code>r 3 2</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">not hit!</span><br><span class="line">Cache 0: the status is M,the address is 1.</span><br><span class="line">Cache 1: the status is S,the address is 2.</span><br><span class="line">Cache 2: the status is I,the address is -1.</span><br><span class="line">Cache 3: the status is S,the address is 2.</span><br><span class="line">Memory 0  1  2  3  4  5  6  7  8  9  </span><br><span class="line">Status I  I  S  I  I  I  I  I  I  I  </span><br><span class="line">Share  0  1  3  0  0  0  0  0  0  0 </span><br></pre></td></tr></table></figure>
+<h1 id="写在最后"><a class="markdownIt-Anchor" href="#写在最后"></a> 写在最后</h1>
+<p>这个作业还是比较好做的，其实可以不用C++多文件，整个项目下来可能有点繁琐，但是就是想试一试所以就这么写了。要求用文件读写的方式来做控制，但是还没实现，离 deadline 还有一个多月，到时候可以再补上。</p>
+<p>其实一直以来我都是用 c++ 比较多，但是因为以前都在用 devc++ 写算法题，大三以后的课程作业基本都用 python 写了，所以对怎么用 C++ 写小实验还是比较陌生。算是弥补了一直以来的遗憾吧。</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>c++</tag>
       </tags>
   </entry>
   <entry>
@@ -847,8 +847,11 @@
   <entry>
     <title>并行计算机体系结构笔记</title>
     <url>/2023/11/12/parallel-computer-architecture/</url>
-    <content><![CDATA[<p>这是本学期的第一门闭卷考试，部分内容由我的研究生导师陈衡主讲，整理一下笔记。</p>
-<p>其实之前和老师每周对话的时候问了一下，老师说师兄们去年都考得挺好的。</p>
+    <content><![CDATA[<p><strong>2023.11.16</strong></p>
+<p>1w9 字完结撒花！</p>
+<hr>
+<p>这是本学期的第一门闭卷考试，部分内容由我的研究生导师陈衡主讲，整理一下笔记。</p>
+<p>其实之前和老师每周对话的时候问了一下，老师说师兄们去年都考得挺好的，<s>那可能我也能考好</s>。</p>
 <h2 id="一-概述"><a class="markdownIt-Anchor" href="#一-概述"></a> 一、概述</h2>
 <p>计算机技术的发展需要<mark>计算机系统结构</mark>、硬件、软件、编程语言、高效应用算法通信技术等多方面发展。要改善计算机系统的性能，可以使用更合理、更快的硬件，也可以优化解决计算任务的算法，还可以使用<mark>多处理器计算机</mark>来解决特定任务。</p>
 <p>硬件是物质基础，也是改善计算机性能最关键的因素，随着微电子技术的发展，芯片的集成度和处理速度日新月异。而<mark>计算机系统结构</mark>是改善计算机性能的极其重要因素，通过合理的新方法设计和构成综合性能指标最佳的计算机系统，可以最大限度地发挥硬件的内在潜力。</p>
@@ -1952,7 +1955,576 @@ M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 <li>PC：可使用与 PS3 游戏机一样标准的 CELL，或对核心适当裁剪。</li>
 <li>工作站/服务器系统：可将两枚 CELL 处理器集成在一起，获得更高效能。</li>
 </ul>
-<h3 id="六-资源管理与任务调度"><a class="markdownIt-Anchor" href="#六-资源管理与任务调度"></a> 六、资源管理与任务调度</h3>
+<h2 id="六-资源管理与任务调度"><a class="markdownIt-Anchor" href="#六-资源管理与任务调度"></a> 六、资源管理与任务调度</h2>
+<h3 id="多机操作系统"><a class="markdownIt-Anchor" href="#多机操作系统"></a> 多机操作系统</h3>
+<h4 id="多机操作系统主要功能"><a class="markdownIt-Anchor" href="#多机操作系统主要功能"></a> 多机操作系统主要功能</h4>
+<p>多机操作系统用<mark>中间件</mark>实现，处于节点操作系统和用户环境中间。</p>
+<p>它由软件基础结构的两个子层组成：</p>
+<ul>
+<li><strong>SSI 基础结构</strong>：与节点操作系统相联系，提供对<strong>系统资源的统一访问</strong>。
+<ul>
+<li>单一用户接口：用户通过与单机工作站外观一致的<strong>单一 GUI</strong> 使用系统。</li>
+<li>单一 I/O 空间：任一节点透明使用<strong>本地或远程</strong>外设与存储设备的 I/O 操作。</li>
+<li>单一进程空间：每一进程在<strong>系统范围内</strong>拥有独立 ID，可以与系统中任一进程通信。</li>
+</ul>
+</li>
+<li><strong>系统可用性基础结构</strong>：在各个节点上提供可用性服务，如检查点、自动故障检测、故障恢复、容错、迁移调度和负载重均衡支持。
+<ul>
+<li><strong>检查点机制</strong>定期保存进程状态和中间结果，失效时，故障节点进程可以迁移到另一节点重新从检查点开始。</li>
+<li>进程迁移支持了节点间的<strong>动态负载平衡</strong>和容错。</li>
+</ul>
+</li>
+</ul>
+<h4 id="多机操作系统分类"><a class="markdownIt-Anchor" href="#多机操作系统分类"></a> 多机操作系统分类</h4>
+<ul>
+<li>主从式：操作系统在指定<strong>主处理机</strong>上运行。
+<ul>
+<li>主处理机管理系统，为从处理器分配任务。</li>
+<li>从处理器通过<mark>软中断</mark>或<mark>访管</mark>访问主存等。</li>
+<li>适用<mark>非对称系统</mark>，以及工作负载不太重的情况。</li>
+</ul>
+</li>
+<li>单独管理：每个处理器有自己的操作系统或管理程序。
+<ul>
+<li>按自身需要独立运行和管理。</li>
+<li>适合于<mark>松散耦合</mark>的多处理机系统。</li>
+</ul>
+</li>
+<li>浮动管理：主处理机可从一个处理机<strong>浮动</strong>到另一个处理机。
+<ul>
+<li>任何处理机都能成为主处理机。</li>
+<li>适用于<mark>同构多机系统</mark>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="资源管理和调度-rms"><a class="markdownIt-Anchor" href="#资源管理和调度-rms"></a> 资源管理和调度 RMS</h3>
+<p>系统资源管理和调度，一方面可以提高系统效率与可靠性，它通过实现<mark>负载平衡</mark>、尽可能地利用<mark>空闲的 CPU 周期</mark>、提供<mark>容错机制</mark>，为应用程序提供了更强、更可靠的服务以及更高的吞吐量；另一方面，可以提高<mark>可编程性</mark>和<mark>易管理性</mark>，使得资源能被更便捷地管理与访问。</p>
+<p>资源管理和调度的目标是实现 SSI 基础结构，使得系统更加自动、智能，使应用程序达到最大吞吐量/最短完成时间，使资源被有效、节能地利用。</p>
+<ul>
+<li>线程/进程迁移：负载不均衡或节点故障时，线程/进程挂起、移动和重启动。</li>
+<li>检查点：故障时，程序可以从检查点重新开始。</li>
+<li>容错：隔离故障节点，进程迁移，并从检查点重启。</li>
+<li>空闲周期搜索：使用空闲的 CPU 周期以提高资源利用率。</li>
+<li>减少用户干预：将用户干预减到最少，提供透明服务。</li>
+<li>负载平衡：在特定结构中作业可以分布在所有可用的处理器上。</li>
+<li>多应用程序队列：在特定结构中协助管理资源，实现作业调度，每一队列可以配置为一定属性。
+<ul>
+<li>大系统中有全局多应用程序队列和局部多应用程序队列。</li>
+</ul>
+</li>
+</ul>
+<p>RMS 的由<mark>资源管理器</mark>和<mark>作业调度器</mark>组成。前者组织管理物理资源，包括处理和定位计算资源的配置、验证，监控资源状态，故障诊断与恢复，进程迁移，动态负载均衡等；后者实现任务与物理资源的有效匹配，包括处理应用程序队列等待任务，以及资源定位与任务分配。</p>
+<p>作业调度要考虑<mark>用户优先级</mark>与<mark>任务优先级</mark>，并考虑任务调度<mark>算法</mark>、调度<mark>时机</mark>、调度<mark>过程</mark>，同时考虑调度的基本单位是计算节点或是更细粒度的资源。</p>
+<p>不同的应用场景考虑不同的因素，采取不同的调度策略和方法。</p>
+<h4 id="调度概述"><a class="markdownIt-Anchor" href="#调度概述"></a> 调度概述</h4>
+<p>调度，指在一组具有任意特性的处理机中，对一组进程进行调度。好的调度应该<mark>最大化资源利用率</mark>并<mark>最快完成任务执行</mark>。</p>
+<ul>
+<li>最小完成时间</li>
+<li>所需最少处理机数</li>
+<li>最小平均等待时间</li>
+<li>处理机最大利用率</li>
+<li>处理机最小空闲时间</li>
+</ul>
+<p>调度策略有两类：</p>
+<ul>
+<li>确定性调度：求解问题前给出表示问题特征的所有信息，如<mark>任务运行时间</mark>和<mark>任务间关系</mark>。</li>
+<li>不确定性调度：运行过程中根据系统状态对任务进行分配。</li>
+</ul>
+<p>调度实现方法有：</p>
+<ul>
+<li>抢先调度</li>
+<li>非抢先调度</li>
+</ul>
+<h4 id="确定性调度"><a class="markdownIt-Anchor" href="#确定性调度"></a> 确定性调度</h4>
+<h5 id="单作业并行调度"><a class="markdownIt-Anchor" href="#单作业并行调度"></a> 单作业并行调度</h5>
+<p>子任务之间有数据、控制等相关性，调度时必须考虑同步等问题。</p>
+<p>单作业多进程调度过程一般采用 Gantt 图表示。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/Gantt.png" alt="Gantt"></p>
+<h6 id="非抢先调度方法"><a class="markdownIt-Anchor" href="#非抢先调度方法"></a> 非抢先调度方法</h6>
+<p>对于一个给定的任务图，如下所示，结点表示子任务，有向线表示各子任务之间的关系，结点右侧的数字表示子任务的运行时间。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%BB%BB%E5%8A%A1%E5%9B%BE.png" alt="任务图"></p>
+<p>最小完成时间由最长路径决定，所需的最多处理器个数由图宽度决定，调度系统可以根据结点的最早开始时间调度，或者根据结点的最晚完成时间调度。</p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%B0%BD%E6%97%A9%E5%88%86%E9%85%8D.png" alt="尽早分配"></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E6%9C%80%E4%BD%B3%E5%88%86%E9%85%8D.png" alt="最佳分配"></p>
+<p>处理机空闲时立即分配任务不一定获得最小完成时间。任务图的任务分配是网络规划问题，实际调度时也要考虑任务数据相关性和局部性，相关任务尽量调度到同一个节点，提高数据复用等。</p>
+<p><strong>任务图</strong>可以由图 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mo stretchy="false">(</mo><mi>T</mi><mo separator="true">,</mo><mi>Q</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">G=(T,Q)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">Q</span><span class="mclose">)</span></span></span></span>表示：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span> 为任务集，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>t</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>t</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>t</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">T=\{t_1,t_2,t_3,…,t_n\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">t_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 为结点权，表示<strong>子任务运行时间</strong>。</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span></span></span></span> 为通信集，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>q</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>q</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>q</mi><mn>3</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>q</mi><mi>m</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">Q=\{q_1,q_2,q_3,…,q_m\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>j</mi></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi>t</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>t</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">q_j=(t_i,t_k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">t_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>与<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>t</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">t_k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76508em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>两个结点之间边的权，表示两个子任务之间的<strong>通信量</strong>。</li>
+</ul>
+<p>在确定性调度中，结点权为常数，不确定性调度中，结点权是不确定数。</p>
+<p><strong>多机系统</strong>可由系统图<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><mo stretchy="false">(</mo><mi>P</mi><mo separator="true">,</mo><mi>E</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">H=(P,E)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mclose">)</span></span></span></span>表示：</p>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span> 为处理机集，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>p</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>p</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>p</mi><mi>s</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">P=\{p_1,p_2,…,p_s\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>为结点权，表示<strong>处理机速度</strong>。</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi></mrow><annotation encoding="application/x-tex">E</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span></span></span></span> 为通信链路集，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>e</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>e</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>e</mi><mi>r</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">E=\{e_1,e_2,…,e_r\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">e_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>为有向边权，表示两个处理机之间<strong>通信链路带宽</strong>。</li>
+</ul>
+<p>调度过程就是从任务图到系统图的映射。</p>
+<p>最小完成时间的非抢先调度：</p>
+<ul>
+<li>设定任务图结点标号：
+<ul>
+<li>结点 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">T_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_i=x_i+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>进行标号，其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">T_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 到结束结点的最大路径长度。</li>
+<li>任务图最小完成时间 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mrow><mi>m</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>≥</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">T_{min} \geq a_{max}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%BB%BB%E5%8A%A1%E5%9B%BE%E6%A0%87%E5%8F%B7.png" alt="任务图标号"></p>
+<ul>
+<li>给定处理机数目 P，确定执行任务图最小完成时间。
+<ul>
+<li>调度最多 P 个最大标号结点，可能包括两层。</li>
+<li>把处理过的 P 个结点从图中删除，剩下没有数据、控制相关的结点为开始结点。</li>
+<li>重复上述过程。</li>
+</ul>
+</li>
+<li>给定任务图执行时间 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>+</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">T=a_{max}+c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span></span></span></span>，确定最小处理机数目。
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≥</mo><mfrac><mn>1</mn><mrow><msup><mi>r</mi><mo>∗</mo></msup><mo>+</mo><mi>c</mi></mrow></mfrac><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><msup><mi>r</mi><mo>∗</mo></msup></msubsup><mi>ρ</mi><mo stretchy="false">(</mo><msub><mi>a</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub><mo>+</mo><mn>1</mn><mo>−</mo><mi>j</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p\geq \frac{1}{r^*+c}\sum_{j=1}^{r^*}\rho(a_{max}+1-j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304100000000001em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.473058em;vertical-align:-0.43581800000000004em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6183428571428571em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">c</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.403331em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.03724em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7633428571428571em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mclose">)</span></span></span></span></li>
+<li>其中<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rho(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span>表示途经标号<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>的结点数，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">r^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>是给定表达式值为最大的常数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span>值。</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mo>∗</mo></msup></mrow><annotation encoding="application/x-tex">r^*</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.688696em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.688696em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span>的确定只要把所有的可能都算一遍，取最大的那个就行。</li>
+</ul>
+</li>
+</ul>
+<h6 id="抢先调度方法"><a class="markdownIt-Anchor" href="#抢先调度方法"></a> 抢先调度方法</h6>
+<p><strong>公度结点权</strong></p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/公度拆分.png" alt="公度拆分" style="zoom: 67%;">
+<ul>
+<li>基于最小完成时间的抢先调度
+<ul>
+<li>假设对 n 个相互独立任务和 p 台处理机进行调度，n 个任务的权分别是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>w</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mtext>，</mtext><msub><mi>w</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">w_1,w_2,…，w_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>。</li>
+<li>最小完成时间是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">{</mo><mi>m</mi><mi>a</mi><mi>x</mi><mo stretchy="false">(</mo><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo separator="true">,</mo><mfrac><mn>1</mn><mi>p</mi></mfrac><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>w</mi><mi>i</mi></msub><mo stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">w=max\{max(w_i),\frac{1}{p}\sum_{i=1}^nw_i\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.326216em;vertical-align:-0.481108em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mopen">{</span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.804292em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span> 当<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≤</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n\leq p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span>取前者，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>&gt;</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">n&gt;p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span>取后者。</li>
+</ul>
+</li>
+<li>基于公度结点权的抢先调度，前提是任务之间没有相关性</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%85%AC%E5%BA%A6%E6%8A%A2%E5%85%88%E8%B0%83%E5%BA%A6.png" alt="公度抢先调度"></p>
+<ul>
+<li>最小完成时间的抢先调度算法，假设任务图为一棵根树，树结点权可公度
+<ul>
+<li>按公度结点权值将结点拆分，并划分为若干个不相交的子集，子集内的结点相互独立。</li>
+<li>任务图按层分割，结束结点为第一层，向上扩展。</li>
+<li>首先调度最高层，逐步向下获得最小完成时间。</li>
+</ul>
+</li>
+</ul>
+<p>粒度尽量大以减小开销；每层粒度最好相当，不浪费资源。</p>
+<p>在程序的初始应该尽可能细分。<mark>粒度太小通信和调度开销会大</mark>，因此要折衷。如果加大粒度可以消除不必要的通信时延或降低总调度开销，则合并多个细粒度结点为粗粒度结点。<mark>粒度太大导致处理器空闲</mark>，因此合并后并行度尽量与处理器数相匹配。</p>
+<p><strong>静态多处理机调度优化</strong>：<mark>结点复制</mark></p>
+<p>不复制时：</p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/不复制.png" alt="结点不复制" style="zoom:50%;">
+<p>复制时：</p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/复制.png" alt="结点复制" style="zoom:50%;">
+<h5 id="多作业并行调度"><a class="markdownIt-Anchor" href="#多作业并行调度"></a> 多作业并行调度</h5>
+<ul>
+<li>各作业间无相关，独立执行
+<ul>
+<li>最长处理时间优先：时间最短。</li>
+<li>最短处理时间优先：作业启动执行前等待时间最短，用户体验好。</li>
+<li>最短最长循环：兼顾时间和用户体验。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E4%BD%9C%E4%B8%9A%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5.png" alt="作业调度策略"></p>
+<ul>
+<li>多个作业内并行子任务多处理机调度
+<ul>
+<li>多作业和多处理器调度优化</li>
+<li>单并行作业和多处理器调度优化</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E8%B0%83%E5%BA%A6%E9%97%AE%E9%A2%98.png" alt="调度问题"></p>
+<p><mark>并行度优先，再最长时间优先。</mark></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%B9%B6%E8%A1%8C%E5%BA%A6&amp;%E6%9C%80%E9%95%BF%E6%97%B6%E9%97%B4.png" alt="并行度&amp;最长时间"></p>
+<h4 id="不确定性调度"><a class="markdownIt-Anchor" href="#不确定性调度"></a> 不确定性调度</h4>
+<ul>
+<li>通过动态获取任务的执行时间或相应运行参数，探索进程执行的时间规律。</li>
+<li>在运行过程中保证各处理机满负荷运行。</li>
+</ul>
+<p>排队系统的三个主要组成部分：</p>
+<ol>
+<li>输入过程：任务到达情况
+<ul>
+<li>任务总体——有限多、无限多</li>
+<li>到达方式——单个、成批</li>
+<li>到达时间间隔——确定、随机</li>
+<li>到达相关——独立的、前后相关</li>
+<li>到达稳定性——到达时间间隔分布</li>
+</ul>
+</li>
+<li>排队规则
+<ul>
+<li>即时。立即服务，无资源满足不等待</li>
+<li>等待。排队</li>
+<li>等待调度次序——先来先服务，优先权服务等。</li>
+</ul>
+</li>
+<li>任务调度
+<ul>
+<li><mark>调度器数目</mark></li>
+<li><mark>串行或并行</mark>处理任务调度</li>
+<li><mark>单任务或成批</mark>调度</li>
+<li><mark>服务时间</mark>确定或不确定</li>
+<li>服务<mark>时间间隔</mark>平稳情况</li>
+</ul>
+</li>
+</ol>
+<p>三个最大的影响因素：任务到达时间间隔分布、任务执行时间分布、处理器数。</p>
+<p><strong>基于优先权的动态调度</strong></p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>优先权</mtext><mo>=</mo><mfrac><mrow><mtext>等待时间</mtext><mo>+</mo><mtext>要求服务时间</mtext></mrow><mtext>要求服务时间</mtext></mfrac></mrow><annotation encoding="application/x-tex">优先权=\frac{等待时间+要求服务时间}{要求服务时间}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord cjk_fallback">优</span><span class="mord cjk_fallback">先</span><span class="mord cjk_fallback">权</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.217331em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.872331em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">要</span><span class="mord cjk_fallback mtight">求</span><span class="mord cjk_fallback mtight">服</span><span class="mord cjk_fallback mtight">务</span><span class="mord cjk_fallback mtight">时</span><span class="mord cjk_fallback mtight">间</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">等</span><span class="mord cjk_fallback mtight">待</span><span class="mord cjk_fallback mtight">时</span><span class="mord cjk_fallback mtight">间</span><span class="mbin mtight">+</span><span class="mord cjk_fallback mtight">要</span><span class="mord cjk_fallback mtight">求</span><span class="mord cjk_fallback mtight">服</span><span class="mord cjk_fallback mtight">务</span><span class="mord cjk_fallback mtight">时</span><span class="mord cjk_fallback mtight">间</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>防止饥饿。</p>
+<h2 id="七-并行文件系统"><a class="markdownIt-Anchor" href="#七-并行文件系统"></a> 七、并行文件系统</h2>
+<h3 id="并行计算机存储墙问题"><a class="markdownIt-Anchor" href="#并行计算机存储墙问题"></a> 并行计算机存储墙问题</h3>
+<p><mark>计算机性能提高速度远远大于存储访问带宽提升。</mark></p>
+<ul>
+<li>众核处理器与主存之间的存储墙如何解决？
+<ul>
+<li>高速缓存提高访存速度，且数据复用减少主存访问。</li>
+<li>核间设置高速网络、寄存器通信，提高核间通信速度。</li>
+<li>从核局部存储与主存之间的 DMA 机制。</li>
+</ul>
+</li>
+<li>计算阵列与存储系统的存储墙如何解决？
+<ul>
+<li>并行文件系统：并行读写数据，以提高数据读写速度。</li>
+</ul>
+</li>
+<li>众核处理器面临的存储墙问题？
+<ul>
+<li>神威众核处理器计算性能高，但访存带宽相对比较低。
+<ul>
+<li>充分提高带宽利用率，DMA 方式数据读写，核间寄存器通信。</li>
+<li>访存与计算的充分重叠，以发挥处理器强大的计算能力。</li>
+</ul>
+</li>
+<li>GPU 处理器中的 SM 结构
+<ul>
+<li>片上存储需要软件显式精确地使用，减少因 Cache 冲突核颠簸带来的额外访存流量，避免带宽浪费。</li>
+<li>采用 SIMT 执行机制，实现访存延迟和计算充分重叠。</li>
+</ul>
+</li>
+<li>Cell 处理器也采用非 Cache 结构
+<ul>
+<li>异步 DMA 机制，并通过软件多缓冲有效实现计算与访存的重叠。</li>
+</ul>
+</li>
+<li>受芯片资源总量限制，用于发掘数据局部性的片上缓存往往会被减小，片上数据的重用机制是众核处理器体系结构研究最为关键的问题之一。</li>
+<li>片上数据重用机制：包括共享片上存储和片上通信两种方式。
+<ul>
+<li>Intel MIC 采用了共享 L2 Cache 的数据复用机制。</li>
+<li>Tile64、Intel SCC、神威等处理器都设计了较为强大的片上 2D Mesh 通信网络，增强核间通信带宽。
+<ul>
+<li>神威处理器设置了核间寄存器通信，减少中间结果使用缓存。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="磁盘阵列-raid-技术"><a class="markdownIt-Anchor" href="#磁盘阵列-raid-技术"></a> 磁盘阵列 RAID 技术</h3>
+<p>独立磁盘构成的具有冗余能力的阵列。</p>
+<p>基本功能：</p>
+<ul>
+<li>高性能
+<ul>
+<li>对磁盘上的数据进行条带化，实现<mark>对数据按块存取</mark>，提高数据存取速度。</li>
+<li>对阵列中几块磁盘<mark>同时读取</mark>，提高数据存取速度，同时提供大容量。</li>
+</ul>
+</li>
+<li>大容量
+<ul>
+<li>多块独立磁盘组合成磁盘阵列，提供巨大存储容量。</li>
+</ul>
+</li>
+<li>容错
+<ul>
+<li>镜像或奇偶校验–&gt;多副本或纠删码。</li>
+<li>实现对数据的冗余保护。</li>
+</ul>
+</li>
+</ul>
+<p>RAID 分类</p>
+<ul>
+<li>RAID 0：无容错的数据条带。
+<ul>
+<li>提高<mark>磁盘性能和吞吐量</mark>。</li>
+<li>无冗余或错误修复能力。</li>
+<li>实现<mark>成本最低</mark>。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID0.png" alt="RAID0"></p>
+<ul>
+<li>RAID 1：无校验的相互镜像。
+<ul>
+<li>磁盘镜像，保证可靠性和可修复性。</li>
+<li><mark>成本增加，磁盘利用率 50%</mark>。</li>
+<li>同步镜像时间长，影响系统性能。</li>
+<li>应用在保存关键性重要数据的场合。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID1.png" alt="RAID1"></p>
+<ol>
+<li><mark>MTTF</mark>：平均无故障时间，度量<mark>可靠性</mark>。</li>
+<li>FIT：故障率，MTTF 的倒数，通常以运行10亿个小时的故障数表示。</li>
+<li><mark>MTTR</mark>：服务中断的平均修复时间。</li>
+<li>MTBF：平均故障间隔时间，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mi>T</mi><mi>B</mi><mi>F</mi><mo>=</mo><mi>M</mi><mi>T</mi><mi>T</mi><mi>F</mi><mo>+</mo><mi>M</mi><mi>T</mi><mi>T</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">MTBF=MTTF+MTTR</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span>。</li>
+<li><mark>可用性</mark><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>M</mi><mi>T</mi><mi>T</mi><mi>F</mi><mi mathvariant="normal">/</mi><mo stretchy="false">(</mo><mi>M</mi><mi>T</mi><mi>T</mi><mi>F</mi><mo>+</mo><mi>M</mi><mi>T</mi><mi>T</mi><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">=MTTF/(MTTF+MTTR)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord">/</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mclose">)</span></span></span></span>。</li>
+</ol>
+<p><strong>例题：</strong></p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/例题2.1.png" alt="例题2.1" style="zoom: 80%;">
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/例题2.2.png" alt="例题2.2" style="zoom:80%;">
+<ul>
+<li>RAID 2：海明码校验
+<ul>
+<li>带海明码校验。</li>
+<li>用<mark>编码</mark>技术提供错误检查及恢复。</li>
+<li>多个磁盘存放检查及恢复信息，技术实施复杂，<mark>性能低</mark>，在商业环境中很少使用。</li>
+<li>输出数据的速率与驱动器<mark>组中速度最慢</mark>的相等。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID2.png" alt="RAID2"></p>
+<ul>
+<li>RAID 3：带有<mark>专用位</mark>校验的数据条带。
+<ul>
+<li>带奇偶校验码并行传送，<mark>只能查错不能纠错</mark>。</li>
+<li>要有三个以上的驱动器，写入速度与读出速率都很高。</li>
+<li><mark>校验位少，计算时间相对较少</mark>。</li>
+<li>主要用于图形等要求吞吐率比较高的场合。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID3.png" alt="RAID3"></p>
+<ul>
+<li>RAID 4：带有<mark>专用块级</mark>校验的数据条带 <mark>纠删码技术</mark></li>
+<li>可容忍<mark>一个磁盘失效</mark>。</li>
+<li>写操作只涉及当前数据盘和校验盘两个盘，多个 I/O 请求可以同时处理，提高系统性能。</li>
+<li>读性能好，但<mark>校验盘是系统性能瓶颈，且校验盘已磨损</mark>。</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID4.png" alt="RAID4"></p>
+<ul>
+<li>RAID 5：带分散校验的数据条带
+<ul>
+<li><mark>校验数据分布在阵列所有磁盘上</mark>，可容忍一个磁盘失效。</li>
+<li>不存在并发写操作时校验盘性能瓶颈问题。</li>
+<li>具备很好的可扩展性，拥有更高容量及更高性能。</li>
+<li>目前最常用的 RAID。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID5.png" alt="RAID5"></p>
+<ul>
+<li>RAID 6：带双重分散校验的数据条带
+<ul>
+<li>可容忍两个磁盘失效。</li>
+<li>最常见实现方式是采用两个独立校验算法，P 和 Q。</li>
+<li>具有快速读取性能、更高的容错能力。</li>
+<li>控制器比其他等级更复杂、更昂贵，写性能也较差。</li>
+<li>主要用于数据安全等级要求非常高的场合。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID6.png" alt="RAID6"></p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/RAID对比.png" alt="RAID对比" style="zoom:75%;">
+<h3 id="并行文件系统"><a class="markdownIt-Anchor" href="#并行文件系统"></a> 并行文件系统</h3>
+<h4 id="并行文件系统概述"><a class="markdownIt-Anchor" href="#并行文件系统概述"></a> 并行文件系统概述</h4>
+<p>并行文件系统是应用于多机环境的网络文件系统，单个文件的数据采用分条等形式<mark>存放于不同的 I/O 节点之上</mark>，支持多机多个进程的并发存取，同时支持元数据和数据的分布存放，并提供单一的目录空间。</p>
+<p>并行文件系统需要实现两个主要方面：</p>
+<ul>
+<li><strong>单一文件映像</strong>：文件数据存放的具体分布情况对于用户是透明的，并行文件系统在用户看来是一完整的树型结构，在调用时只要给出文件名即可。</li>
+<li><strong>采用条和分区技术</strong>：支持一个文件数据在多个磁盘/节点之上分布和在多个进程之间共享，即多个进程并发读写多个磁盘/节点上的数据。</li>
+</ul>
+<p>并行文件系统的特点：</p>
+<ul>
+<li>很好的性能和容量扩展性
+<ul>
+<li>随着存储节点增加，I/O 吞吐量、读写性能、容量线性增长。</li>
+<li>存储节点、存储对象数、存储对象空间具有可扩展性。</li>
+</ul>
+</li>
+<li>高访问性能
+<ul>
+<li>大规模海量数据访问高度并行。</li>
+</ul>
+</li>
+<li>具有全局唯一的对象标识和文件属性信息</li>
+<li>采用文件数据与元数据分离存储机制
+<ul>
+<li>文件数据分解为条带化存储到存储节点。</li>
+<li>文件元数据保存在元数据存储节点。</li>
+<li>控制流与数据流分离传输，有效分布 I/O 负载，提高系统 I/O 性能。</li>
+</ul>
+</li>
+</ul>
+<h4 id="存储区域网并行文件系统"><a class="markdownIt-Anchor" href="#存储区域网并行文件系统"></a> 存储区域网并行文件系统</h4>
+<h5 id="pvfs-并行虚拟文件系统"><a class="markdownIt-Anchor" href="#pvfs-并行虚拟文件系统"></a> PVFS 并行虚拟文件系统</h5>
+<p>PVFS 为 Linux 集群提供了高性能和可扩展的并行文件系统。</p>
+<p>其中由三种类型的节点：</p>
+<ul>
+<li><strong>管理节点 mgr</strong>：元数据服务器，处理文件元数据（描述文件信息文件）。</li>
+<li><strong>I/O 节点 iod</strong>：I/O 服务器，存储文件数据，负责数据存储和检索。</li>
+<li><strong>计算节点</strong>：处理应用访问，利用 libpvfs 客户端 I/O 库，从底层访问 PVFS 服务器。</li>
+</ul>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/PVFS.png" alt="PVFS"></p>
+<ol>
+<li>当打开、关闭、创建或删除一个文件时，计算节点上的应用通过 libpvfs 直接<mark>与管理节点通信</mark>。</li>
+<li>管理节点<mark>定位到文件</mark>后，向 libpvfs 返回文件<mark>位置</mark>。</li>
+<li>libpvfs 直接对数据 I/O 节点进行<mark>并行读写</mark>操作，不必与元数据服务器通信，提高了访问效率。</li>
+</ol>
+<h5 id="并行文件系统-lustre"><a class="markdownIt-Anchor" href="#并行文件系统-lustre"></a> 并行文件系统 Lustre</h5>
+<p>Lustre 消除了传统网络文件系统可扩展性、可用性和性能问题。它是基于 Linux 平台的可扩展并行文件系统，基于对象存储，替代以往的数据块管理方法，是基于廉价硬盘构建的大规模存储系统，支持大多数高速网络类型，具有高吞吐量、高扩展性和高性能，具有数据管理机制、全局数据共享、失效容错等功能。</p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/Lustre.png" alt="Lustre 体系结构" style="zoom:80%;">
+<p><strong>客户端缓存机制</strong></p>
+<p>在客户端的内存空间开辟一段缓存区，把首次访问的文件对象保存在缓存区中，尽量减少与数据服务器的交互次数，从而<mark>提高性能、降低网络开销</mark>。</p>
+<p>客户端执行文件读取操作时，</p>
+<ul>
+<li>向 MDS 发送元数据请求，获得元数据信息，并保存到客户端本地的缓存区中。</li>
+<li>客户端与相应 OST 建立连接，将需要的文件数据读入缓存区，应用程序再从缓存区中执行文件读取操作。</li>
+</ul>
+<p><strong>备份服务器 Failover</strong></p>
+<p>Lustre 系统每个节点（MDS/OST）都可以配置备份服务器，两个服务器采用共享硬盘存储方式存放数据。当服务器或网络连接发生失效时：</p>
+<ul>
+<li>会导致客户端数据访问超时，客户端查询备份服务器数据。</li>
+<li>客户端得到信息后，立即将后续请求重定向到备份服务器。</li>
+</ul>
+<p>借鉴 RAID 将文件数据以某种 RAID 模式分布存储在多个 OST 的存储对象中，能够同时容忍硬盘和节点失效。</p>
+<h5 id="元数据服务器集群-cmd"><a class="markdownIt-Anchor" href="#元数据服务器集群-cmd"></a> 元数据服务器集群 CMD</h5>
+<p>单一元数据服务器存在局限：单一故障点、性能瓶颈。</p>
+<p>随着客户端和对象存储节点的增加，会成为整个系统的性能瓶颈。</p>
+<h4 id="分布式文件系统"><a class="markdownIt-Anchor" href="#分布式文件系统"></a> 分布式文件系统</h4>
+<h5 id="hdfs"><a class="markdownIt-Anchor" href="#hdfs"></a> HDFS</h5>
+<p><mark>名字节点双备份，信息交互采用不同协议。</mark></p>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/HDFS.png" alt="HDFS" style="zoom:80%;">
+<h5 id="ceph"><a class="markdownIt-Anchor" href="#ceph"></a> Ceph</h5>
+<p>分为四个层次：</p>
+<ul>
+<li>基础存储系统：RADOS   <mark>可靠</mark>的、<mark>自主</mark>的、<mark>分布式</mark>的<mark>对象存储</mark>。</li>
+<li>基础库：LIBRADOS</li>
+<li>高层应用接口：RADOS GW、RBD、Ceph FS</li>
+<li>应用层</li>
+</ul>
+<img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/Ceph.png" alt="Ceph" style="zoom:80%;">
+<p>Ceph 底层关键是 <mark>RADOS</mark>，它由两个组件组成：</p>
+<ul>
+<li>OSD：提供存储资源的存储设备，负责对象存储和查找，及向该对象的复制节点分发和恢复。</li>
+<li>Monitor：维护整个 Ceph 存储集群全局状态，提供强一致性的决策。</li>
+<li>OSD 和 Monitor 相互传输节点状态和信息，形成<mark>系统全局状态记录数据结构 cluster map</mark>。该数据结构与 RADOS 特定算法相配合，实现”无需查表，算算就好“核心机制。实现了<mark>去中心化</mark>，<mark>自动容错</mark>、<mark>负载均衡</mark>等。</li>
+</ul>
+<p>RADOS 具有很强的扩展性和可编程性。</p>
+<p>Ceph 另外两个组件：</p>
+<ul>
+<li>MDS：用于保存 CephFS 的元数据。</li>
+<li>RADOS Gateway：对外提供 REST 接口，兼容 S3 和 Swift 的 API。</li>
+</ul>
+<p><strong>寻址流程</strong></p>
+<p><img src="/common/img/loading.jpg" data-original="/2023/11/12/parallel-computer-architecture/%E5%AF%BB%E5%9D%80%E6%B5%81%E7%A8%8B.png" alt="寻址流程"></p>
+<p><strong>数据访问</strong></p>
+<p>数据访问过程具有强一致性，读写操作采用 Primary-Replica 模型，只向 Object 所对应 OSD set 的 Primary 发起读写请求。</p>
+<p><strong>数据冗余</strong></p>
+<ul>
+<li>多副本策略：多份相同数据放置在不同 OSD 上。</li>
+<li>纠删码策略</li>
+</ul>
+<p><strong>节点状态检测</strong></p>
+<p>通过 heartbeat 及时发现 osd 状态变化，由 monitor 更新 osdmap，并同步到相关的 osd 上。</p>
+<ul>
+<li>osd 之间的 heartbeat
+<ul>
+<li>同一个 PG 内的 OSD 进行 heartbeat，如果发现有 osd 未能建立心跳汇报至 monitor。</li>
+</ul>
+</li>
+<li>osd 与 monitor 之间
+<ul>
+<li>发现有 osd down 或者 up，会汇报至 monnitor 端，并修改 osdmap；同时，某一个 osd 会汇报子集的状态。</li>
+</ul>
+</li>
+</ul>
+<p><strong>故障恢复</strong></p>
+<ul>
+<li>暂时性故障：用日志同步恢复不一致。</li>
+<li>永久性故障：数据回填，将损坏节点的数据放置在其他节点之上。</li>
+</ul>
+<p><strong>一致性检查功能</strong></p>
+<ul>
+<li>Scrub：仅仅通过对比对象各副本的元数据，来检查数据的一致性。</li>
+<li>Deep-scrub：进一步检查对象的数据内容是否一致，几乎要扫描磁盘上所有数据计算 crc32 校验值。</li>
+</ul>
+<p>Ceph 主要技术特点：</p>
+<ul>
+<li>统一：提供<mark>对象存储</mark>、<mark>块存储</mark>和<mark>文件系统存储</mark>。</li>
+<li>分布式：<mark>无中心结构</mark>和理论上的无限系统规模<mark>可扩展性</mark>。</li>
+<li>先进核心设计思想：无需中心查表，算算就好。</li>
+</ul>
+<p>Ceph 功能特点：</p>
+<ul>
+<li>高扩展性</li>
+<li>高可靠性</li>
+<li>高性能</li>
+<li>兼容性</li>
+</ul>
+<h3 id="八-并行编程模型与并行程序设计"><a class="markdownIt-Anchor" href="#八-并行编程模型与并行程序设计"></a> 八、并行编程模型与并行程序设计</h3>
+<h4 id="并行编程模型"><a class="markdownIt-Anchor" href="#并行编程模型"></a> 并行编程模型</h4>
+<p>并行编程模型是并行计算机体系结构的抽象化描述，是程序员关于算法或应用程序详细执行的思维模型。不同的并行计算机可以支持同一种并行编程模型，提高软件的<mark>可移植性</mark>以及<mark>开发者的效率</mark>。</p>
+<p>并行编程模型根据并行进程间的交互方式，可分为：<mark>共享内存</mark>、<mark>消息传递</mark>，根据问题分解方式，可分为：<mark>数据并行</mark>、<mark>任务并行</mark>。</p>
+<p>常见的并行编程模型有：</p>
+<ul>
+<li>消息传递编程模型：MPI</li>
+<li>共享内存编程模型：OpenMP</li>
+<li>GPU 编程模型：CUDA</li>
+</ul>
+<h4 id="foster-设计方法"><a class="markdownIt-Anchor" href="#foster-设计方法"></a> Foster 设计方法</h4>
+<p>一个并行算法设计过程分为四步：<mark>划分</mark>、<mark>通信</mark>、<mark>聚集</mark>、<mark>映射</mark>。</p>
+<ul>
+<li>划分：三维矩阵是最大和最频繁访问的数据结构，可划分为：<mark>二维切片集合</mark>、<mark>一维切片集合</mark>、<mark>矩阵元素集合</mark>。</li>
+<li>通信
+<ul>
+<li>局部通信</li>
+<li>全局通信</li>
+<li>通信结构评估：
+<ul>
+<li><mark>平衡</mark>任务间的通信操作。</li>
+<li>每个任务仅与<mark>少量邻居</mark>进行通信。</li>
+<li>任务能够并发执行它们的<mark>通信</mark>。</li>
+<li>任务能够并发执行它们的<mark>计算</mark>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>聚集：聚集和映射阶段要考虑怎样将原始任务<mark>合并</mark>成大的任务并<mark>映射</mark>到物理处理器上以减少并行开销。
+<ul>
+<li>降低通信开销。</li>
+<li>维护并行设计的可扩展性。</li>
+<li>减少软件工程上的开销。</li>
+</ul>
+</li>
+<li>映射：将任务分配给处理器，最大化处理器的利用率和最小化处理器之间的通信。</li>
+</ul>
+<h4 id="mpi"><a class="markdownIt-Anchor" href="#mpi"></a> MPI</h4>
+<p>涉及通信集合中所有进程的通信函数成为集合通信。</p>
+<p>在集合通信中，如果属于一个进程的数据被发送到通信集合中的所有进程，这样的集合通信就是广播。</p>
+<h4 id="openmp"><a class="markdownIt-Anchor" href="#openmp"></a> OpenMP</h4>
+<p>编译制导语句。</p>
+<p><strong>归约子句</strong></p>
+<p>归约是将相同的归约操作符重复地应用到操作数序列来得到一个结果的计算。</p>
+<h4 id="性能分析"><a class="markdownIt-Anchor" href="#性能分析"></a> 性能分析</h4>
+<p>系统级性能优化通常包括两个阶段：性能剖析、代码优化</p>
+<ul>
+<li>性能剖析的目标是寻址性能瓶颈，查找引发性能问题的原因及热点代码。
+<ul>
+<li>IPM</li>
+<li>TAU</li>
+</ul>
+</li>
+<li>代码优化的目标是针对具体性能问题优化代码或编译选项，以改善软件性能。
+<ul>
+<li>SCALASCA</li>
+<li>MPE</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>笔记</category>
