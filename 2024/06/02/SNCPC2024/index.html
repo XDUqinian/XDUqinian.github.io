@@ -1,0 +1,263 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SNCPC2024陕西省赛游记 | 年雨冰季</title><meta name="author" content="七年"><meta name="copyright" content="七年"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="7题铜首，不打铁就算成功！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SNCPC2024陕西省赛游记">
+<meta property="og:url" content="http://example.com/2024/06/02/SNCPC2024/index.html">
+<meta property="og:site_name" content="年雨冰季">
+<meta property="og:description" content="7题铜首，不打铁就算成功！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg">
+<meta property="article:published_time" content="2024-06-02T13:49:01.000Z">
+<meta property="article:modified_time" content="2024-06-02T17:11:12.671Z">
+<meta property="article:author" content="七年">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg"><link rel="shortcut icon" href="/common/img/snow1.png"><link rel="canonical" href="http://example.com/2024/06/02/SNCPC2024/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/./search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 七年","link":"链接: ","source":"来源: 年雨冰季","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SNCPC2024陕西省赛游记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2024-06-03 01:11:12'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" onerror="onerror=null;src='/common/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s1.imagehub.cc/images/2023/09/30/home_banner.jpeg')"><nav id="nav"><span id="blog-info"><a href="/" title="年雨冰季"><span class="site-name">年雨冰季</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SNCPC2024陕西省赛游记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-02T13:49:01.000Z" title="发表于 2024-06-02 21:49:01">2024-06-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-02T17:11:12.671Z" title="更新于 2024-06-03 01:11:12">2024-06-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%AF%94%E8%B5%9B/">比赛</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SNCPC2024陕西省赛游记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/medal.jpg" style="zoom: 33%;">
+<p>今天是2024年6月2日，下午四点半省赛结束，在1300滚完榜后和队友到李家村万达吃了晚饭，就坐地铁五号线回了创新港，到宿舍已经是晚上22点04分了。赛前宇舜说今天要保铜争银，我说别毒奶，有铜牌就不错了。但最后真就差点银牌，甚至7题的头部队伍已经到了金牌区。<s>所以四舍五入我们也是金牌（bushi）</s>。</p>
+<hr>
+<h1 id="赛前">赛前</h1>
+<h2 id="撺掇队友报名">撺掇队友报名</h2>
+<p>2024年4月15日晚21点07分，我正快乐地在王者峡谷里遨游，突然 QQ 弹出了一条消息，我点开一看是西交 acm 交流群发布了 2024陕西省赛的报名通知。上学期刚好和室友们参加了西交的软件开发校赛，写了一个基于 unity2D 的垃圾分类小游戏，其实本质就是一个推箱子，我和宇舜还有旭贸一起负责游戏总体的程序设计以及开发。虽然最后只拿了校三等奖，但是在开发过程中我们对彼此的编程实力都有了一定了解，因此我们决定一起参加这次的 ICPC 陕西省赛。</p>
+<p>报名的时候要填队名，我键盘一动就把宿舍群的群名敲了上去——403 Forbbiden。403是我们宿舍的门牌号，当时建群的时候隔壁404宿舍取了个很好听的名字叫 404 not found，宇舜说那我们就叫 403 Forbbden 吧，对仗工整而且具有专业特色，于是就有了我们的宿舍群名，我决定沿用一下这个名字作为队名，<s>让宿舍的名号在 ICPC  的赛场上发扬光大！</s></p>
+<p><img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/%E6%8A%A5%E5%90%8D.png" alt="报名信息"></p>
+<h2 id="校赛摸鱼">校赛摸鱼</h2>
+<p>同时我们发现在省赛前半个月，西交会举办一次校赛。由于我们三个都是第一次以组队的形式参加 ICPC 的比赛，我们决定充分利用校赛的机会练一练配合，感受一下赛场的氛围，并通过校赛的复盘为省赛调整策略。</p>
+<p>带着这样的目的，5月19日早上10点我们从创新港坐5号线来到了兴庆校区。在两位”交本佬“的带领下，我在兴庆的食堂吃了一顿不错的午饭，然后我们一人拎着一瓶脉动就前往了比赛场地。</p>
+<p>校赛的题目还是比较简单的，宇舜上来就把A题秒了，然后旭贸接着就把C题秒了。而我突然犯起傻逼被B题卡了十分钟，最后简单写了一下思路就把草稿纸丢给了宇舜让他接着写，然后我就和旭贸一起去开D题了。还没看一会宇舜就把B题秒了，然后就去开E题了，他真强。</p>
+<p>D题的题意大概是构造一棵符合一定条件的树。我想了想觉得这题不需要建树，直接建一条链，从小到大对结点排个序，如果不满足题意就把链反过来，原序链和反序链必有一个是符合题意的。我和旭贸讨论了一下觉得没问题，直接交上去就过了，感觉非常爽。</p>
+<p>然后我和宇舜就从不同的角度研究E题，他把题目抽象成了一个一笔画问题，但是有一个不知道怎么解决的问题，而我想从DP的角度把这题弄出来。这个时候旭贸已经在写F题了，他自信满满地交了程序，背着队友偷偷TLE了一发，然后他又优化了一下程序，第二次交上去就过了。宇舜发现旭贸把F过了，就拉他过去当小黄鸭，给他讲他的一笔画问题，旭贸灵机一动解决了宇舜不知道怎么解决的问题，然后拿起键盘一通狂敲，就把E给过了，他也好强。</p>
+<p>过完E之后，我发现J好像是背包题就去开J了。旭贸去开了I题的大模拟，宇舜开K题。</p>
+<p>但是我发现J题背包复杂度好像过不去，看了看榜单没几个过的，就放弃了，想着看看宇舜的K题，但是也没啥头绪。旭贸对着电脑一顿输出，开始写bug，调试了很久。这时已经封榜了，我看着题感觉没有会的了，就开始一边摸鱼一边给旭贸加油希望他能把I模拟出来。</p>
+<p>这时宇舜突然跟我说，他把K题抽象成了一个矩阵快速幂问题，但是他不会矩阵快速幂。我听了一下他的思路感觉没问题，就拿出了之前果果给打的板子现场学矩阵快速幂。我们学完了以后，旭贸已经卡I题一小时了，~~不许再敲了！~~于是我们俩抢过旭贸的键盘开始敲K题，然后就把K题过了。</p>
+<p>然后旭贸就继续他的模拟之路……赶在比赛结束前交了一发I，但是还是wa了。</p>
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/校赛2.jpg" style="zoom:50%;">
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/校赛1.jpg" style="zoom:50%;">
+<p>最后我们7题喜提校赛银牌。</p>
+<h2 id="校赛复盘">校赛复盘</h2>
+<p>虽然校赛的成绩还不错，但是我们还是发现了很多问题。</p>
+<p><strong>跟榜不坚定</strong></p>
+<p>虽然我们在校赛的过程中大部分是在跟榜走的，但是不够坚定。比如榜上没有几个队过J题但我还是去开J题，然后把自己心态开崩了。以及O题榜上过了一大堆，但是我们觉得是数学题要用素数筛超出了我们的能力范围放弃了，但是它其实就是一个输入n输出n平方的找规律题。</p>
+<p><strong>钻牛角尖</strong></p>
+<p>一道题做了半小时没头绪就应该和队友讨论一下，或者果断换题，因为这种时候大多是陷入思维误区而死循环，陷入其中除了浪费时间没有别的意义。比如我想了一小时的E，以及半小时的J，还有旭贸写了一个小时的I。</p>
+<p><strong>合理分工</strong></p>
+<p>虽然赛前分配宇舜做主编程手，但是校赛的时候基本上是谁有思路就上机写代码的。有时候没想清楚就抢键盘了，经常出现思路不清晰卡住的情况。所以我们讨论后决定应该先让宇舜自己开签到题，我们俩先在纸上手写清晰的伪代码后再上机实现。</p>
+<hr>
+<h1 id="赛中">赛中</h1>
+<h2 id="报到">报到</h2>
+<p>2024年6月2日早上8点15分我们就起床，洗漱之后9点从南区宿舍出发，10点就到了兴庆校区。</p>
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/icpc陕西省赛.jpg" style="zoom:50%;">
+<p>因为比较远，所以我们有计划地错过了热身赛以及开幕式，到1300签到后我们领取了参赛证、ICPC省赛纪念衫还有一个罗小黑的钥匙串就去吃饭了。</p>
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/1300.jpg" style="zoom:50%;">
+<h2 id="省赛过程">省赛过程</h2>
+<p>11点30分比赛开始，宇舜开A题，我开B题，旭贸开C题。宇舜发现A是个模拟的签到题，很快就把A过了，然后继续往后找签到题。B题是求一个只有数字1、加号、乘号的表达式矩阵，要求矩阵的值最小，我想着找规律但是觉得很奇怪找不出来。宇舜简单看了一下B也没啥思路，就去开F了，F题最后简化的结论就是输出序列最大值，比较简单，<s>但是他背着队友偷偷wa了一发</s>。</p>
+<p>我想B题想了半小时没思路，发现榜上做出了B的队伍也不多，于是就跟榜去开G题。这时宇舜发现M题也是签到题，就直接背着我们把M给偷偷过了，点名表扬！这时旭贸给出了C题的一个做法，但是宇舜给他举了个反例。G题我想到用容斥定理，先预处理出一些可能用到的值，然后再根据实际情况求值，但是实现的时候脑子浆糊了，就把宇舜叫过来当小黄鸭。跟宇舜讨论后，我们造了一些数据修了一下程序，就把G给过了。最后滚榜讲题的时候说这题是看成九进制转十进制，不过当时没想到，过了就行。</p>
+<p>这时旭贸已经卡C题一个多小时了，但是榜上过C的队伍还比较多，于是我就跟他一起继续研究C。宇舜发现榜上L题过的人太多了觉得不太正常，就去开L了。C题我看了一下，想到用并查集来做，我觉得只要队并查集做简单的修改就可以过，实现了以后交上去发现wa了。这时旭贸也给我举了一个反例，我发现我把树简单地考虑成链了，于是在原有程序的基础上加了一个树的构建然后树形dp了一下，过了旭贸的反例，交上去就把C题过了。</p>
+<p>在这之后没多久就封榜了，我们位于铜尾。</p>
+<p>这时宇舜表示L题的数据是10的18次方，询问次数是10的5次方，根据校赛O题失败的经验这题应该是打表找规律的题，但是他打了3到7的表没找到规律。但是L题过的队伍实在太多了，所以我和旭贸决定继续看L，宇舜去看B题了。旭贸说，会不会所有数的答案就在2和3里面，因为感觉这个答案会比较小，我觉得他说的有道理，但是宇舜打的表中6的答案是4，我检验了一下发现确实是4，所以否掉了这个结论。我看了看宇舜打的表，</p>
+<table>
+<thead>
+<tr>
+<th>输入n</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结果k</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>其中9和10的输出是题目样例给的。我看着这些数字发呆，觉得结果中的4非常突兀，突然灵光一闪，难道结果k就是不能被n整除的最小数！我越想越觉得有道理，就把这个结论和队友分享了一下，宇舜想也没想选择相信我的直觉，直接丢下B题开始准备打质数表。我用输入8尝试了一下，发现结果是3，刚好也符合我找到的规律，我和旭贸觉得我猜出来的结论非常靠谱。我又一想，直接从2遍历到n-1找最小非因子就行了，不需要打质数表，因为觉得非因子的分布不会太大，时间复杂度是可以的，所以就直接制止了宇舜打质数表的行为，直接往上一交，居然过了！！！队友对我精准的直觉感到诧异，我也觉得很神奇。</p>
+<p>这时距离比赛结束还有一个小时，因为B题的数据很小，宇舜就打算继续用暴力搜索的方式把B题做出来，他想调用c++的一个叫的eval的我没见过的函数直接对表达式字符串求值，但是没过编译，我怀疑这个神奇的函数是否存在。我一想，最后一小时也做不了别的题了，就拉着旭贸开始打表，一共就49个矩阵，转置一下只要25个矩阵，我觉得不如直接面向答案编程，先把答案打表打出来直接调就行了。宇舜觉得很有道理，于是他就开始写打表框架，我和旭贸就开始人脑算答案，互相对了一下觉得没问题，就填进宇舜的框架里。第一发wa了，宇舜精准地发现有一个矩阵写错了，我们改了一下，第二次在比赛结束前五分钟交了上去，把B题给过了。</p>
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/省赛2.jpg" style="zoom:50%;">
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/省赛1.jpg" style="zoom:50%;">
+<p>赛后发现很多队伍B题都是打表过的，甚至打代码的时候把打印机都搞红温了。</p>
+<img src="/common/img/loading.jpg" data-original="/2024/06/02/SNCPC2024/B题打印.jpg" style="zoom:50%;">
+<h2 id="省赛颁奖">省赛颁奖</h2>
+<p>打完省赛后我们回到签到的1300开始滚榜，中间有一段时间我甚至感觉银牌有望，但是对手们都太强了，我们还是只拿了个铜首。不过还是比较满意的，因为封榜前是铜尾，一不小心就打铁了，最后有铜就很满意了。不过7题的队伍最高达到金牌区，虽然同样7题的我们只拿到了铜牌，<s>但我自信地感觉我们有金牌的实力</s>。</p>
+<hr>
+<h1 id="赛后感想">赛后感想</h1>
+<p>从2019年的国庆假期在果果的引领下第一次接触洛谷，然后打西电的acm新生赛拿到了二等奖，我开始慢慢接触程序设计竞赛这个之前从未想过的领域。然后慢慢的是校赛、csp、cccc天梯赛……其实大二的时候有同学找我组队打省赛，但是当时因为一些原因没有答应他们，于是他们找了另一个同学，<s>最后他们省赛打铁了</s>。后来其实有一些后悔，没有在大一的时候努力一点进校队，没有参加省赛感受那个赛场的氛围……大四毕业后我本来以为自己不会再有机会了，但是幸好这次圆梦了，甚至拿了一块铜牌，算是留下了一点痕迹证明我也为之奋斗过吧。</p>
+<p>我还记得第一次听线下的acm宣讲，当时那个学长在讲台上说了一段话至今印象深刻，他说：</p>
+<p>有些事情已经过去了，就不要后悔，不要惋惜。话虽然很老套，但事实的确如此，能把握的只有当下与未来。或许你看到身边很多大佬在高中甚至初中就已经学会了很多很多，感觉自己永远都无法跟上他们的脚步。或许你在后悔你过去的一些决策，这也没有办法，毕竟人生不像动态规划有最优子结构。如果你喜欢ACM这个竞赛，就请坚持下去，不要在意自己的基础，这不是决定的因素。一颗热爱这个竞赛的心，与在追逐梦想上付出的汗水，才是一路走来最为珍贵的东西。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">七年</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/06/02/SNCPC2024/">http://example.com/2024/06/02/SNCPC2024/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">年雨冰季</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c++</a></div><div class="post_share"><div class="social-share" data-image="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/11/12/parallel-computer-architecture/" title="并行计算机体系结构笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">并行计算机体系结构笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/04/05/CodingLog/" title="第七届团体程序设计天梯赛"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-05</div><div class="title">第七届团体程序设计天梯赛</div></div></a></div><div><a href="/2023/10/02/fake_cache/" title="基于MSI协议的Cache一致性模拟器设计"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-02</div><div class="title">基于MSI协议的Cache一致性模拟器设计</div></div></a></div><div><a href="/2023/10/17/sycl-learn/" title="Data Parallel CPP 学习笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-17</div><div class="title">Data Parallel CPP 学习笔记</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" onerror="this.onerror=null;this.src='/common/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">七年</div><div class="author-info__description">夜阑风静欲归时，唯有一江明月碧琉璃。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XDUqinian" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://1841128521@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%9B%E5%89%8D"><span class="toc-number">1.</span> <span class="toc-text">赛前</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%BA%E6%8E%87%E9%98%9F%E5%8F%8B%E6%8A%A5%E5%90%8D"><span class="toc-number">1.1.</span> <span class="toc-text">撺掇队友报名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%A1%E8%B5%9B%E6%91%B8%E9%B1%BC"><span class="toc-number">1.2.</span> <span class="toc-text">校赛摸鱼</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%A1%E8%B5%9B%E5%A4%8D%E7%9B%98"><span class="toc-number">1.3.</span> <span class="toc-text">校赛复盘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%9B%E4%B8%AD"><span class="toc-number">2.</span> <span class="toc-text">赛中</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%A5%E5%88%B0"><span class="toc-number">2.1.</span> <span class="toc-text">报到</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%81%E8%B5%9B%E8%BF%87%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">省赛过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9C%81%E8%B5%9B%E9%A2%81%E5%A5%96"><span class="toc-number">2.3.</span> <span class="toc-text">省赛颁奖</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%B5%9B%E5%90%8E%E6%84%9F%E6%83%B3"><span class="toc-number">3.</span> <span class="toc-text">赛后感想</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://s1.imagehub.cc/images/2023/09/30/home_banner.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By 七年</div><div class="footer_custom_text">夜阑风静欲归时，唯有一江明月碧琉璃。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
