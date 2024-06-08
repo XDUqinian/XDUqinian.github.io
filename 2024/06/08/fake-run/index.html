@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>移动交通大学体育打卡自动姬 | 年雨冰季</title><meta name="author" content="七年"><meta name="copyright" content="七年"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="因为老是忘记打卡，所以我决定写个脚本自动化……">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动交通大学体育打卡自动姬">
+<meta property="og:url" content="http://example.com/2024/06/08/fake-run/index.html">
+<meta property="og:site_name" content="年雨冰季">
+<meta property="og:description" content="因为老是忘记打卡，所以我决定写个脚本自动化……">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg">
+<meta property="article:published_time" content="2024-06-08T06:32:43.000Z">
+<meta property="article:modified_time" content="2024-06-08T15:47:28.948Z">
+<meta property="article:author" content="七年">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg"><link rel="shortcut icon" href="/common/img/snow1.png"><link rel="canonical" href="http://example.com/2024/06/08/fake-run/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/./search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 七年","link":"链接: ","source":"来源: 年雨冰季","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '移动交通大学体育打卡自动姬',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: true,
+  isToc: true,
+  postUpdate: '2024-06-08 23:47:28'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css" rel="stylesheet" /></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" onerror="onerror=null;src='/common/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://s1.imagehub.cc/images/2023/09/30/home_banner.jpeg')"><nav id="nav"><span id="blog-info"><a href="/" title="年雨冰季"><span class="site-name">年雨冰季</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">移动交通大学体育打卡自动姬</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-08T06:32:43.000Z" title="发表于 2024-06-08 14:32:43">2024-06-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-08T15:47:28.948Z" title="更新于 2024-06-08 23:47:28">2024-06-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%99%E7%A8%8B/">教程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="移动交通大学体育打卡自动姬"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>生命在于运动，不在于体育打卡。</p>
+<img src="/common/img/loading.jpg" data-original="fake-run/1.png" alt="fake run start !" style="zoom: 67%;">
+<p>在西安交通大学中国西部科技创新港，每天做牛做马的研究生们有5个学期的体育打卡要求，其中每学期要求60次体育打卡，每天签到签退间隔不少于30分钟，而且只能在校内规定的运动区域连接校园网进行打卡。其实要求不算太苛刻，但是因为平时忙于上课与科研，常常忽视了打卡的需求，有时一时兴起签到了，但是又把签退忘了，又或者想起来要签到，但是却不在指定的运动区。上学期尽力强迫自己要记住每天打卡了，但直到最后还是没打满60次，转眼间这学期也快进入尾声了，可是我的打卡次数只有可怜的10次，痛定思痛下，我决定放过自己，解放生产力，实现体育打卡自动化。</p>
+<hr>
+<h1 id="我应该做什么">我应该做什么</h1>
+<p>大的目标很明确，就是要实现移动交通大学的自动签到和签退。自动化在这样的语境下，其实就是用程序模拟人签到和签退的过程，因此我首先考虑一次正常的签到签退需要哪些因素。</p>
+<ol>
+<li>需要一个移动交通大学 app。</li>
+<li>需要到达指定的运动区域。</li>
+<li>需要模拟签到和签退的指令。</li>
+<li>控制模拟签到和签退的时间。</li>
+</ol>
+<p>因此，关键就在于如何通过计算机技术来解决上述4个问题。</p>
+<p>由于我是 ios 系统，没有移动交通大学的安装包，而且 ios 系统对软件的保护比较好，所以我选择在电脑上安装一个安卓模拟器，从使用安卓手机的同门那要来了移动交通大学的 apk，将其安装在了模拟器中。</p>
+<p>经过对市面上几种模拟器的了解与尝试后，我决定使用网易的 MuMu 模拟器，它自带虚拟定位功能，而且可以设置开启 root 权限与修改系统盘，比较方便我后续的调试工作。但是在后续的调试过程中我发现当模拟器开启 root 权限时，移动交大app会闪退，所以只能在需要权限的时候开启，不需要的时候就要关掉它。</p>
+<p>模拟签到和签退有两种方法。第一种是通过 adb 直接对模拟器进行操作，通过一系列的 adb 指令模拟人操作模拟器进行签到和签退的动作。但是这样做的缺点在于脚本执行没有交互，无法得到某个动作是否被响应的信息，直白来说就是我点击了但我不知道 app 反应了没有。再加上模拟器上 app 响应的时间延迟不确定，所以这种方法尝试了之后就 pass 了。</p>
+<p>而另外一种方法则是模拟客户端与服务器之间的数据包传输。通过本科半吊子的计网学习，我了解到当前的网络传输基本是基于 https 协议的，如果我能够捕获一次正常签到签退过程中客户端与服务器之间传输了哪些数据包，我就可以通过模拟这些数据包的发送来完成对签到签退的模拟。我觉得这种方法更好且更稳定。</p>
+<h1 id="发现问题然后解决">发现问题然后解决</h1>
+<h2 id="抓包的原理">抓包的原理</h2>
+<p>https 协议是一种非常安全的数据传输协议，它结合了非对称加密与对称加密保证数据传输的安全性，非对称加密用于确保客户端可以安全地获取到服务器的真实公钥，对称加密用于确保客户端和服务端的数据传输不会被任何人窃听。</p>
+<p>而用户想对 https 请求进行抓包，就需要<strong>在客户端安装一个抓包软件的证书</strong>。这个证书就是整个工作原理的核心，如果没有它，那么 https 就是不可能被抓包的。而安装证书需要由用户主动去操作，说明用户知道自己在干什么，自然也应该承担相应的风险。</p>
+<p>我们将实现原理分成两个部分来解析，第一部分是客户端如何安全地获取服务器的真实公钥，第二部分是客户端如何与服务器商定用于对称加密的密钥。</p>
+<p>CA机构专门用于给各个服务器签发数字证书，从而保证客户端可以安全地获得服务器的公钥。服务器的管理员可以向CA机构进行申请，将自己的公钥提交给CA机构。CA机构则会帮忙制作证书，并使用自己的私钥对其加密，然后将加密后的信息返回给服务器。这样，当客户端想要去获取某个服务器的公钥时，服务器会将CA机构签发的那段加密信息返回。那么客户端要如何解密这段信息呢？主流CA机构的公钥都是被内置到操作系统当中的，所以只要是服务器的数字证书是由正规CA机构签发的，那么就一定可以被解密成功，从而客户端也就能安全地获取到服务器的公钥了。</p>
+<p>抓包工具的工作是介于客户端和服务器中间的，它是一个中间人。中间人会先于客户端接收到服务器返回的加密数据，然后用操作系统内置的CA公钥对这段数据解密，从而得到服务器的公钥，并先将这个公钥保存起来。然后，中间人会将解密出来的数据进行调包，将其中服务器返回的公钥替换成自己的一个公钥，然后使用自己的非对称加密私钥对数据重新加密，并将这段重新加密后的数据返回给客户端。</p>
+<p>但是，中间人用自己的私钥加密后的数据，客户端是解密不出来的，因为中间人的公钥并没有内置到操作系统当中。所以我们就一定要在客户端安装抓包软件的证书，这样用户才能解密被中间人调包后的数据。这样一来，客户端仍然得到了一个公钥，并且还以为这个公钥是服务器返回的，但实际上是被中间人调包后的公钥，而服务器返回的真实公钥被中间人保存了起来。</p>
+<p>接下来是商定对称加密密钥的过程。</p>
+<p>客户端利用随机算法在本地生成一个对称加密密钥，并用服务器返回的公钥进行加密，然后发送给服务器。由于公钥加密的数据只能用私钥解密，因此只有服务器能破解出客户端生成的对称加密密钥到底是什么。</p>
+<p>可是，在有中间人的情况下，客户端拿到的其实根本就不是服务器的公钥，而是由中间人的公钥。所以，客户端生成的对称加密密钥是用中间人的公钥来进行加密的，中间人用自己的私钥就可以获取这个密钥。由于中间人还在之前就保存了服务器返回的真实公钥，所以他可以用真实的服务器公钥再次加密这个密钥发送给服务器。对于服务器而言，它并不知道客户端这边发生了什么事，也不知道中间人的存在。它只知道，用自己的私钥可以解密出客户端发来的数据，获得对称加密的密钥。</p>
+<p>现在客户端、服务器、中间人，这三者都知道对称加密的密钥是什么，而且之后客户端与服务器之间的所有通讯都会使用这个密钥加密后再进行传输。在这样的情况下，作为中间人的抓包软件就可以完美地监听客户端与服务器之间的通讯内容了。</p>
+<h2 id="charles-抓包">Charles 抓包</h2>
+<p>了解了原理后，我使用 Charles 进行抓包。</p>
+<p>首先是要制作安装在客户端的证书，用 Charles 导出证书然后使用 OpenSSL 签发证书，按照签发后的提示重命名证书。然后开启 MuMU 模拟器的 root 权限，并设置可写系统盘，通过 adb 工具连接模拟器，将刚刚制作好的证书放到系统盘中，证书就装好了。最后设置 Charles 代理，将网络代理设置为主机的8888端口，这样模拟器中的数据传输就会经过抓包软件后再传输。此时打开 Charles ，关闭其对主机流量的代理，这样一来就可以抓取模拟器中的数据包了。</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wutou/p/17873632.html">证书配置详解</a></p>
+<h2 id="数据包分析">数据包分析</h2>
+<p>能抓包后自然是直奔主题，直接看看点击签到后会发送什么数据包。数据包的请求体中是一些经纬度的信息，请求头中则有一个 token，在网上查了一下发现这是一个 JWT 形式的 token。数据包的响应体中则显示了返回的成功与否的信息。</p>
+<p>因此，待解决的目标转移成了，如何获取 JWT token。</p>
+<p>JWT 全称 JSON Web Token，它的作用是用户授权而不是用户认证。用户认证指使用用户名和密码验证当前的用户身份，简单来说就是用户登录，而用户授权则指用户登录后当前用户是否有足够的权限访问特定的资源。对于 JWT 而言，当用户使用账号和密码登录系统时，服务器会验证账号密码是否正确，如果登录成功，服务器就会返回一个加密文档，这个文档就是 JWT token，用户如果需要访问某些权限，就只要把 JWT token 放在 http 的请求头中。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/YJG7D314/article/details/124525914">JSON Web Token 原理</a></p>
+<p>所以，我们需要在登录的过程中获取 JWT token。通过对登录过程的抓包分析，发现得到 JWT 的流程是这样的：</p>
+<ol>
+<li>通过账号和密码获取用户的id与token。</li>
+<li>通过账号和token获取一个ticket。</li>
+<li>通过账号和token获取一个认证码authCode。</li>
+<li>通过账号、ticket、authCode 得到 JWT。</li>
+</ol>
+<p>因此只要模拟这个过程就可以实现签到和签退了。</p>
+<h2 id="python-requests">python-requests</h2>
+<p>最后就是写代码，由于目前还在用这个脚本，所以就不公开了，<s>等我研三毕业了再说</s>。</p>
+<p>总体上就是伪造一个 headers 然后用 requests 的 get 或 post 方法将数据传给要发送的 url，然后解析它的返回值。</p>
+<p>分析好数据包的流程以后代码就是照着写就行。</p>
+<h1 id="感想">感想</h1>
+<p>本科就学了半吊子的计网，磕磕绊绊地就一步步钻研过来了，这可能就是西电李龙海老师说的“黑整”吧，明明什么都不会但是可以边学边做，发现问题、了解问题、解决问题，实现目的的过程中也收获了知识。最开始不知道模拟器怎么用，先是了解要怎么调试模拟器，再到研究抓包工具的使用，如何发证书，最后抓到包了如何分析数据，每一步都走了很多弯路，但好在最后都解决了。</p>
+<p>甚至因为两个同门给我发的移动交通大学apk版本不同，导致抓到的包不同。一开始用的是高版本的apk，应该是被学校加密过了，抓不到什么有用的包，所以逼不得已决定用暴力破解JWT的HS256密钥，跑了一晚上还是失败了。后来觉得可能密钥嵌在apk里，就学了一下安卓逆向，反编译得到 java 代码，想在其中找密钥。但是逻辑太复杂了，没有找到密钥，不过发现了两个 apk 的差异，从而选择用低版本的 apk 抓包，最后终于成功了。</p>
+<p>想来学校也不会蠢到用暴力就能破解的密钥，也不会蠢到把密钥明晃晃地放在apk里，当时怎么就这么天真。不过还是在低版本的移动交通大学抓包过程中发现了一个神奇的明文字段<strong>secret_key</strong>，被用于获取ticket，可能算是彩蛋吧哈哈。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">七年</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/06/08/fake-run/">http://example.com/2024/06/08/fake-run/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">年雨冰季</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2024/06/02/SNCPC2024/" title="SNCPC2024陕西省赛游记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SNCPC2024陕西省赛游记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2022/01/27/mybot/" title="基于go-cqhttp与python的qq机器人开发"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-01-27</div><div class="title">基于go-cqhttp与python的qq机器人开发</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://s1.imagehub.cc/images/2023/09/30/avatar.jpeg" onerror="this.onerror=null;this.src='/common/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">七年</div><div class="author-info__description">夜阑风静欲归时，唯有一江明月碧琉璃。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/XDUqinian" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://1841128521@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%91%E5%BA%94%E8%AF%A5%E5%81%9A%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">我应该做什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%91%E7%8E%B0%E9%97%AE%E9%A2%98%E7%84%B6%E5%90%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">2.</span> <span class="toc-text">发现问题然后解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%93%E5%8C%85%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">抓包的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#charles-%E6%8A%93%E5%8C%85"><span class="toc-number">2.2.</span> <span class="toc-text">Charles 抓包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8C%85%E5%88%86%E6%9E%90"><span class="toc-number">2.3.</span> <span class="toc-text">数据包分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python-requests"><span class="toc-number">2.4.</span> <span class="toc-text">python-requests</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%84%9F%E6%83%B3"><span class="toc-number">3.</span> <span class="toc-text">感想</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://s1.imagehub.cc/images/2023/09/30/home_banner.jpeg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By 七年</div><div class="footer_custom_text">夜阑风静欲归时，唯有一江明月碧琉璃。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
